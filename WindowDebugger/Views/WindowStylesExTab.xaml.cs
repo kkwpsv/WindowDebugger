@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -20,9 +21,9 @@ namespace WindowDebugger.Views
     /// <summary>
     /// WindowStylesTab.xaml 的交互逻辑
     /// </summary>
-    public partial class WindowStylesTab : TabItem
+    public partial class WindowStylesExTab : TabItem
     {
-        public WindowStylesTab()
+        public WindowStylesExTab()
         {
             InitializeComponent();
         }
@@ -33,9 +34,9 @@ namespace WindowDebugger.Views
             {
                 var window = ViewModel.Instance.SelectedWindow;
 
-                var style = (WindowStyles)Enum.Parse(typeof(WindowStyles), (string)checkBox.Tag);
+                var style = (WindowStylesEx)Enum.Parse(typeof(WindowStylesEx), (string)checkBox.Tag);
 
-                var styles = window.Styles;
+                var styles = window.StylesEx;
 
                 if (checkBox.IsChecked == true)
                 {
@@ -46,7 +47,7 @@ namespace WindowDebugger.Views
                     styles &= ~style;
                 }
 
-                if (!window.SetStyles(styles, out var errorCode))
+                if (!window.SetStylesEx(styles, out var errorCode))
                 {
                     MessageBox.Show(Window.GetWindow(this), new Win32Exception(errorCode).Message);
                 }
@@ -56,14 +57,14 @@ namespace WindowDebugger.Views
             }
         }
 
-        private void UpdateStyles(object sender, RoutedEventArgs e)
+        private void UpdateStylesEx(object sender, RoutedEventArgs e)
         {
-            TextBoxStyle.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            TextBoxStyleEx.GetBindingExpression(TextBox.TextProperty).UpdateSource();
         }
 
-        private void RefreshStyles(object sender, RoutedEventArgs e)
+        private void RefreshStylesEx(object sender, RoutedEventArgs e)
         {
-            ViewModel.Instance.SelectedWindow.RefreshStyles();
+            ViewModel.Instance.SelectedWindow.RefreshStylesEx();
         }
     }
 }

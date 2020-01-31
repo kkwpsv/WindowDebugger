@@ -23,6 +23,7 @@
         </Grid>
         <TabControl Grid.Column="1" DataContext="{Binding SelectedWindow}">
             <views:WindowStylesTab Header="Styles"/>
+            <views:WindowStylesExTab Header="StyleExes"/>
         </TabControl>
     </Grid>
 </Window>

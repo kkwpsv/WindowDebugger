@@ -14,7 +14,12 @@ namespace WindowDebugger.Converters
         {
             if (value is string str)
             {
-                if (str.StartsWith("WS_"))
+                if (str.StartsWith("WS_EX_"))
+                {
+                    var result = (WindowStylesEx)Enum.Parse(typeof(WindowStylesEx), str);
+                    return $"{str.Replace("_", "__")} (0X{((uint)result).ToString("X8")})";
+                }
+                else if (str.StartsWith("WS_"))
                 {
                     var result = (WindowStyles)Enum.Parse(typeof(WindowStyles), str);
                     return $"{str.Replace("_", "__")} (0X{((uint)result).ToString("X8")})";

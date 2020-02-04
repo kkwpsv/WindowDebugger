@@ -1,0 +1,51 @@
+﻿<TabItem x:Class="WindowDebugger.Views.WindowInfoTab"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:WindowDebugger.Views"
+             xmlns:converters="clr-namespace:WindowDebugger.Converters"
+             xmlns:utilconverters="clr-namespace:Lsj.Util.WPF.Converters;assembly=Lsj.Util.WPF"
+             xmlns:viewmodels="clr-namespace:WindowDebugger.ViewModels"
+         mc:Ignorable="d"
+         d:DesignHeight="500" d:DesignWidth="500" d:DataContext="{d:DesignInstance Type=viewmodels:WindowItem}" Header="{Binding Content, RelativeSource={RelativeSource Self}, Mode=OneWay}">
+    <Border Padding="10">
+        <Grid>
+            <Grid.Resources>
+                <utilconverters:IntPtrToHexConverter x:Key="IntPtrToHexConverter"/>
+                <Style TargetType="TextBlock">
+                    <Style.Setters>
+                        <Setter Property="VerticalAlignment" Value="Top"/>
+                    </Style.Setters>
+                </Style>
+                <Style TargetType="TextBox">
+                    <Style.Setters>
+                        <Setter Property="VerticalAlignment" Value="Top"/>
+                        <Setter Property="Height" Value="20"/>
+                    </Style.Setters>
+                </Style>
+                <Style TargetType="Button">
+                    <Style.Setters>
+                        <Setter Property="VerticalAlignment" Value="Top"/>
+                        <Setter Property="Height" Value="20"/>
+                        <Setter Property="Margin" Value="10,0,0,0"/>
+                    </Style.Setters>
+                </Style>
+            </Grid.Resources>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Window Handle"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding WindowHandle, Converter={StaticResource IntPtrToHexConverter}}" IsReadOnly="True"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Text"/>
+            <TextBox Grid.Row="1" Grid.Column="1" x:Name="TextBoxText" Text="{Binding Text, Mode=OneWay}"/>
+            <Button Grid.Row="1" Grid.Column="2" Click="UpdateText" Content="Update"/>
+        </Grid>
+    </Border>
+</TabItem>

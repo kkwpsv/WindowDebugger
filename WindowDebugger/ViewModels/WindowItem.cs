@@ -1,4 +1,5 @@
-﻿using Lsj.Util.Win32.Enums;
+﻿using Lsj.Util.Text;
+using Lsj.Util.Win32.Enums;
 using Lsj.Util.Win32.Extensions;
 using Lsj.Util.WPF;
 using System;
@@ -30,6 +31,14 @@ namespace WindowDebugger.ViewModels
             RefreshStylesEx();
         }
 
+        public bool SetText(string value, out int errorCode)
+        {
+            var result = SetWindowText(_windowHandle, value);
+            errorCode = Marshal.GetLastWin32Error();
+            RefreshText();
+            return result;
+        }
+
         public void RefreshText()
         {
             var sb = new StringBuilder(50);
@@ -40,8 +49,8 @@ namespace WindowDebugger.ViewModels
 
         public bool SetStyles(WindowStyles value, out int errorCode)
         {
-            SetWindowLong(_windowHandle, GetWindowLongIndexes.GWL_STYLE, (IntPtr)value);
             SetLastError(0);
+            SetWindowLong(_windowHandle, GetWindowLongIndexes.GWL_STYLE, (IntPtr)value);
             errorCode = Marshal.GetLastWin32Error();
             var result = errorCode == 0;
             RefreshStyles();
@@ -56,8 +65,8 @@ namespace WindowDebugger.ViewModels
 
         public bool SetStylesEx(WindowStylesEx value, out int errorCode)
         {
-            SetWindowLong(_windowHandle, GetWindowLongIndexes.GWL_EXSTYLE, (IntPtr)value);
             SetLastError(0);
+            SetWindowLong(_windowHandle, GetWindowLongIndexes.GWL_EXSTYLE, (IntPtr)value);
             errorCode = Marshal.GetLastWin32Error();
             var result = errorCode == 0;
             RefreshStylesEx();
@@ -70,6 +79,6 @@ namespace WindowDebugger.ViewModels
             SetField(ref _stylesEx, style, propertyName: nameof(StylesEx));
         }
 
-        public override string ToString() => $"{WindowHandle.ToString("X8")}({Text})";
+        public override string ToString() => $"0x{WindowHandle.ToString("X8")}{(!Text.IsNullOrEmpty() ? $"({Text})" : "")}";
     }
 }

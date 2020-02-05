@@ -13,6 +13,7 @@
         <Grid>
             <Grid.Resources>
                 <utilconverters:IntPtrToHexConverter x:Key="IntPtrToHexConverter"/>
+                <converters:ProcessIDToDisplayNameConverter x:Key="ProcessIDToDisplayNameConverter"/>
                 <Style TargetType="TextBlock">
                     <Style.Setters>
                         <Setter Property="VerticalAlignment" Value="Top"/>
@@ -40,12 +41,15 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
+                <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Window Handle"/>
-            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding WindowHandle, Converter={StaticResource IntPtrToHexConverter}}" IsReadOnly="True"/>
+            <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding WindowHandle, Converter={StaticResource IntPtrToHexConverter}, Mode=OneWay}" IsReadOnly="True"/>
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Text"/>
             <TextBox Grid.Row="1" Grid.Column="1" x:Name="TextBoxText" Text="{Binding Text, Mode=OneWay}"/>
             <Button Grid.Row="1" Grid.Column="2" Click="UpdateText" Content="Update"/>
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Process"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ProcessID, Converter={StaticResource ProcessIDToDisplayNameConverter}, Mode=OneWay}" IsReadOnly="True"/>
         </Grid>
     </Border>
 </TabItem>

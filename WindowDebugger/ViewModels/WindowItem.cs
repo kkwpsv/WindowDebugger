@@ -3,6 +3,7 @@ using Lsj.Util.Win32.Enums;
 using Lsj.Util.Win32.Extensions;
 using Lsj.Util.WPF;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using static Lsj.Util.Win32.Kernel32;
@@ -24,11 +25,15 @@ namespace WindowDebugger.ViewModels
         private WindowStylesEx _stylesEx;
         public WindowStylesEx StylesEx { get => _stylesEx; set => SetStylesEx(value, out var _); }
 
+        private int _processID;
+        public int ProcessID { get => _processID; }
+
         public void RefreshItem()
         {
             RefreshText();
             RefreshStyles();
             RefreshStylesEx();
+            RefreshProcessID();
         }
 
         public bool SetText(string value, out int errorCode)
@@ -77,6 +82,12 @@ namespace WindowDebugger.ViewModels
         {
             var style = (WindowStylesEx)GetWindowLong(WindowHandle, GetWindowLongIndexes.GWL_EXSTYLE).SafeToUInt32();
             SetField(ref _stylesEx, style, propertyName: nameof(StylesEx));
+        }
+
+        public void RefreshProcessID()
+        {
+            GetWindowThreadProcessId(WindowHandle, out var processid);
+            SetField(ref _processID, (int)processid, propertyName: nameof(ProcessID));
         }
 
         public override string ToString() => $"0x{WindowHandle.ToString("X8")}{(!Text.IsNullOrEmpty() ? $"({Text})" : "")}";

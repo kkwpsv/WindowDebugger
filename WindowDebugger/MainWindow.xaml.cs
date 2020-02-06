@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Interop;
 using Lsj.Util.Win32.Extensions;
@@ -41,6 +42,34 @@ namespace WindowDebugger
 
             Model.SelectedWindow = selected ?? Model.Windows.FirstOrDefault(x => x.WindowHandle == new WindowInteropHelper(this).Handle);
             WindowList.ScrollIntoView(Model.SelectedWindow);
+        }
+
+        private void RefreshCurrent(object sender, RoutedEventArgs e)
+        {
+            Model.SelectedWindow?.RefreshItem();
+        }
+
+        private void TabControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (e.OldValue is WindowItem olditem)
+            {
+                olditem.PropertyChanged -= WindowItem_PropertyChanged;
+            }
+            if (e.NewValue is WindowItem newitem)
+            {
+                newitem.PropertyChanged += WindowItem_PropertyChanged;
+            }
+        }
+
+        private void WindowItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (sender is WindowItem item && e.PropertyName == nameof(WindowItem.LastError))
+            {
+                if (item.LastError != null)
+                {
+                    MessageBox.Show(this, item.LastError);
+                }
+            }
         }
     }
 }

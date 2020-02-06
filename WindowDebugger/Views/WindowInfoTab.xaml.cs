@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Lsj.Util.Win32.Extensions;
+using Lsj.Util.WPF;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text;
@@ -27,9 +29,14 @@ namespace WindowDebugger.Views
 
         private void UpdateText(object sender, RoutedEventArgs e)
         {
-            if (!ViewModel.Instance.SelectedWindow.SetText(TextBoxText.Text, out var errorCode))
+            TextBoxText.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+        }
+
+        private void UpdateRect(object sender, RoutedEventArgs e)
+        {
+            if (!ValidationHelper.GetHasErrorWithChildren(GridRect))
             {
-                MessageBox.Show(Window.GetWindow(this), new Win32Exception(errorCode).Message);
+                ViewModel.Instance.SelectedWindow.UpdateWindowRect();
             }
         }
     }

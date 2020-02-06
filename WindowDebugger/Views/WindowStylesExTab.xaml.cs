@@ -48,12 +48,8 @@ namespace WindowDebugger.Views
                     styles &= ~style;
                 }
 
-                if (!window.SetStylesEx(styles, out var errorCode))
-                {
-                    MessageBox.Show(Window.GetWindow(this), ErrorMessageExtensions.GetSystemErrorMessageFromCode((uint)errorCode));
-                }
+                window.StylesEx = styles;
 
-                // Sometimes, style will be changed by system, so update IsChecked.
                 BindingOperations.GetMultiBindingExpression(checkBox, CheckBox.IsCheckedProperty).UpdateTarget();
             }
         }

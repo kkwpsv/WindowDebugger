@@ -34,22 +34,47 @@
                 </Style>
             </Grid.Resources>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*" MaxWidth="150"/>
+                <ColumnDefinition Width="5*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="*" MaxHeight="40"/>
+                <RowDefinition Height="*" MaxHeight="40"/>
+                <RowDefinition Height="*" MaxHeight="40"/>
+                <RowDefinition Height="2*" MaxHeight="70"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="*" MaxHeight="40"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Window Handle"/>
             <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding WindowHandle, Converter={StaticResource IntPtrToHexConverter}, Mode=OneWay}" IsReadOnly="True"/>
             <TextBlock Grid.Row="1" Grid.Column="0" Text="Text"/>
-            <TextBox Grid.Row="1" Grid.Column="1" x:Name="TextBoxText" Text="{Binding Text, Mode=OneWay}"/>
+            <TextBox Grid.Row="1" Grid.Column="1" x:Name="TextBoxText" Text="{Binding Text, UpdateSourceTrigger=Explicit}"/>
             <Button Grid.Row="1" Grid.Column="2" Click="UpdateText" Content="Update"/>
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Process"/>
             <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ProcessID, Converter={StaticResource ProcessIDToDisplayNameConverter}, Mode=OneWay}" IsReadOnly="True"/>
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Rect"/>
+            <Grid Grid.Row="3" Grid.Column="1" x:Name="GridRect">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="Left" HorizontalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Left, Mode=TwoWay}"/>
+                <TextBlock Grid.Row="0" Grid.Column="2" Text="Top" HorizontalAlignment="Center"/>
+                <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Top, Mode=TwoWay}"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="Width" HorizontalAlignment="Center"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Width, Mode=TwoWay}"/>
+                <TextBlock Grid.Row="1" Grid.Column="2" Text="Height" HorizontalAlignment="Center"/>
+                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Height, Mode=TwoWay}"/>
+            </Grid>
+            <Button Grid.Row="3" Grid.Column="2" Click="UpdateRect" Content="Update"/>
         </Grid>
     </Border>
 </TabItem>

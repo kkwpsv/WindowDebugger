@@ -1,4 +1,5 @@
 ﻿using Lsj.Util.Win32.Enums;
+using Lsj.Util.Win32.Extensions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -48,7 +49,7 @@ namespace WindowDebugger.Views
 
                 if (!window.SetStyles(styles, out var errorCode))
                 {
-                    MessageBox.Show(Window.GetWindow(this), new Win32Exception(errorCode).Message);
+                    MessageBox.Show(Window.GetWindow(this), ErrorMessageExtensions.GetSystemErrorMessageFromCode((uint)errorCode));
                 }
 
                 // Sometimes, style will be changed by system, so update IsChecked.

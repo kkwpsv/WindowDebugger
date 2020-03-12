@@ -85,7 +85,7 @@ namespace WindowDebugger.ViewModels
             var errorCode = Marshal.GetLastWin32Error();
             if (errorCode != 0)
             {
-                ErrorMessageExtensions.GetSystemErrorMessageFromCode((uint)errorCode);
+                SetError();
             }
             RefreshStyles();
         }
@@ -103,7 +103,7 @@ namespace WindowDebugger.ViewModels
             var errorCode = Marshal.GetLastWin32Error();
             if (errorCode != 0)
             {
-                ErrorMessageExtensions.GetSystemErrorMessageFromCode((uint)errorCode);
+                SetError();
             }
             RefreshStylesEx();
         }

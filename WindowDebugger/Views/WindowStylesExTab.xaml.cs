@@ -37,18 +37,25 @@ namespace WindowDebugger.Views
 
                 var style = (WindowStylesEx)Enum.Parse(typeof(WindowStylesEx), (string)checkBox.Tag);
 
-                var styles = window.StylesEx;
-
-                if (checkBox.IsChecked == true)
+                if (style == WindowStylesEx.WS_EX_TOPMOST)
                 {
-                    styles |= style;
+                    window.SetTopMost(checkBox.IsChecked == true);
                 }
                 else
                 {
-                    styles &= ~style;
-                }
+                    var styles = window.StylesEx;
 
-                window.StylesEx = styles;
+                    if (checkBox.IsChecked == true)
+                    {
+                        styles |= style;
+                    }
+                    else
+                    {
+                        styles &= ~style;
+                    }
+
+                    window.StylesEx = styles;
+                }
 
                 BindingOperations.GetMultiBindingExpression(checkBox, CheckBox.IsCheckedProperty).UpdateTarget();
             }

@@ -11,6 +11,7 @@ using System.Text;
 using System.Windows;
 using static Lsj.Util.Win32.Kernel32;
 using static Lsj.Util.Win32.User32;
+using static Lsj.Util.Win32.Enums.SetWindowPosFlags;
 
 namespace WindowDebugger.ViewModels
 {
@@ -151,6 +152,12 @@ namespace WindowDebugger.ViewModels
             {
 
             }
+        }
+
+        public void SetTopMost(bool isTopMost)
+        {
+            SetWindowPos(_windowHandle, isTopMost ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+            RefreshStylesEx();
         }
 
         public override string ToString() => $"0x{WindowHandle.ToString("X8")}{(!Text.IsNullOrEmpty() ? $"({Text})" : "")}";

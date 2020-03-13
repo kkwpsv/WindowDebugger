@@ -156,13 +156,25 @@ namespace WindowDebugger.ViewModels
 
         public void SetTopMost(bool isTopMost)
         {
-            //TODO: Add SetForegroundWindow when set topmost
-            //Sometimes, SetForegroundWindow should be called before when set topmost
-            var result = SetWindowPos(_windowHandle, isTopMost ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-            if (!result)
+            var result = true;
+            if (isTopMost)
             {
-                SetError();
+                result = SetForegroundWindow(_windowHandle);
+                if (!result)
+                {
+                    SetError();
+                }
             }
+
+            if (result)
+            {
+                result = SetWindowPos(_windowHandle, isTopMost ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
+                if (result)
+                {
+                    SetError();
+                }
+            }
+
             RefreshStylesEx();
         }
 

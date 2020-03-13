@@ -169,7 +169,7 @@ namespace WindowDebugger.ViewModels
             if (result)
             {
                 result = SetWindowPos(_windowHandle, isTopMost ? HWND_TOPMOST : HWND_NOTOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOACTIVATE);
-                if (result)
+                if (!result)
                 {
                     SetError();
                 }

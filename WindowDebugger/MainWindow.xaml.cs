@@ -28,12 +28,7 @@ namespace WindowDebugger
             var selectedNew = Model.SelectedWindow;
             var selected = default(WindowItem);
 
-            var windows = WindowExtensions.GetAllTopLevelWindowHandle();
-            Model.Windows.Clear();
-            foreach (var handle in windows)
-            {
-                Model.Windows.Add(new WindowItem { WindowHandle = handle });
-            }
+            Model.RefreshWindowList();
 
             if (selectedNew != null)
             {

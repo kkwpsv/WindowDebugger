@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Lsj.Util.Win32" Version="4.1.3-debug1310" />
+    <PackageReference Include="Lsj.Util.Win32" Version="4.1.3-debug1311" />
     <PackageReference Include="Lsj.Util.WPF" Version="4.1.4-debug1310" />
   </ItemGroup>
 

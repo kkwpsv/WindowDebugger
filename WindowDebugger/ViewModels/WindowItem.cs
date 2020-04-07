@@ -4,14 +4,11 @@ using Lsj.Util.Win32.Extensions;
 using Lsj.Util.Win32.Structs;
 using Lsj.Util.WPF;
 using System;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Security.RightsManagement;
 using System.Text;
-using System.Windows;
+using static Lsj.Util.Win32.Enums.SetWindowPosFlags;
 using static Lsj.Util.Win32.Kernel32;
 using static Lsj.Util.Win32.User32;
-using static Lsj.Util.Win32.Enums.SetWindowPosFlags;
 
 namespace WindowDebugger.ViewModels
 {
@@ -34,6 +31,9 @@ namespace WindowDebugger.ViewModels
 
         private int _processID;
         public int ProcessID { get => _processID; }
+
+        private string _className;
+        public string ClassName { get => _className; }
 
         private int _left;
         public int Left { get => _left; set => SetField(ref _left, value); }
@@ -135,6 +135,7 @@ namespace WindowDebugger.ViewModels
             RefreshStyles();
             RefreshStylesEx();
             RefreshProcessID();
+            RefreshClassName();
             RefreshWindowRect();
             RefreshWindowPlacement();
         }
@@ -163,6 +164,19 @@ namespace WindowDebugger.ViewModels
         {
             GetWindowThreadProcessId(WindowHandle, out var processid);
             SetField(ref _processID, (int)processid, propertyName: nameof(ProcessID));
+        }
+
+        public void RefreshClassName()
+        {
+            var sb = new StringBuilder(100);
+            if (GetClassName(WindowHandle, sb, 100) != 0)
+            {
+                SetField(ref _className, sb.ToString(), propertyName: nameof(ClassName));
+            }
+            else
+            {
+                SetError();
+            }
         }
 
         public void RefreshWindowRect()

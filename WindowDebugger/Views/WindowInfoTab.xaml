@@ -4,8 +4,10 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WindowDebugger.Views"
+             xmlns:win32Enums="clr-namespace:Lsj.Util.Win32.Enums;assembly=Lsj.Util.Win32"
              xmlns:converters="clr-namespace:WindowDebugger.Converters"
              xmlns:utilconverters="clr-namespace:Lsj.Util.WPF.Converters;assembly=Lsj.Util.WPF"
+             xmlns:markupExtensions="clr-namespace:Lsj.Util.WPF.MarkupExtensions;assembly=Lsj.Util.WPF"
              xmlns:viewmodels="clr-namespace:WindowDebugger.ViewModels"
          mc:Ignorable="d"
          d:DesignHeight="500" d:DesignWidth="500" d:DataContext="{d:DesignInstance Type=viewmodels:WindowItem}" Header="{Binding Content, RelativeSource={RelativeSource Self}, Mode=OneWay}">
@@ -16,20 +18,27 @@
                 <converters:ProcessIDToDisplayNameConverter x:Key="ProcessIDToDisplayNameConverter"/>
                 <Style TargetType="TextBlock">
                     <Style.Setters>
-                        <Setter Property="VerticalAlignment" Value="Top"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
                     </Style.Setters>
                 </Style>
                 <Style TargetType="TextBox">
                     <Style.Setters>
-                        <Setter Property="VerticalAlignment" Value="Top"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
                         <Setter Property="Height" Value="20"/>
                     </Style.Setters>
                 </Style>
                 <Style TargetType="Button">
                     <Style.Setters>
-                        <Setter Property="VerticalAlignment" Value="Top"/>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
                         <Setter Property="Height" Value="20"/>
                         <Setter Property="Margin" Value="10,0,0,0"/>
+                    </Style.Setters>
+                </Style>
+                <Style TargetType="ComboBox">
+                    <Style.Setters>
+                        <Setter Property="VerticalAlignment" Value="Center"/>
+                        <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        <Setter Property="Height" Value="22"/>
                     </Style.Setters>
                 </Style>
             </Grid.Resources>
@@ -43,6 +52,7 @@
                 <RowDefinition Height="*" MaxHeight="40"/>
                 <RowDefinition Height="*" MaxHeight="40"/>
                 <RowDefinition Height="2*" MaxHeight="70"/>
+                <RowDefinition Height="*" MaxHeight="40"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="*" MaxHeight="40"/>
             </Grid.RowDefinitions>
@@ -75,6 +85,11 @@
                 <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Height, Mode=TwoWay}"/>
             </Grid>
             <Button Grid.Row="3" Grid.Column="2" Click="UpdateRect" Content="Update"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="WindowShowStates"/>
+            <ComboBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ComboBoxWindowShowStates"
+                      SelectedValue="{Binding WindowShowStates, Mode=TwoWay}"
+                      ItemsSource="{markupExtensions:EnumToItemSource {x:Type win32Enums:ShowWindowCommands}}"
+                      DisplayMemberPath="DisplayName" SelectedValuePath="Value"/>
         </Grid>
     </Border>
 </TabItem>

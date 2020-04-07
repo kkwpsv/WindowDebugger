@@ -47,16 +47,8 @@ namespace WindowDebugger.ViewModels
         private int _height;
         public int Height { get => _height; set => SetField(ref _height, value); }
 
-
-        public void RefreshItem()
-        {
-            RefreshText();
-            RefreshStyles();
-            RefreshStylesEx();
-            RefreshProcessID();
-            RefreshWindowRect();
-            RefreshWindowPlacement();
-        }
+        private ShowWindowCommands _windowShowStates;
+        public ShowWindowCommands WindowShowStates { get => _windowShowStates; set => SetWindowShowStates(value); }
 
         private void SetError() => LastError = ErrorMessageExtensions.GetSystemErrorMessageFromCode((uint)Marshal.GetLastWin32Error());
 
@@ -71,14 +63,6 @@ namespace WindowDebugger.ViewModels
             RefreshText();
         }
 
-        public void RefreshText()
-        {
-            var sb = new StringBuilder(50);
-            GetWindowText(_windowHandle, sb, 50);
-            var text = sb.ToString();
-            SetField(ref _text, text, propertyName: nameof(Text));
-        }
-
         private void SetStyles(WindowStyles value)
         {
             SetLastError(0);
@@ -91,12 +75,6 @@ namespace WindowDebugger.ViewModels
             RefreshStyles();
         }
 
-        public void RefreshStyles()
-        {
-            var style = (WindowStyles)GetWindowLong(WindowHandle, GetWindowLongIndexes.GWL_STYLE).SafeToUInt32();
-            SetField(ref _styles, style, propertyName: nameof(Styles));
-        }
-
         private void SetStylesEx(WindowStylesEx value)
         {
             SetLastError(0);
@@ -107,51 +85,6 @@ namespace WindowDebugger.ViewModels
                 SetError();
             }
             RefreshStylesEx();
-        }
-
-        public void RefreshStylesEx()
-        {
-            var style = (WindowStylesEx)GetWindowLong(WindowHandle, GetWindowLongIndexes.GWL_EXSTYLE).SafeToUInt32();
-            SetField(ref _stylesEx, style, propertyName: nameof(StylesEx));
-        }
-
-        public void RefreshProcessID()
-        {
-            GetWindowThreadProcessId(WindowHandle, out var processid);
-            SetField(ref _processID, (int)processid, propertyName: nameof(ProcessID));
-        }
-
-        public bool UpdateWindowRect()
-        {
-            var result = SetWindowPos(WindowHandle, IntPtr.Zero, _left, _top, _width, _height, SetWindowPosFlags.SWP_NOZORDER);
-            if (!result)
-            {
-                SetError();
-            }
-            RefreshWindowRect();
-            RefreshWindowPlacement();
-            return result;
-        }
-
-        public void RefreshWindowRect()
-        {
-            if (GetWindowRect(WindowHandle, out var rect))
-            {
-                Left = rect.left;
-                Top = rect.top;
-                Height = rect.bottom - rect.top;
-                Width = rect.right - rect.left;
-            }
-        }
-
-        public void RefreshWindowPlacement()
-        {
-            var placement = new WINDOWPLACEMENT();
-            placement.length = (uint)Marshal.SizeOf<WINDOWPLACEMENT>();
-            if (GetWindowPlacement(WindowHandle, ref placement))
-            {
-
-            }
         }
 
         public void SetTopMost(bool isTopMost)
@@ -176,6 +109,81 @@ namespace WindowDebugger.ViewModels
             }
 
             RefreshStylesEx();
+        }
+
+        public bool SetWindowRect()
+        {
+            var result = SetWindowPos(WindowHandle, IntPtr.Zero, _left, _top, _width, _height, SWP_NOZORDER);
+            if (!result)
+            {
+                SetError();
+            }
+            RefreshWindowRect();
+            RefreshWindowPlacement();
+            return result;
+        }
+
+        public void SetWindowShowStates(ShowWindowCommands commands)
+        {
+            ShowWindow(_windowHandle, commands);
+            RefreshWindowPlacement();
+        }
+
+        public void RefreshItem()
+        {
+            RefreshText();
+            RefreshStyles();
+            RefreshStylesEx();
+            RefreshProcessID();
+            RefreshWindowRect();
+            RefreshWindowPlacement();
+        }
+
+        public void RefreshText()
+        {
+            var sb = new StringBuilder(50);
+            GetWindowText(_windowHandle, sb, 50);
+            var text = sb.ToString();
+            SetField(ref _text, text, propertyName: nameof(Text));
+        }
+
+        public void RefreshStyles()
+        {
+            var style = (WindowStyles)GetWindowLong(WindowHandle, GetWindowLongIndexes.GWL_STYLE).SafeToUInt32();
+            SetField(ref _styles, style, propertyName: nameof(Styles));
+        }
+
+        public void RefreshStylesEx()
+        {
+            var style = (WindowStylesEx)GetWindowLong(WindowHandle, GetWindowLongIndexes.GWL_EXSTYLE).SafeToUInt32();
+            SetField(ref _stylesEx, style, propertyName: nameof(StylesEx));
+        }
+
+        public void RefreshProcessID()
+        {
+            GetWindowThreadProcessId(WindowHandle, out var processid);
+            SetField(ref _processID, (int)processid, propertyName: nameof(ProcessID));
+        }
+
+        public void RefreshWindowRect()
+        {
+            if (GetWindowRect(WindowHandle, out var rect))
+            {
+                Left = rect.left;
+                Top = rect.top;
+                Height = rect.bottom - rect.top;
+                Width = rect.right - rect.left;
+            }
+        }
+
+        public void RefreshWindowPlacement()
+        {
+            var placement = new WINDOWPLACEMENT();
+            placement.length = (uint)Marshal.SizeOf<WINDOWPLACEMENT>();
+            if (GetWindowPlacement(WindowHandle, ref placement))
+            {
+                SetField(ref _windowShowStates, placement.showCmd, propertyName: nameof(WindowShowStates));
+            }
         }
 
         public override string ToString() => $"0x{WindowHandle.ToString("X8")}{(!Text.IsNullOrEmpty() ? $"({Text})" : "")}";

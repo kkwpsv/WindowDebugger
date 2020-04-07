@@ -36,7 +36,7 @@ namespace WindowDebugger.Views
         {
             if (!ValidationHelper.GetHasErrorWithChildren(GridRect))
             {
-                ViewModel.Instance.SelectedWindow.UpdateWindowRect();
+                ViewModel.Instance.SelectedWindow.SetWindowRect();
             }
         }
     }

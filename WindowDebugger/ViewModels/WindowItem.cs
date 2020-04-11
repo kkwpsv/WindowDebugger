@@ -18,7 +18,7 @@ namespace WindowDebugger.ViewModels
         public IntPtr WindowHandle { get => _windowHandle; set => SetField(ref _windowHandle, value, extraAction: RefreshItem); }
 
         private string _lastError;
-        public string LastError { get => _lastError; private set => SetField(ref _lastError, value); }
+        public string LastError { get => _lastError; set => SetField(ref _lastError, value); }
 
         private string _text;
         public string Text { get => _text; set => SetText(value); }
@@ -28,6 +28,9 @@ namespace WindowDebugger.ViewModels
 
         private WindowStylesEx _stylesEx;
         public WindowStylesEx StylesEx { get => _stylesEx; set => SetStylesEx(value); }
+
+        private ClassStyles _classStyles;
+        public ClassStyles ClassStyles { get => _classStyles; set => SetClassStyles(value); }
 
         private int _processID;
         public int ProcessID { get => _processID; }
@@ -50,7 +53,10 @@ namespace WindowDebugger.ViewModels
         private ShowWindowCommands _windowShowStates;
         public ShowWindowCommands WindowShowStates { get => _windowShowStates; set => SetWindowShowStates(value); }
 
-        private void SetError() => LastError = ErrorMessageExtensions.GetSystemErrorMessageFromCode((uint)Marshal.GetLastWin32Error());
+        private void SetError()
+        {
+            LastError = ErrorMessageExtensions.GetSystemErrorMessageFromCode((uint)Marshal.GetLastWin32Error());
+        }
 
         private void SetText(string value)
         {
@@ -85,6 +91,18 @@ namespace WindowDebugger.ViewModels
                 SetError();
             }
             RefreshStylesEx();
+        }
+
+        private void SetClassStyles(ClassStyles value)
+        {
+            SetLastError(0);
+            SetClassLong(_windowHandle, GetClassLongIndexes.GCL_STYLE, (IntPtr)value);
+            var errorCode = Marshal.GetLastWin32Error();
+            if (errorCode != 0)
+            {
+                SetError();
+            }
+            RefreshClassStyles();
         }
 
         public void SetTopMost(bool isTopMost)
@@ -134,6 +152,7 @@ namespace WindowDebugger.ViewModels
             RefreshText();
             RefreshStyles();
             RefreshStylesEx();
+            RefreshClassStyles();
             RefreshProcessID();
             RefreshClassName();
             RefreshWindowRect();
@@ -158,6 +177,12 @@ namespace WindowDebugger.ViewModels
         {
             var style = (WindowStylesEx)GetWindowLong(WindowHandle, GetWindowLongIndexes.GWL_EXSTYLE).SafeToUInt32();
             SetField(ref _stylesEx, style, propertyName: nameof(StylesEx));
+        }
+
+        public void RefreshClassStyles()
+        {
+            var style = (ClassStyles)((UIntPtr)GetClassLong(WindowHandle, GetClassLongIndexes.GCL_STYLE)).SafeToUInt32();
+            SetField(ref _classStyles, style, propertyName: nameof(ClassStyles));
         }
 
         public void RefreshProcessID()

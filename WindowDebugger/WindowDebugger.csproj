@@ -16,10 +16,16 @@
     <Compile Update="Views\WindowStylesExTab.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Views\ClassStylesTab.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <Page Update="Views\WindowStylesExTab.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Views\ClassStylesTab.xaml">
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>

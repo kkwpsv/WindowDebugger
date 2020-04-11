@@ -24,6 +24,11 @@ namespace WindowDebugger.Converters
                     var result = (WindowStyles)Enum.Parse(typeof(WindowStyles), str);
                     return $"{str.Replace("_", "__")} (0X{((uint)result).ToString("X8")})";
                 }
+                else if (str.StartsWith("CS_"))
+                {
+                    var result = (ClassStyles)Enum.Parse(typeof(ClassStyles), str);
+                    return $"{str.Replace("_", "__")} (0X{((uint)result).ToString("X8")})";
+                }
             }
             return DependencyProperty.UnsetValue;
         }

@@ -30,6 +30,7 @@
             <views:WindowInfoTab Header="Info"/>
             <views:WindowStylesTab Header="Styles"/>
             <views:WindowStylesExTab Header="StyleExes"/>
+            <views:ClassStylesTab Header="ClassStyles"/>
         </TabControl>
         <Button Grid.Row="1" Grid.Column="1" Content="Refresh Current" MaxWidth="200" Click="RefreshCurrent"/>
     </Grid>

@@ -63,6 +63,7 @@ namespace WindowDebugger
                 if (item.LastError != null)
                 {
                     MessageBox.Show(this, item.LastError);
+                    item.LastError = null;
                 }
             }
         }

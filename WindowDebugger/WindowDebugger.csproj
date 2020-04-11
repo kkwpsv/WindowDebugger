@@ -5,6 +5,7 @@
     <TargetFrameworks>netcoreapp3.1;net48</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Version>0.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>

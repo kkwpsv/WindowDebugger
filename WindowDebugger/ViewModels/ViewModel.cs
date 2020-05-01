@@ -1,6 +1,7 @@
 ﻿using Lsj.Util.Text;
 using Lsj.Util.Win32.Extensions;
 using Lsj.Util.WPF;
+using System;
 using System.Collections.ObjectModel;
 
 namespace WindowDebugger.ViewModels
@@ -30,8 +31,13 @@ namespace WindowDebugger.ViewModels
                 var item = new WindowItem { WindowHandle = handle };
                 if (!_searchText.IsNullOrEmpty())
                 {
-                    item.RefreshText();
-                    if (item.Text.Contains(_searchText))
+#if NET48
+                    if ((item.Text?.IndexOf(_searchText, StringComparison.CurrentCultureIgnoreCase) > -1)
+                        || (item.ProcessName?.IndexOf(_searchText, StringComparison.CurrentCultureIgnoreCase) > -1))
+#else
+                    if ((item.Text?.Contains(_searchText, StringComparison.CurrentCultureIgnoreCase) ?? false)
+                        || (item.ProcessName?.Contains(_searchText, StringComparison.CurrentCultureIgnoreCase) ?? false))
+#endif
                     {
                         Windows.Add(item);
                     }

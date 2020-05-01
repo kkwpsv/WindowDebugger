@@ -15,7 +15,6 @@
         <Grid>
             <Grid.Resources>
                 <utilconverters:IntPtrToHexConverter x:Key="IntPtrToHexConverter"/>
-                <converters:ProcessIDToDisplayNameConverter x:Key="ProcessIDToDisplayNameConverter"/>
                 <Style TargetType="TextBlock">
                     <Style.Setters>
                         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -63,7 +62,12 @@
             <TextBox Grid.Row="1" Grid.Column="1" x:Name="TextBoxText" Text="{Binding Text, UpdateSourceTrigger=Explicit}"/>
             <Button Grid.Row="1" Grid.Column="2" Click="UpdateText" Content="Update"/>
             <TextBlock Grid.Row="2" Grid.Column="0" Text="Process"/>
-            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ProcessID, Converter={StaticResource ProcessIDToDisplayNameConverter}, Mode=OneWay}" IsReadOnly="True"/>
+            <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" IsReadOnly="True">
+                <MultiBinding StringFormat="{}{0} ({1})" Mode="OneWay">
+                    <Binding Path="ProcessID" />
+                    <Binding Path="ProcessName" />
+                </MultiBinding>
+            </TextBox>
             <TextBlock Grid.Row="3" Grid.Column="0" Text="Class Name"/>
             <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ClassName, Mode=OneWay}" IsReadOnly="True"/>
             <TextBlock Grid.Row="4" Grid.Column="0" Text="Rect"/>

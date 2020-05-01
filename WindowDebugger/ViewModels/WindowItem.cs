@@ -4,11 +4,16 @@ using Lsj.Util.Win32.Extensions;
 using Lsj.Util.Win32.Structs;
 using Lsj.Util.WPF;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Text;
 using static Lsj.Util.Win32.Enums.SetWindowPosFlags;
 using static Lsj.Util.Win32.Kernel32;
 using static Lsj.Util.Win32.User32;
+using static Lsj.Util.Win32.Enums.ProcessAccessRights;
+using static Lsj.Util.Win32.Constants;
+using System.IO;
+using Lsj.Util.Win32.BaseTypes;
 
 namespace WindowDebugger.ViewModels
 {
@@ -34,6 +39,9 @@ namespace WindowDebugger.ViewModels
 
         private int _processID;
         public int ProcessID { get => _processID; }
+
+        private string _processName;
+        public string ProcessName { get => _processName; }
 
         private string _className;
         public string ClassName { get => _className; }
@@ -189,6 +197,18 @@ namespace WindowDebugger.ViewModels
         {
             GetWindowThreadProcessId(WindowHandle, out var processid);
             SetField(ref _processID, (int)processid, propertyName: nameof(ProcessID));
+
+            //Process.GetProcessById((int)processid)?.ProcessName is too slow
+            var process = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, processid);
+            if (process != NULL)
+            {
+                var length = (DWORD)MAX_PATH;
+                var path = new StringBuilder(MAX_PATH);
+                if (QueryFullProcessImageName(process, 0, path, ref length))
+                {
+                    SetField(ref _processName, Path.ChangeExtension(Path.GetFileName(path.ToString()), null), propertyName: nameof(ProcessName));
+                }
+            }
         }
 
         public void RefreshClassName()

@@ -208,6 +208,7 @@ namespace WindowDebugger.ViewModels
                 {
                     SetField(ref _processName, Path.ChangeExtension(Path.GetFileName(path.ToString()), null), propertyName: nameof(ProcessName));
                 }
+                CloseHandle(process);
             }
         }
 

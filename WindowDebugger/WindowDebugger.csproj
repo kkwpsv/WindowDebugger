@@ -9,8 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Lsj.Util.Win32" Version="4.1.5" />
-    <PackageReference Include="Lsj.Util.WPF" Version="4.1.4" />
+    <PackageReference Include="Lsj.Util.Win32" Version="4.1.6" />
+    <PackageReference Include="Lsj.Util.WPF" Version="4.1.5" />
   </ItemGroup>
 
   <ItemGroup>

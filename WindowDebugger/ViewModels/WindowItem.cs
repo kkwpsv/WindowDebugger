@@ -161,7 +161,7 @@ namespace WindowDebugger.ViewModels
             RefreshStyles();
             RefreshStylesEx();
             RefreshClassStyles();
-            RefreshProcessID();
+            RefreshProcessInformation();
             RefreshClassName();
             RefreshWindowRect();
             RefreshWindowPlacement();
@@ -193,7 +193,7 @@ namespace WindowDebugger.ViewModels
             SetField(ref _classStyles, style, propertyName: nameof(ClassStyles));
         }
 
-        public void RefreshProcessID()
+        public void RefreshProcessInformation()
         {
             GetWindowThreadProcessId(WindowHandle, out var processid);
             SetField(ref _processID, (int)processid, propertyName: nameof(ProcessID));

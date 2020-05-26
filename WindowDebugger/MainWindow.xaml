@@ -20,16 +20,17 @@
             <Setter Property="Padding" Value="0" />
             <Setter Property="Margin" Value="0" />
             <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="TextOptions.TextHintingMode" Value="Animated" />
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="ListBoxItem">
-                        <Grid>
-                            <Border Name="BackBorder" BorderThickness="0 0 1 1" Visibility="Collapsed">
+                        <Grid effects:TiltEffect2D.IsEnabled="True">
+                            <Border Name="BackBorder" BorderThickness="0 0 0 1" Visibility="Collapsed">
                                 <Border.Background>
                                     <effects:RevealBorderBrush Color="{StaticResource Color.Theme.Light1}" Radius="200" />
                                 </Border.Background>
                             </Border>
-                            <Border x:Name="ContentBorder" Background="{TemplateBinding Background}" BorderThickness="0 0 1 1">
+                            <Border x:Name="ContentBorder" Background="{TemplateBinding Background}" BorderThickness="0 0 0 1">
                                 <Border.BorderBrush>
                                     <effects:RevealBorderBrush />
                                 </Border.BorderBrush>
@@ -99,10 +100,11 @@
             <ListBox Grid.Row="2" Grid.ColumnSpan="3" x:Name="WindowList"
                      ItemsSource="{Binding Windows, Mode=OneWay}"
                      SelectedItem="{Binding SelectedWindow, Mode=TwoWay}"
-                     BorderThickness="0" Background="Transparent"
+                     BorderThickness="0" Background="Transparent" Padding="0"
                      ItemContainerStyle="{StaticResource Style.ListBoxItem}"
                      ItemTemplate="{StaticResource DataTemplate.WindowItem}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled" />
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     VirtualizingPanel.ScrollUnit="Pixel" />
         </Grid>
 
         <Grid Grid.Row="1" Grid.Column="1">

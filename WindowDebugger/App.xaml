@@ -11,6 +11,7 @@
                 <ResourceDictionary Source="/Themes/FDS/ScrollBar.xaml" />
                 <ResourceDictionary Source="/Themes/FDS/ScrollViewer.xaml" />
                 <ResourceDictionary Source="/Themes/FDS/ListBox.xaml" />
+                <ResourceDictionary Source="/Themes/FDS/TabControl.xaml" />
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>

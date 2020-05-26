@@ -26,11 +26,12 @@
                         <Setter Property="Height" Value="20"/>
                     </Style.Setters>
                 </Style>
-                <Style TargetType="Button">
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                     <Style.Setters>
                         <Setter Property="VerticalAlignment" Value="Center"/>
                         <Setter Property="Height" Value="20"/>
                         <Setter Property="Margin" Value="10,0,0,0"/>
+                        <Setter Property="Padding" Value="8 0" />
                     </Style.Setters>
                 </Style>
                 <Style TargetType="ComboBox">

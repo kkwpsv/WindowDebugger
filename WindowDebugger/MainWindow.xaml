@@ -88,13 +88,19 @@
             <!--标题栏-->
             <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource Brush.Theme}">
             </Grid>
-            
+
             <TextBox Grid.Row="1" Grid.ColumnSpan="2"
                      Margin="8 8 0 0" Padding="8 4" FontSize="14"
                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                     VerticalContentAlignment="Center" />
+                     VerticalContentAlignment="Center"
+                     Foreground="{StaticResource Brush.Theme.Foreground}"
+                     Background="{StaticResource Brush.Theme.Dark1}">
+                <TextBox.BorderBrush>
+                    <effects:RevealBorderBrush />
+                </TextBox.BorderBrush>
+            </TextBox>
             <Button Grid.Row="1" Grid.Column="2"
-                    Width="32" Height="32" Margin="0 8 8 0"
+                    Padding="0" Width="32" Height="32" Margin="0 8 8 0"
                     Content="&#xE895;" FontFamily="Segoe MDL2 Assets"
                     Click="RefreshWindowList"/>
             <ListBox Grid.Row="2" Grid.ColumnSpan="3" x:Name="WindowList"
@@ -110,7 +116,7 @@
         <Grid Grid.Row="1" Grid.Column="1">
             <Grid.RowDefinitions>
                 <RowDefinition />
-                <RowDefinition Height="48" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
             <TabControl Margin="8 16 12 8"
                         DataContext="{Binding SelectedWindow}"
@@ -121,7 +127,10 @@
                 <views:WindowStylesExTab Header="StyleExes"/>
                 <views:ClassStylesTab Header="ClassStyles"/>
             </TabControl>
-            <Button Grid.Row="1" Content="Refresh Current" MaxWidth="200" Click="RefreshCurrent"/>
+            <Button Grid.Row="1" Content="Refresh Current" MaxWidth="200"
+                    Click="RefreshCurrent"
+                    Margin="16" Padding="24 0" Height="40">
+            </Button>
         </Grid>
     </Grid>
 </Window>

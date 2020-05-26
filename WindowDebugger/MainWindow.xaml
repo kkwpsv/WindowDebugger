@@ -6,32 +6,131 @@
         xmlns:local="clr-namespace:WindowDebugger"
         xmlns:views="clr-namespace:WindowDebugger.Views"
         xmlns:viewmodels="clr-namespace:WindowDebugger.ViewModels"
+        xmlns:effects="clr-namespace:Walterlv.Windows.Effects;assembly=Walterlv.Themes.FluentDesign"
+        xmlns:converters="clr-namespace:WindowDebugger.Converters"
         mc:Ignorable="d" DataContext="{x:Static viewmodels:ViewModel.Instance}"
-        Title="WindowDebugger" Height="500" Width="800" MinHeight="400" MinWidth="750" Loaded="Window_Loaded">
+        Title="WindowDebugger" Height="640" Width="960" MinHeight="400" MinWidth="750" Loaded="Window_Loaded"
+        Style="{StaticResource Style.Window}">
+    <Window.Resources>
+        <converters:IntPtrToInt32Converter x:Key="IntPtrToInt32Converter" />
+        <Style x:Key="Style.ListBoxItem" TargetType="ListBoxItem">
+            <Setter Property="Foreground" Value="{StaticResource Brush.Theme.Foreground}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Height" Value="40" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+            <Setter Property="TextOptions.TextHintingMode" Value="Animated" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Grid effects:TiltEffect2D.IsEnabled="True">
+                            <Border Name="BackBorder" BorderThickness="0 0 0 1" Visibility="Collapsed">
+                                <Border.Background>
+                                    <effects:RevealBorderBrush Color="{StaticResource Color.Theme.Light1}" Radius="200" />
+                                </Border.Background>
+                            </Border>
+                            <Border x:Name="ContentBorder" Background="{TemplateBinding Background}" BorderThickness="0 0 0 1">
+                                <Border.BorderBrush>
+                                    <effects:RevealBorderBrush />
+                                </Border.BorderBrush>
+                                <ContentPresenter />
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BackBorder" Property="Visibility" Value="Visible" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsSelected" Value="True">
+                    <Setter Property="Foreground" Value="{StaticResource Brush.Foreground}" />
+                    <Setter Property="Background" Value="{StaticResource Brush.Background}" />
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <DataTemplate x:Key="DataTemplate.WindowItem" DataType="viewmodels:WindowItem">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="72" />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Opacity="0.5" Margin="10 4"
+                           FontFamily="Consolas" FontSize="12"
+                           Text="{Binding WindowHandle, Converter={StaticResource IntPtrToInt32Converter}, StringFormat={}{0:X8}, Mode=OneWay}" />
+                <TextBlock Grid.Column="1" Margin="0 4" Text="{Binding Text, Mode=OneWay}"
+                           TextWrapping="WrapWithOverflow" TextTrimming="CharacterEllipsis" />
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*" MinWidth="250"/>
             <ColumnDefinition Width="4*"/>
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Row="0" Grid.Column="0">
+
+        <!--窗口列表-->
+        <Grid Grid.Column="0" Background="#1570A6">
             <Grid.RowDefinitions>
-                <RowDefinition Height="25"/>
+                <RowDefinition Height="32"/>
+                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <TextBox Grid.Row="0" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" VerticalContentAlignment="Center"/>
-            <ListBox Grid.Row="1" x:Name="WindowList" ItemsSource="{Binding Windows, Mode=OneWay}" SelectedItem="{Binding SelectedWindow, Mode=TwoWay}"/>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!--标题栏-->
+            <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Background="{StaticResource Brush.Theme}">
+            </Grid>
+
+            <TextBox Grid.Row="1" Grid.ColumnSpan="2"
+                     Margin="8 8 0 0" Padding="8 4" FontSize="14"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                     VerticalContentAlignment="Center"
+                     Foreground="{StaticResource Brush.Theme.Foreground}"
+                     Background="{StaticResource Brush.Theme.Dark1}">
+                <TextBox.BorderBrush>
+                    <effects:RevealBorderBrush />
+                </TextBox.BorderBrush>
+            </TextBox>
+            <Button Grid.Row="1" Grid.Column="2"
+                    Padding="0" Width="32" Height="32" Margin="0 8 8 0"
+                    Content="&#xE895;" FontFamily="Segoe MDL2 Assets"
+                    Click="RefreshWindowList"/>
+            <ListBox Grid.Row="2" Grid.ColumnSpan="3" x:Name="WindowList"
+                     ItemsSource="{Binding Windows, Mode=OneWay}"
+                     SelectedItem="{Binding SelectedWindow, Mode=TwoWay}"
+                     BorderThickness="0" Background="Transparent" Padding="0"
+                     ItemContainerStyle="{StaticResource Style.ListBoxItem}"
+                     ItemTemplate="{StaticResource DataTemplate.WindowItem}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     VirtualizingPanel.ScrollUnit="Pixel" />
         </Grid>
-        <Button Grid.Row="1" Grid.Column="0" Content="Refresh List" Click="RefreshWindowList"/>
-        <TabControl Grid.Row="0" Grid.Column="1" DataContext="{Binding SelectedWindow}" DataContextChanged="TabControl_DataContextChanged">
-            <views:WindowInfoTab Header="Info"/>
-            <views:WindowStylesTab Header="Styles"/>
-            <views:WindowStylesExTab Header="StyleExes"/>
-            <views:ClassStylesTab Header="ClassStyles"/>
-        </TabControl>
-        <Button Grid.Row="1" Grid.Column="1" Content="Refresh Current" MaxWidth="200" Click="RefreshCurrent"/>
+
+        <Grid Grid.Row="1" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <TabControl Margin="8 16 12 8"
+                        DataContext="{Binding SelectedWindow}"
+                        DataContextChanged="TabControl_DataContextChanged"
+                        ItemContainerStyle="{StaticResource {x:Type TabItem}}">
+                <views:WindowInfoTab Header="Info"/>
+                <views:WindowStylesTab Header="Styles"/>
+                <views:WindowStylesExTab Header="StyleExes"/>
+                <views:ClassStylesTab Header="ClassStyles"/>
+            </TabControl>
+            <Button Grid.Row="1" Content="Refresh Current" MaxWidth="200"
+                    Click="RefreshCurrent"
+                    Margin="16" Padding="24 0" Height="40">
+            </Button>
+        </Grid>
     </Grid>
 </Window>

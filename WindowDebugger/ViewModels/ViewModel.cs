@@ -24,7 +24,7 @@ namespace WindowDebugger.ViewModels
 
         public void RefreshWindowList()
         {
-            var windows = WindowExtensions.GetAllTopLevelWindowHandle();
+            var windows = WindowExtensions.GetAllWindowHandle();
             Windows.Clear();
             foreach (var handle in windows)
             {

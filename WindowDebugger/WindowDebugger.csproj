@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Lsj.Util.Win32" Version="4.1.8-debug1719" />
+    <PackageReference Include="Lsj.Util.Win32" Version="4.1.8" />
     <PackageReference Include="Lsj.Util.WPF" Version="4.1.5" />
     <PackageReference Include="Walterlv.Themes.FluentDesign" Version="2.1.3" />
   </ItemGroup>

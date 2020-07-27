@@ -50,6 +50,6 @@ namespace WindowDebugger.ViewModels
         }
 
         private WindowItem _currentWindow;
-        public WindowItem SelectedWindow { get => _currentWindow; set => SetField(ref _currentWindow, value); }
+        public WindowItem SelectedWindow { get => _currentWindow; set => SetField(ref _currentWindow, value, extraAction: () => { value?.RefreshItem(); value?.RefreshScreenShot(); }); }
     }
 }

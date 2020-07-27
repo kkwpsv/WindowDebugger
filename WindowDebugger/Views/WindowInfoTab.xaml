@@ -55,7 +55,6 @@
                 <RowDefinition Height="2*" MaxHeight="70"/>
                 <RowDefinition Height="*" MaxHeight="40"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*" MaxHeight="40"/>
             </Grid.RowDefinitions>
             <TextBlock Grid.Row="0" Grid.Column="0" Text="Window Handle"/>
             <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding WindowHandle, Converter={StaticResource IntPtrToHexConverter}, Mode=OneWay}" IsReadOnly="True"/>
@@ -98,6 +97,8 @@
                       SelectedValue="{Binding WindowShowStates, Mode=TwoWay}"
                       ItemsSource="{markupExtensions:EnumToItemSource {x:Type win32Enums:ShowWindowCommands}}"
                       DisplayMemberPath="DisplayName" SelectedValuePath="Value"/>
+            <Image Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
+                   Source="{Binding Screenshot}"/>
         </Grid>
     </Border>
 </TabItem>

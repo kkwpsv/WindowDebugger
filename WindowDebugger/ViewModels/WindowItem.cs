@@ -1,19 +1,23 @@
 ﻿using Lsj.Util.Text;
+using Lsj.Util.Win32.BaseTypes;
 using Lsj.Util.Win32.Enums;
 using Lsj.Util.Win32.Extensions;
 using Lsj.Util.Win32.Structs;
 using Lsj.Util.WPF;
 using System;
-using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows;
+using System.Windows.Interop;
+using System.Windows.Media.Imaging;
+using static Lsj.Util.Win32.Constants;
+using static Lsj.Util.Win32.Enums.ProcessAccessRights;
 using static Lsj.Util.Win32.Enums.SetWindowPosFlags;
+using static Lsj.Util.Win32.Extensions.WindowExtensions;
 using static Lsj.Util.Win32.Kernel32;
 using static Lsj.Util.Win32.User32;
-using static Lsj.Util.Win32.Enums.ProcessAccessRights;
-using static Lsj.Util.Win32.Constants;
-using System.IO;
-using Lsj.Util.Win32.BaseTypes;
+using static Lsj.Util.Win32.Gdi32;
 
 namespace WindowDebugger.ViewModels
 {
@@ -60,6 +64,9 @@ namespace WindowDebugger.ViewModels
 
         private ShowWindowCommands _windowShowStates;
         public ShowWindowCommands WindowShowStates { get => _windowShowStates; set => SetWindowShowStates(value); }
+
+        private BitmapSource _screenshot;
+        public BitmapSource Screenshot { get => _screenshot; set => SetField(ref _screenshot, value); }
 
         private void SetError()
         {
@@ -243,6 +250,20 @@ namespace WindowDebugger.ViewModels
             if (GetWindowPlacement(WindowHandle, ref placement))
             {
                 SetField(ref _windowShowStates, placement.showCmd, propertyName: nameof(WindowShowStates));
+            }
+        }
+
+        /// <summary>
+        /// Not refresh when <see cref="RefreshItem"/> beacuse of too many cost.
+        /// </summary>
+        public void RefreshScreenShot()
+        {
+            var screenShot = GetWindowScreenshot(WindowHandle);
+            if (screenShot != NULL)
+            {
+                var imageSource = Imaging.CreateBitmapSourceFromHBitmap(screenShot, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                SetField(ref _screenshot, imageSource, propertyName: nameof(Screenshot));
+                DeleteObject(screenShot);
             }
         }
 

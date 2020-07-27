@@ -42,6 +42,7 @@ namespace WindowDebugger
         private void RefreshCurrent(object sender, RoutedEventArgs e)
         {
             Model.SelectedWindow?.RefreshItem();
+            Model.SelectedWindow?.RefreshScreenShot();
         }
 
         private void TabControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)

@@ -12,12 +12,14 @@ using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using static Lsj.Util.Win32.Constants;
+using static Lsj.Util.Win32.Enums.GetAncestorFlags;
 using static Lsj.Util.Win32.Enums.ProcessAccessRights;
 using static Lsj.Util.Win32.Enums.SetWindowPosFlags;
+using static Lsj.Util.Win32.Enums.WindowStyles;
 using static Lsj.Util.Win32.Extensions.WindowExtensions;
+using static Lsj.Util.Win32.Gdi32;
 using static Lsj.Util.Win32.Kernel32;
 using static Lsj.Util.Win32.User32;
-using static Lsj.Util.Win32.Gdi32;
 
 namespace WindowDebugger.ViewModels
 {
@@ -146,7 +148,27 @@ namespace WindowDebugger.ViewModels
 
         public bool SetWindowRect()
         {
-            var result = SetWindowPos(WindowHandle, IntPtr.Zero, _left, _top, _width, _height, SWP_NOZORDER);
+            HWND parentWindow = NULL;
+            var result = false;
+
+            if ((_styles & WS_CHILD) != 0)
+            {
+                parentWindow = GetAncestor(WindowHandle, GA_PARENT);
+            }
+
+            if (parentWindow != NULL)
+            {
+                var point = new POINT { x = _left, y = _top };
+                result = ScreenToClient(parentWindow, ref point);
+                if (result)
+                {
+                    result = SetWindowPos(WindowHandle, IntPtr.Zero, point.x, point.y, _width, _height, SWP_NOZORDER);
+                }
+            }
+            else
+            {
+                result = SetWindowPos(WindowHandle, IntPtr.Zero, _left, _top, _width, _height, SWP_NOZORDER);
+            }
             if (!result)
             {
                 SetError();

@@ -70,7 +70,7 @@
             </TextBox>
             <TextBlock Grid.Row="3" Grid.Column="0" Text="Class Name"/>
             <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ClassName, Mode=OneWay}" IsReadOnly="True"/>
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="Rect"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Rect (Screen)"/>
             <Grid Grid.Row="4" Grid.Column="1" x:Name="GridRect">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>

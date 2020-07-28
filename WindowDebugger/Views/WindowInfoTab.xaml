@@ -98,7 +98,7 @@
                       ItemsSource="{markupExtensions:EnumToItemSource {x:Type win32Enums:ShowWindowCommands}}"
                       DisplayMemberPath="DisplayName" SelectedValuePath="Value"/>
             <Image Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" VerticalAlignment="Center"
-                   Source="{Binding Screenshot}"/>
+                   Source="{Binding Screenshot}" RenderOptions.BitmapScalingMode="Fant"/>
         </Grid>
     </Border>
 </TabItem>

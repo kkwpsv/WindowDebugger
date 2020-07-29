@@ -12,5 +12,5 @@ curl --ssl-no-revoke -H "JOB-TOKEN: %CI_JOB_TOKEN%" -H "Content-Type: applicatio
 
 ) else (
 ::exist
-exit 0
+echo No Need To Release
 )

@@ -1,0 +1,22 @@
+before_script:
+  - chcp 65001
+
+stages:
+  - build
+  - pack
+
+build:
+  stage: build
+  script:
+    - ".\\build.bat"
+  artifacts:
+    paths:
+      - "WindowDebugger\\bin\\Release\\"
+    expire_in: 1h
+
+pack:
+  stage: pack
+  only:
+   - master
+  script:
+    - ".\\pack.bat"

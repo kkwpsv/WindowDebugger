@@ -20,6 +20,7 @@ using static Lsj.Util.Win32.Extensions.WindowExtensions;
 using static Lsj.Util.Win32.Gdi32;
 using static Lsj.Util.Win32.Kernel32;
 using static Lsj.Util.Win32.User32;
+using static Lsj.Util.Win32.Enums.GetWindowCommands;
 
 namespace WindowDebugger.ViewModels
 {
@@ -66,6 +67,15 @@ namespace WindowDebugger.ViewModels
 
         private ShowWindowCommands _windowShowStates;
         public ShowWindowCommands WindowShowStates { get => _windowShowStates; set => SetWindowShowStates(value); }
+
+        private DPI_AWARENESS _dpiAwareness;
+        public DPI_AWARENESS DpiAwareness { get => _dpiAwareness; set => SetField(ref _dpiAwareness, value); }
+
+        private IntPtr _parentWindowHandle;
+        public IntPtr ParentWindowHandle { get => _parentWindowHandle; set => SetParentWindowHandle(value); }
+
+        private IntPtr _ownerWindowHandle;
+        public IntPtr OwnerWindowHandle { get => _ownerWindowHandle; }
 
         private BitmapSource _screenshot;
         public BitmapSource Screenshot { get => _screenshot; set => SetField(ref _screenshot, value); }
@@ -148,18 +158,14 @@ namespace WindowDebugger.ViewModels
 
         public bool SetWindowRect()
         {
-            HWND parentWindow = NULL;
             var result = false;
 
-            if ((_styles & WS_CHILD) != 0)
-            {
-                parentWindow = GetAncestor(WindowHandle, GA_PARENT);
-            }
+            RefreshParentWindowHandle();
 
-            if (parentWindow != NULL)
+            if (_parentWindowHandle != NULL)
             {
                 var point = new POINT { x = _left, y = _top };
-                result = ScreenToClient(parentWindow, ref point);
+                result = ScreenToClient(_parentWindowHandle, ref point);
                 if (result)
                 {
                     result = SetWindowPos(WindowHandle, IntPtr.Zero, point.x, point.y, _width, _height, SWP_NOZORDER);
@@ -184,6 +190,42 @@ namespace WindowDebugger.ViewModels
             RefreshWindowPlacement();
         }
 
+        private void SetParentWindowHandle(IntPtr value)
+        {
+            LastError = null;
+
+            RefreshStyles();
+            if (value == NULL && (_styles & WS_CHILD) != 0)
+            {
+                SetStyles(_styles & ~WS_CHILD);
+            }
+            else if (value != NULL)
+            {
+                if ((_styles & WS_POPUP) != 0)
+                {
+                    SetStyles(_styles & ~WS_POPUP);
+                }
+                if ((_styles & WS_CHILD) == 0)
+                {
+                    SetStyles(_styles | WS_CHILD);
+                }
+            }
+
+            var result = SetParent(_windowHandle, value);
+            if (result == NULL)
+            {
+                SetError();
+            }
+
+            if (value == NULL && (_styles & WS_POPUP) == 0)
+            {
+                SetStyles(_styles | WS_POPUP);
+            }
+
+            RefreshParentWindowHandle();
+            RefreshDpiAwareness();//May be forced reset by system
+        }
+
         public void RefreshItem()
         {
             RefreshText();
@@ -194,6 +236,9 @@ namespace WindowDebugger.ViewModels
             RefreshClassName();
             RefreshWindowRect();
             RefreshWindowPlacement();
+            RefreshDpiAwareness();
+            RefreshParentWindowHandle();
+            RefreshOwnerWindowHandle();
         }
 
         public void RefreshText()
@@ -273,6 +318,22 @@ namespace WindowDebugger.ViewModels
             {
                 SetField(ref _windowShowStates, placement.showCmd, propertyName: nameof(WindowShowStates));
             }
+        }
+
+        public void RefreshParentWindowHandle()
+        {
+            SetField(ref _parentWindowHandle, GetAncestor(WindowHandle, GA_PARENT), propertyName: nameof(ParentWindowHandle));
+        }
+
+        public void RefreshOwnerWindowHandle()
+        {
+            SetField(ref _ownerWindowHandle, GetWindow(WindowHandle, GW_OWNER), propertyName: nameof(OwnerWindowHandle));
+        }
+
+        public void RefreshDpiAwareness()
+        {
+            var dpiAwarenessContext = GetWindowDpiAwarenessContext(WindowHandle);
+            DpiAwareness = GetAwarenessFromDpiAwarenessContext(dpiAwarenessContext);
         }
 
         /// <summary>

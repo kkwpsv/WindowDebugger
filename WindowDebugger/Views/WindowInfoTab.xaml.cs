@@ -39,5 +39,13 @@ namespace WindowDebugger.Views
                 ViewModel.Instance.SelectedWindow.SetWindowRect();
             }
         }
+
+        private void UpdateParentWindowHandle(object sender, RoutedEventArgs e)
+        {
+            if (!Validation.GetHasError(TextBoxParentWindowHandle))
+            {
+                TextBoxParentWindowHandle.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            }
+        }
     }
 }

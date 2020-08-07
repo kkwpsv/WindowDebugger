@@ -31,7 +31,7 @@ namespace WindowDebugger.ViewModels
                 var item = new WindowItem { WindowHandle = handle };
                 if (!_searchText.IsNullOrEmpty())
                 {
-#if NET48
+#if NETFRAMEWORK
                     if ((item.Text?.IndexOf(_searchText, StringComparison.CurrentCultureIgnoreCase) > -1)
                         || (item.ProcessName?.IndexOf(_searchText, StringComparison.CurrentCultureIgnoreCase) > -1))
 #else

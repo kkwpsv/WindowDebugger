@@ -20,3 +20,7 @@ pack:
    - master
   script:
     - ".\\pack.bat"
+  artifacts:
+    paths:
+      - "WindowDebugger.netcoreapp3.1.7z"
+    expire_in: 1h

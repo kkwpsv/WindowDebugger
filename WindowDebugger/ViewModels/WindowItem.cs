@@ -21,6 +21,7 @@ using static Lsj.Util.Win32.Gdi32;
 using static Lsj.Util.Win32.Kernel32;
 using static Lsj.Util.Win32.User32;
 using static Lsj.Util.Win32.Enums.GetWindowCommands;
+using Lsj.Util.Win32;
 
 namespace WindowDebugger.ViewModels
 {
@@ -313,7 +314,7 @@ namespace WindowDebugger.ViewModels
         public void RefreshWindowPlacement()
         {
             var placement = new WINDOWPLACEMENT();
-            placement.length = (uint)Marshal.SizeOf<WINDOWPLACEMENT>();
+            placement.length = (uint)UnsafePInvokeExtensions.SizeOf<WINDOWPLACEMENT>();
             if (GetWindowPlacement(WindowHandle, ref placement))
             {
                 SetField(ref _windowShowStates, placement.showCmd, propertyName: nameof(WindowShowStates));

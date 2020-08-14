@@ -1,4 +1,5 @@
 ﻿using Lsj.Util.Text;
+using Lsj.Util.Win32;
 using Lsj.Util.Win32.BaseTypes;
 using Lsj.Util.Win32.Enums;
 using Lsj.Util.Win32.Extensions;
@@ -13,15 +14,17 @@ using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using static Lsj.Util.Win32.Constants;
 using static Lsj.Util.Win32.Enums.GetAncestorFlags;
+using static Lsj.Util.Win32.Enums.GetWindowCommands;
 using static Lsj.Util.Win32.Enums.ProcessAccessRights;
+using static Lsj.Util.Win32.Enums.RedrawWindowFlags;
 using static Lsj.Util.Win32.Enums.SetWindowPosFlags;
+using static Lsj.Util.Win32.Enums.WindowsMessages;
 using static Lsj.Util.Win32.Enums.WindowStyles;
 using static Lsj.Util.Win32.Extensions.WindowExtensions;
 using static Lsj.Util.Win32.Gdi32;
 using static Lsj.Util.Win32.Kernel32;
+using static Lsj.Util.Win32.UnsafePInvokeExtensions;
 using static Lsj.Util.Win32.User32;
-using static Lsj.Util.Win32.Enums.GetWindowCommands;
-using Lsj.Util.Win32;
 
 namespace WindowDebugger.ViewModels
 {
@@ -86,6 +89,55 @@ namespace WindowDebugger.ViewModels
             LastError = ErrorMessageExtensions.GetSystemErrorMessageFromCode((uint)Marshal.GetLastWin32Error());
         }
 
+        public bool SetForeground()
+        {
+            var result = SetForegroundWindow(_windowHandle);
+            if (!result)
+            {
+                SetError();
+            }
+            return result;
+        }
+
+        public void CloseWindow()
+        {
+            PostMessage(WindowHandle, WM_CLOSE, 0, NULL);
+        }
+
+        public bool RedrawWindow()
+        {
+            return User32.RedrawWindow(WindowHandle, NullRef<RECT>(), NULL, RDW_INVALIDATE);
+        }
+
+        public void FlashWindow()
+        {
+            User32.FlashWindow(WindowHandle, true);
+        }
+
+        public void KillProcess()
+        {
+            var process = OpenProcess(PROCESS_TERMINATE, false, ProcessID);
+            if (process != NULL)
+            {
+                TerminateProcess(process, 0xFFFFFFFF);
+                CloseHandle(process);
+            }
+        }
+
+        public void ForceKillProcess()
+        {
+            var process = OpenProcess(PROCESS_CREATE_THREAD, false, ProcessID);
+            if (process != NULL)
+            {
+                var threadHandle = CreateRemoteThread(process, NullRef<SECURITY_ATTRIBUTES>(), UIntPtr.Zero, null, NULL, 0, out NullRef<uint>());
+                if (threadHandle != NULL)
+                {
+                    CloseHandle(threadHandle);
+                }
+                CloseHandle(process);
+            }
+        }
+
         private void SetText(string value)
         {
             LastError = null;
@@ -138,11 +190,7 @@ namespace WindowDebugger.ViewModels
             var result = true;
             if (isTopMost)
             {
-                result = SetForegroundWindow(_windowHandle);
-                if (!result)
-                {
-                    SetError();
-                }
+                result = SetForeground();
             }
 
             if (result)
@@ -342,12 +390,19 @@ namespace WindowDebugger.ViewModels
         /// </summary>
         public void RefreshScreenShot()
         {
-            var screenShot = GetWindowScreenshot(WindowHandle);
-            if (screenShot != NULL)
+            try
             {
-                var imageSource = Imaging.CreateBitmapSourceFromHBitmap(screenShot, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-                SetField(ref _screenshot, imageSource, propertyName: nameof(Screenshot));
-                DeleteObject(screenShot);
+                var screenShot = GetWindowScreenshot(WindowHandle);
+                if (screenShot != NULL)
+                {
+                    var imageSource = Imaging.CreateBitmapSourceFromHBitmap(screenShot, IntPtr.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
+                    SetField(ref _screenshot, imageSource, propertyName: nameof(Screenshot));
+                    DeleteObject(screenShot);
+                }
+            }
+            catch
+            {
+
             }
         }
 

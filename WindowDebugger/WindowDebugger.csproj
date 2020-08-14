@@ -15,6 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="Views\OperationsTab.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Views\WindowStylesExTab.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -24,6 +27,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Update="Views\OperationsTab.xaml">
+      <SubType>Designer</SubType>
+    </Page>
     <Page Update="Views\WindowStylesExTab.xaml">
       <SubType>Designer</SubType>
     </Page>

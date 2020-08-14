@@ -126,6 +126,7 @@
                 <views:WindowStylesTab Header="Styles"/>
                 <views:WindowStylesExTab Header="StyleExes"/>
                 <views:ClassStylesTab Header="ClassStyles"/>
+                <views:OperationsTab Header="Operations"/>
             </TabControl>
             <Button Grid.Row="1" Content="Refresh Current" MaxWidth="200"
                     Click="RefreshCurrent"

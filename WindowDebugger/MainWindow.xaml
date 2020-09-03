@@ -9,7 +9,7 @@
         xmlns:effects="clr-namespace:Walterlv.Windows.Effects;assembly=Walterlv.Themes.FluentDesign"
         xmlns:converters="clr-namespace:WindowDebugger.Converters"
         mc:Ignorable="d" DataContext="{x:Static viewmodels:ViewModel.Instance}"
-        Title="WindowDebugger" Height="640" Width="960" MinHeight="400" MinWidth="750" Loaded="Window_Loaded"
+        Title="WindowDebugger" Height="640" Width="960" MinHeight="550" MinWidth="800" Loaded="Window_Loaded"
         Style="{StaticResource Style.Window}">
     <Window.Resources>
         <converters:IntPtrToInt32Converter x:Key="IntPtrToInt32Converter" />
@@ -130,7 +130,7 @@
             </TabControl>
             <Button Grid.Row="1" Content="Refresh Current" MaxWidth="200"
                     Click="RefreshCurrent"
-                    Margin="16" Padding="24 0" Height="40">
+                    Margin="16,0,10,16" Padding="24 0" Height="40">
             </Button>
         </Grid>
     </Grid>

@@ -18,6 +18,7 @@ using static Lsj.Util.Win32.Enums.GetWindowCommands;
 using static Lsj.Util.Win32.Enums.ProcessAccessRights;
 using static Lsj.Util.Win32.Enums.RedrawWindowFlags;
 using static Lsj.Util.Win32.Enums.SetWindowPosFlags;
+using static Lsj.Util.Win32.Enums.ThreadAccessRights;
 using static Lsj.Util.Win32.Enums.WindowsMessages;
 using static Lsj.Util.Win32.Enums.WindowStyles;
 using static Lsj.Util.Win32.Extensions.WindowExtensions;
@@ -53,6 +54,9 @@ namespace WindowDebugger.ViewModels
 
         private string _processName;
         public string ProcessName { get => _processName; }
+
+        private int _threadID;
+        public int ThreadID { get => _threadID; }
 
         private string _className;
         public string ClassName { get => _className; }
@@ -129,12 +133,22 @@ namespace WindowDebugger.ViewModels
             var process = OpenProcess(PROCESS_CREATE_THREAD, false, ProcessID);
             if (process != NULL)
             {
-                var threadHandle = CreateRemoteThread(process, NullRef<SECURITY_ATTRIBUTES>(), UIntPtr.Zero, null, NULL, 0, out NullRef<uint>());
+                var threadHandle = CreateRemoteThread(process, NullRef<SECURITY_ATTRIBUTES>(), UIntPtr.Zero, null, NULL, 0, out NullRef<DWORD>());
                 if (threadHandle != NULL)
                 {
                     CloseHandle(threadHandle);
                 }
                 CloseHandle(process);
+            }
+        }
+
+        public void KillThread()
+        {
+            var thread = OpenThread(THREAD_TERMINATE, false, ThreadID);
+            if (thread != NULL)
+            {
+                TerminateThread(thread, 0xFFFFFFFF);
+                CloseHandle(thread);
             }
         }
 
@@ -281,7 +295,7 @@ namespace WindowDebugger.ViewModels
             RefreshStyles();
             RefreshStylesEx();
             RefreshClassStyles();
-            RefreshProcessInformation();
+            RefreshProcessAndThreadInformation();
             RefreshClassName();
             RefreshWindowRect();
             RefreshWindowPlacement();
@@ -300,13 +314,13 @@ namespace WindowDebugger.ViewModels
 
         public void RefreshStyles()
         {
-            var style = (WindowStyles)GetWindowLong(WindowHandle, GetWindowLongIndexes.GWL_STYLE).SafeToUInt32();
+            var style = (WindowStyles)((IntPtr)GetWindowLong(WindowHandle, GetWindowLongIndexes.GWL_STYLE)).SafeToUInt32();
             SetField(ref _styles, style, propertyName: nameof(Styles));
         }
 
         public void RefreshStylesEx()
         {
-            var style = (WindowStylesEx)GetWindowLong(WindowHandle, GetWindowLongIndexes.GWL_EXSTYLE).SafeToUInt32();
+            var style = (WindowStylesEx)((IntPtr)GetWindowLong(WindowHandle, GetWindowLongIndexes.GWL_EXSTYLE)).SafeToUInt32();
             SetField(ref _stylesEx, style, propertyName: nameof(StylesEx));
         }
 
@@ -316,13 +330,14 @@ namespace WindowDebugger.ViewModels
             SetField(ref _classStyles, style, propertyName: nameof(ClassStyles));
         }
 
-        public void RefreshProcessInformation()
+        public void RefreshProcessAndThreadInformation()
         {
-            GetWindowThreadProcessId(WindowHandle, out var processid);
-            SetField(ref _processID, (int)processid, propertyName: nameof(ProcessID));
+            var threadID = GetWindowThreadProcessId(WindowHandle, out var processID);
+            SetField(ref _processID, (int)processID, propertyName: nameof(ProcessID));
+            SetField(ref _threadID, (int)threadID, propertyName: nameof(ThreadID));
 
             //Process.GetProcessById((int)processid)?.ProcessName is too slow
-            var process = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, processid);
+            var process = OpenProcess(PROCESS_QUERY_LIMITED_INFORMATION, false, processID);
             if (process != NULL)
             {
                 var length = (DWORD)MAX_PATH;

@@ -11,7 +11,7 @@
              xmlns:viewmodels="clr-namespace:WindowDebugger.ViewModels"
          mc:Ignorable="d"
          d:DesignHeight="500" d:DesignWidth="500" d:DataContext="{d:DesignInstance Type=viewmodels:WindowItem}" Header="{Binding Content, RelativeSource={RelativeSource Self}, Mode=OneWay}">
-    <Border Padding="10">
+    <Border Padding="10,10,10,0">
         <Grid>
             <Grid.Resources>
                 <utilconverters:IntPtrToHexConverter x:Key="IntPtrToHexConverter"/>
@@ -45,9 +45,10 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*" MaxWidth="150"/>
                 <ColumnDefinition Width="5*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" MinWidth="80"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="*" MaxHeight="40"/>
                 <RowDefinition Height="*" MaxHeight="40"/>
                 <RowDefinition Height="*" MaxHeight="40"/>
                 <RowDefinition Height="*" MaxHeight="40"/>
@@ -71,10 +72,12 @@
                     <Binding Path="ProcessName" />
                 </MultiBinding>
             </TextBox>
-            <TextBlock Grid.Row="3" Grid.Column="0" Text="Class Name"/>
-            <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ClassName, Mode=OneWay}" IsReadOnly="True"/>
-            <TextBlock Grid.Row="4" Grid.Column="0" Text="Rect (Screen)"/>
-            <Grid Grid.Row="4" Grid.Column="1" x:Name="GridRect">
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Thread ID"/>
+            <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ThreadID, Mode=OneWay}" IsReadOnly="True"/>
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Class Name"/>
+            <TextBox Grid.Row="4" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding ClassName, Mode=OneWay}" IsReadOnly="True"/>
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="Rect (Screen)"/>
+            <Grid Grid.Row="5" Grid.Column="1" x:Name="GridRect">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
@@ -94,20 +97,20 @@
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="Height" HorizontalAlignment="Center"/>
                 <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Height, Mode=TwoWay}"/>
             </Grid>
-            <Button Grid.Row="4" Grid.Column="2" Click="UpdateRect" Content="Update"/>
-            <TextBlock Grid.Row="5" Grid.Column="0" Text="WindowShowStates"/>
-            <ComboBox Grid.Row="5" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ComboBoxWindowShowStates"
+            <Button Grid.Row="5" Grid.Column="2" Click="UpdateRect" Content="Update"/>
+            <TextBlock Grid.Row="6" Grid.Column="0" Text="WindowShowStates"/>
+            <ComboBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ComboBoxWindowShowStates"
                       SelectedValue="{Binding WindowShowStates, Mode=TwoWay}"
                       ItemsSource="{markupExtensions:EnumToItemSource {x:Type win32Enums:ShowWindowCommands}}"
                       DisplayMemberPath="DisplayName" SelectedValuePath="Value"/>
-            <TextBlock Grid.Row="6" Grid.Column="0" Text="DpiAwareness"/>
-            <TextBox Grid.Row="6" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding DpiAwareness, Mode=OneWay}" IsReadOnly="True"/>
-            <TextBlock Grid.Row="7" Grid.Column="0" Text="Parent Window"/>
-            <TextBox Grid.Row="7" Grid.Column="1" x:Name="TextBoxParentWindowHandle" Text="{Binding ParentWindowHandle, Converter={StaticResource IntPtrToHexConverter}, UpdateSourceTrigger=Explicit}"/>
-            <Button Grid.Row="7" Grid.Column="2" Click="UpdateParentWindowHandle" Content="Update"/>
-            <TextBlock Grid.Row="8" Grid.Column="0" Text="Owner Window"/>
-            <TextBox Grid.Row="8" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding OwnerWindowHandle, Converter={StaticResource IntPtrToHexConverter}, Mode=OneWay}" IsReadOnly="True"/>
-            <Border Grid.Row="9" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="2" BorderBrush="{StaticResource Brush.Theme}"
+            <TextBlock Grid.Row="7" Grid.Column="0" Text="DpiAwareness"/>
+            <TextBox Grid.Row="7" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding DpiAwareness, Mode=OneWay}" IsReadOnly="True"/>
+            <TextBlock Grid.Row="8" Grid.Column="0" Text="Parent Window"/>
+            <TextBox Grid.Row="8" Grid.Column="1" x:Name="TextBoxParentWindowHandle" Text="{Binding ParentWindowHandle, Converter={StaticResource IntPtrToHexConverter}, UpdateSourceTrigger=Explicit}"/>
+            <Button Grid.Row="8" Grid.Column="2" Click="UpdateParentWindowHandle" Content="Update"/>
+            <TextBlock Grid.Row="9" Grid.Column="0" Text="Owner Window"/>
+            <TextBox Grid.Row="9" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding OwnerWindowHandle, Converter={StaticResource IntPtrToHexConverter}, Mode=OneWay}" IsReadOnly="True"/>
+            <Border Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="2" BorderBrush="{StaticResource Brush.Theme}"
                     HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Image Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Source="{Binding Screenshot}" RenderOptions.BitmapScalingMode="Fant"/>
             </Border>

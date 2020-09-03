@@ -32,7 +32,7 @@ namespace WindowDebugger.ViewModels
     public class WindowItem : ModelObject
     {
         private IntPtr _windowHandle;
-        public IntPtr WindowHandle { get => _windowHandle; set => SetField(ref _windowHandle, value, extraAction: RefreshItem); }
+        public IntPtr WindowHandle { get => _windowHandle; set => SetField(ref _windowHandle, value, extraAction: RefreshBaseInfo); }
 
         private string _lastError;
         public string LastError { get => _lastError; set => SetField(ref _lastError, value); }
@@ -289,6 +289,12 @@ namespace WindowDebugger.ViewModels
             RefreshDpiAwareness();//May be forced reset by system
         }
 
+        public void RefreshBaseInfo()
+        {
+            RefreshText();
+            RefreshProcessAndThreadInformation();
+        }
+
         public void RefreshItem()
         {
             RefreshText();
@@ -302,6 +308,7 @@ namespace WindowDebugger.ViewModels
             RefreshDpiAwareness();
             RefreshParentWindowHandle();
             RefreshOwnerWindowHandle();
+            RefreshScreenShot();
         }
 
         public void RefreshText()
@@ -400,9 +407,6 @@ namespace WindowDebugger.ViewModels
             DpiAwareness = GetAwarenessFromDpiAwarenessContext(dpiAwarenessContext);
         }
 
-        /// <summary>
-        /// Not refresh when <see cref="RefreshItem"/> beacuse of too many cost.
-        /// </summary>
         public void RefreshScreenShot()
         {
             try

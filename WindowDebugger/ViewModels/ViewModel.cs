@@ -3,6 +3,7 @@ using Lsj.Util.Win32.Extensions;
 using Lsj.Util.WPF;
 using System;
 using System.Collections.ObjectModel;
+using System.Globalization;
 
 namespace WindowDebugger.ViewModels
 {
@@ -31,15 +32,27 @@ namespace WindowDebugger.ViewModels
                 var item = new WindowItem { WindowHandle = handle };
                 if (!_searchText.IsNullOrEmpty())
                 {
-#if NETFRAMEWORK
                     if ((item.Text?.IndexOf(_searchText, StringComparison.CurrentCultureIgnoreCase) > -1)
                         || (item.ProcessName?.IndexOf(_searchText, StringComparison.CurrentCultureIgnoreCase) > -1))
-#else
-                    if ((item.Text?.Contains(_searchText, StringComparison.CurrentCultureIgnoreCase) ?? false)
-                        || (item.ProcessName?.Contains(_searchText, StringComparison.CurrentCultureIgnoreCase) ?? false))
-#endif
                     {
                         Windows.Add(item);
+                    }
+
+                    if (uint.TryParse(_searchText, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out var uintHexVal) ||
+                        (_searchText.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase) && uint.TryParse(_searchText, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out uintHexVal)))
+                    {
+                        if (item.WindowHandle.SafeToUInt32() == uintHexVal || item.ProcessID == uintHexVal || item.ThreadID == uintHexVal)
+                        {
+                            Windows.Add(item);
+                        }
+                    }
+
+                    if (uint.TryParse(_searchText, out var uintVal))
+                    {
+                        if (item.WindowHandle.SafeToUInt32() == uintVal || item.ProcessID == uintVal || item.ThreadID == uintVal)
+                        {
+                            Windows.Add(item);
+                        }
                     }
                 }
                 else

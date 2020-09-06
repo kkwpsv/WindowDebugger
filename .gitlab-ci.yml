@@ -1,6 +1,3 @@
-before_script:
-  - chcp 65001
-
 stages:
   - build
   - pack
@@ -8,7 +5,7 @@ stages:
 build:
   stage: build
   script:
-    - ".\\build.bat"
+    - ".\\build.ps1"
   artifacts:
     paths:
       - "WindowDebugger\\bin\\Release\\"
@@ -19,8 +16,4 @@ pack:
   only:
    - master
   script:
-    - ".\\pack.bat"
-  artifacts:
-    paths:
-      - "WindowDebugger.netcoreapp3.1.7z"
-    expire_in: 1h
+    - ".\\pack.ps1"

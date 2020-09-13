@@ -142,6 +142,26 @@ namespace WindowDebugger.ViewModels
             }
         }
 
+        public void SuspendThread()
+        {
+            var thread = OpenThread(THREAD_SUSPEND_RESUME, false, ThreadID);
+            if (thread != NULL)
+            {
+                Kernel32.SuspendThread(thread);
+                CloseHandle(thread);
+            }
+        }
+
+        public void ResumeThread()
+        {
+            var thread = OpenThread(THREAD_SUSPEND_RESUME, false, ThreadID);
+            if (thread != NULL)
+            {
+                Kernel32.ResumeThread(thread);
+                CloseHandle(thread);
+            }
+        }
+
         public void KillThread()
         {
             var thread = OpenThread(THREAD_TERMINATE, false, ThreadID);

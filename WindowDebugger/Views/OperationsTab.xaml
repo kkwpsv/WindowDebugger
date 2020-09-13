@@ -28,7 +28,9 @@
             <Button Grid.Column="1" Grid.Row="1" MaxWidth="200" Click="ButtonFlashWindow_Click">Flash Window</Button>
             <Button Grid.Column="0" Grid.Row="2" MaxWidth="200" Click="ButtonKillProcess_Click">Kill Process</Button>
             <Button Grid.Column="1" Grid.Row="2" MaxWidth="200" Click="ButtonForceKillProcess_Click">Force Kill Process</Button>
-            <Button Grid.Column="0" Grid.Row="3" MaxWidth="200" Click="ButtonKillThread_Click">Kill Thread</Button>
+            <Button Grid.Column="0" Grid.Row="3" MaxWidth="200" Click="ButtonSuspendThread_Click">Suspend Thread</Button>
+            <Button Grid.Column="1" Grid.Row="3" MaxWidth="200" Click="ButtonResumeThread_Click">Resume Thread</Button>
+            <Button Grid.Column="0" Grid.Row="4" MaxWidth="200" Click="ButtonKillThread_Click">Kill Thread</Button>
         </Grid>
     </Border>
 </TabItem>

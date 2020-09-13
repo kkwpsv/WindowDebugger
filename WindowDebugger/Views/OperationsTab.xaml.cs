@@ -43,6 +43,16 @@ namespace WindowDebugger.Views
             ViewModel.Instance.SelectedWindow.ForceKillProcess();
         }
 
+        private void ButtonSuspendThread_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ViewModel.Instance.SelectedWindow.SuspendThread();
+        }
+
+        private void ButtonResumeThread_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            ViewModel.Instance.SelectedWindow.ResumeThread();
+        }
+
         private void ButtonKillThread_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             ViewModel.Instance.SelectedWindow.KillThread();

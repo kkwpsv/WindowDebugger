@@ -121,10 +121,9 @@ namespace WindowDebugger.ViewModels
         public void KillProcess()
         {
             var process = OpenProcess(PROCESS_TERMINATE, false, ProcessID);
-            if (process != NULL)
+            if (process == NULL || !TerminateProcess(process, 0xFFFFFFFF) || !CloseHandle(process))
             {
-                TerminateProcess(process, 0xFFFFFFFF);
-                CloseHandle(process);
+                SetError();
             }
         }
 
@@ -134,31 +133,36 @@ namespace WindowDebugger.ViewModels
             if (process != NULL)
             {
                 var threadHandle = CreateRemoteThread(process, NullRef<SECURITY_ATTRIBUTES>(), UIntPtr.Zero, null, NULL, 0, out NullRef<DWORD>());
-                if (threadHandle != NULL)
+                if (threadHandle == NULL || !CloseHandle(threadHandle))
                 {
-                    CloseHandle(threadHandle);
+                    SetError();
                 }
-                CloseHandle(process);
+                if (!CloseHandle(process))
+                {
+                    SetError();
+                }
+            }
+            else
+            {
+                SetError();
             }
         }
 
         public void SuspendThread()
         {
             var thread = OpenThread(THREAD_SUSPEND_RESUME, false, ThreadID);
-            if (thread != NULL)
+            if (thread == NULL || Kernel32.SuspendThread(thread) == (DWORD)(-1) || !CloseHandle(thread))
             {
-                Kernel32.SuspendThread(thread);
-                CloseHandle(thread);
+                SetError();
             }
         }
 
         public void ResumeThread()
         {
             var thread = OpenThread(THREAD_SUSPEND_RESUME, false, ThreadID);
-            if (thread != NULL)
+            if (thread == NULL || Kernel32.ResumeThread(thread) == (DWORD)(-1) || !CloseHandle(thread))
             {
-                Kernel32.ResumeThread(thread);
-                CloseHandle(thread);
+                SetError();
             }
         }
 

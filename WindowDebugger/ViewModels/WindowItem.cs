@@ -427,8 +427,11 @@ namespace WindowDebugger.ViewModels
 
         public void RefreshDpiAwareness()
         {
-            var dpiAwarenessContext = GetWindowDpiAwarenessContext(WindowHandle);
-            DpiAwareness = GetAwarenessFromDpiAwarenessContext(dpiAwarenessContext);
+            if (Environment.OSVersion.Version >= new Version(10, 0, 14393, 0))
+            {
+                var dpiAwarenessContext = GetWindowDpiAwarenessContext(WindowHandle);
+                DpiAwareness = GetAwarenessFromDpiAwarenessContext(dpiAwarenessContext);
+            }
         }
 
         public void RefreshScreenShot()

@@ -4,4 +4,4 @@
 
 A tool to debug window.
 
-Get releases from [here](https://gitlab.sdlsj.net/lsj/windowdebugger/-/releases) or [my ccoop bucket](https://github.com/kkwpsv/ScoopBucket).
+Get releases from [here](https://gitlab.sdlsj.net/lsj/windowdebugger/-/releases) or [my scoop bucket](https://github.com/kkwpsv/ScoopBucket).

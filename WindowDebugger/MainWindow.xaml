@@ -10,7 +10,8 @@
         xmlns:converters="clr-namespace:WindowDebugger.Converters"
         mc:Ignorable="d" DataContext="{x:Static viewmodels:ViewModel.Instance}"
         Title="WindowDebugger" Height="640" Width="960" MinHeight="550" MinWidth="800" Loaded="Window_Loaded"
-        Style="{StaticResource Style.Window}">
+        Style="{StaticResource Style.Window}"
+        Icon="/icon.ico">
     <Window.Resources>
         <converters:IntPtrToInt32Converter x:Key="IntPtrToInt32Converter" />
         <Style x:Key="Style.ListBoxItem" TargetType="ListBoxItem">

@@ -2,10 +2,11 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFrameworks>netcoreapp3.1;net48;net5;net45</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.1;net48;net5-windows;net45</TargetFrameworks>
     <UseWPF>true</UseWPF>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
     <Version>0.0.6</Version>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,27 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Views\OperationsTab.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\WindowStylesExTab.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\ClassStylesTab.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Page Update="Views\OperationsTab.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\WindowStylesExTab.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="Views\ClassStylesTab.xaml">
-      <SubType>Designer</SubType>
-    </Page>
+    <Resource Include="icon.ico" />
   </ItemGroup>
 
 </Project>

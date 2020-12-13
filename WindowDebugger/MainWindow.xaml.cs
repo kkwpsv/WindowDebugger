@@ -36,7 +36,11 @@ namespace WindowDebugger
             }
 
             Model.SelectedWindow = selected ?? Model.Windows.FirstOrDefault(x => x.WindowHandle == new WindowInteropHelper(this).Handle);
-            WindowList.ScrollIntoView(Model.SelectedWindow);
+            if (Model.SelectedWindow != null)
+            {
+                WindowList.ScrollIntoView(WindowList.Items[WindowList.Items.Count - 1]);
+                WindowList.ScrollIntoView(Model.SelectedWindow);
+            }
         }
 
         private void RefreshCurrent(object sender, RoutedEventArgs e)

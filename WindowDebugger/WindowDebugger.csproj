@@ -10,9 +10,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Lsj.Util.Win32" Version="4.2.0" />
-    <PackageReference Include="Lsj.Util.WPF" Version="4.1.6" />
-    <PackageReference Include="Walterlv.Themes.FluentDesign" Version="5.9.0" />
+    <PackageReference Include="Lsj.Util.Win32" Version="5.0.0-debug1898" />
+    <PackageReference Include="Lsj.Util.WPF" Version="5.0.0-debug1898" />
+    <PackageReference Include="Walterlv.Themes.FluentDesign" Version="5.11.2" />
   </ItemGroup>
 
   <ItemGroup>

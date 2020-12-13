@@ -3,6 +3,7 @@ using Lsj.Util.Win32;
 using Lsj.Util.Win32.BaseTypes;
 using Lsj.Util.Win32.Enums;
 using Lsj.Util.Win32.Extensions;
+using Lsj.Util.Win32.Marshals;
 using Lsj.Util.Win32.Structs;
 using Lsj.Util.WPF;
 using System;
@@ -337,7 +338,7 @@ namespace WindowDebugger.ViewModels
 
         public void RefreshText()
         {
-            var sb = new StringBuilder(50);
+            var sb = new StringBuffer(50);
             GetWindowText(_windowHandle, sb, 50);
             var text = sb.ToString();
             SetField(ref _text, text, propertyName: nameof(Text));
@@ -372,7 +373,7 @@ namespace WindowDebugger.ViewModels
             if (process != NULL)
             {
                 var length = (DWORD)MAX_PATH;
-                var path = new StringBuilder(MAX_PATH);
+                var path = new StringBuffer(MAX_PATH);
                 if (QueryFullProcessImageName(process, 0, path, ref length))
                 {
                     SetField(ref _processName, Path.ChangeExtension(Path.GetFileName(path.ToString()), null), propertyName: nameof(ProcessName));
@@ -383,7 +384,7 @@ namespace WindowDebugger.ViewModels
 
         public void RefreshClassName()
         {
-            var sb = new StringBuilder(100);
+            var sb = new StringBuffer(100);
             if (GetClassName(WindowHandle, sb, 100) != 0)
             {
                 SetField(ref _className, sb.ToString(), propertyName: nameof(ClassName));

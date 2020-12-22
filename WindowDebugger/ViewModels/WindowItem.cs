@@ -82,8 +82,11 @@ namespace WindowDebugger.ViewModels
         private IntPtr _parentWindowHandle;
         public IntPtr ParentWindowHandle { get => _parentWindowHandle; set => SetParentWindowHandle(value); }
 
+        private bool _canUpdateOwner;
+        public bool CanUpdateOwner { get => _canUpdateOwner; }
+
         private IntPtr _ownerWindowHandle;
-        public IntPtr OwnerWindowHandle { get => _ownerWindowHandle; }
+        public IntPtr OwnerWindowHandle { get => _ownerWindowHandle; set => SetOwnerWindowHandle(value); }
 
         private BitmapSource _screenshot;
         public BitmapSource Screenshot { get => _screenshot; set => SetField(ref _screenshot, value); }
@@ -313,6 +316,25 @@ namespace WindowDebugger.ViewModels
             RefreshDpiAwareness();//May be forced reset by system
         }
 
+        private void SetOwnerWindowHandle(IntPtr value)
+        {
+            LastError = null;
+
+            RefreshParentWindowHandle();
+
+            if (CanUpdateOwner)
+            {
+                //Undocument API.
+                SetWindowLong(WindowHandle, GetWindowLongIndexes.GWL_HWNDPARENT, value);
+
+                RefreshOwnerWindowHandle();
+            }
+            else
+            {
+                LastError = "有父窗口的时候不允许改变所有者窗口";
+            }
+        }
+
         public void RefreshBaseInfo()
         {
             RefreshText();
@@ -418,6 +440,14 @@ namespace WindowDebugger.ViewModels
         public void RefreshParentWindowHandle()
         {
             SetField(ref _parentWindowHandle, GetAncestor(WindowHandle, GA_PARENT), propertyName: nameof(ParentWindowHandle));
+            if (_parentWindowHandle == GetDesktopWindow())
+            {
+                SetField(ref _canUpdateOwner, true, propertyName: nameof(CanUpdateOwner));
+            }
+            else
+            {
+                SetField(ref _canUpdateOwner, false, propertyName: nameof(CanUpdateOwner));
+            }
         }
 
         public void RefreshOwnerWindowHandle()

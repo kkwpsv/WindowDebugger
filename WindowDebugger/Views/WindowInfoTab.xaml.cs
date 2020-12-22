@@ -47,5 +47,13 @@ namespace WindowDebugger.Views
                 TextBoxParentWindowHandle.GetBindingExpression(TextBox.TextProperty).UpdateSource();
             }
         }
+
+        private void UpdateOwnerWindowHandle(object sender, RoutedEventArgs e)
+        {
+            if (!Validation.GetHasError(TextBoxOwnerWindowHandle))
+            {
+                TextBoxOwnerWindowHandle.GetBindingExpression(TextBox.TextProperty).UpdateSource();
+            }
+        }
     }
 }

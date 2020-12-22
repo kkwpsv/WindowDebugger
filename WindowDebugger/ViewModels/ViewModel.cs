@@ -30,6 +30,8 @@ namespace WindowDebugger.ViewModels
             foreach (var handle in windows)
             {
                 var item = new WindowItem { WindowHandle = handle };
+                item.RefreshOwnerWindowHandle();
+                item.RefreshParentWindowHandle();
                 if (!_searchText.IsNullOrEmpty())
                 {
                     if ((item.Text?.IndexOf(_searchText, StringComparison.CurrentCultureIgnoreCase) > -1)
@@ -41,7 +43,8 @@ namespace WindowDebugger.ViewModels
                     if (uint.TryParse(_searchText, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out var uintHexVal) ||
                         (_searchText.StartsWith("0x", StringComparison.CurrentCultureIgnoreCase) && uint.TryParse(_searchText, NumberStyles.HexNumber, CultureInfo.CurrentCulture, out uintHexVal)))
                     {
-                        if (item.WindowHandle.SafeToUInt32() == uintHexVal || item.ProcessID == uintHexVal || item.ThreadID == uintHexVal)
+                        if (item.WindowHandle.SafeToUInt32() == uintHexVal || item.ProcessID == uintHexVal || item.ThreadID == uintHexVal
+                             || item.OwnerWindowHandle.SafeToUInt32() == uintHexVal || item.ParentWindowHandle.SafeToUInt32() == uintHexVal)
                         {
                             Windows.Add(item);
                         }
@@ -49,7 +52,8 @@ namespace WindowDebugger.ViewModels
 
                     if (uint.TryParse(_searchText, out var uintVal))
                     {
-                        if (item.WindowHandle.SafeToUInt32() == uintVal || item.ProcessID == uintVal || item.ThreadID == uintVal)
+                        if (item.WindowHandle.SafeToUInt32() == uintVal || item.ProcessID == uintVal || item.ThreadID == uintVal
+                            || item.OwnerWindowHandle.SafeToUInt32() == uintVal || item.ParentWindowHandle.SafeToUInt32() == uintVal)
                         {
                             Windows.Add(item);
                         }

@@ -91,6 +91,9 @@ namespace WindowDebugger.ViewModels
         private BitmapSource _screenshot;
         public BitmapSource Screenshot { get => _screenshot; set => SetField(ref _screenshot, value); }
 
+        private bool _isTouchWindow;
+        public bool IsTouchWindow { get => _isTouchWindow; }
+
         private void SetError()
         {
             LastError = ErrorMessageExtensions.GetSystemErrorMessageFromCode((uint)Marshal.GetLastWin32Error());
@@ -355,6 +358,7 @@ namespace WindowDebugger.ViewModels
             RefreshParentWindowHandle();
             RefreshOwnerWindowHandle();
             RefreshScreenShot();
+            RefreshIsTouchWindow();
         }
 
         public void RefreshText()
@@ -480,6 +484,12 @@ namespace WindowDebugger.ViewModels
             {
 
             }
+        }
+
+        public void RefreshIsTouchWindow()
+        {
+            var result = IsTouchWindow(WindowHandle, out _);
+            SetField(ref _isTouchWindow, result, propertyName: nameof(IsTouchWindow));
         }
 
         public override string ToString() => $"0x{WindowHandle.ToString("X8")}{(!Text.IsNullOrEmpty() ? $"({Text})" : "")}";

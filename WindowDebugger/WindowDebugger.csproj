@@ -7,12 +7,13 @@
     <Version>0.0.6</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>icon.ico</ApplicationIcon>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Lsj.Util.Win32" Version="5.0.1-1917" />
-    <PackageReference Include="Lsj.Util.WPF" Version="5.0.0" />
-    <PackageReference Include="Walterlv.Themes.FluentDesign" Version="5.11.3" />
+    <PackageReference Include="Lsj.Util.Win32" Version="5.1.0-debug1926" />
+    <PackageReference Include="Lsj.Util.WPF" Version="5.1.0-debug1926" />
+    <PackageReference Include="Walterlv.Themes.FluentDesign" Version="5.13.0" />
   </ItemGroup>
 
   <ItemGroup>

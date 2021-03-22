@@ -1,6 +1,7 @@
 ﻿using Lsj.Util.Text;
 using Lsj.Util.Win32;
 using Lsj.Util.Win32.BaseTypes;
+using Lsj.Util.Win32.ComInterfaces;
 using Lsj.Util.Win32.Enums;
 using Lsj.Util.Win32.Extensions;
 using Lsj.Util.Win32.Marshals;
@@ -26,11 +27,21 @@ using static Lsj.Util.Win32.Gdi32;
 using static Lsj.Util.Win32.Kernel32;
 using static Lsj.Util.Win32.UnsafePInvokeExtensions;
 using static Lsj.Util.Win32.User32;
+using static Lsj.Util.Win32.Ole32;
+using static Lsj.Util.Win32.ComInterfaces.CLSIDs;
+using static Lsj.Util.Win32.ComInterfaces.IIDs;
+using static Lsj.Util.Win32.Enums.CLSCTX;
 
 namespace WindowDebugger.ViewModels
 {
     public class WindowItem : ModelObject
     {
+        static LPVOID _virtualDesktopManager;
+        static WindowItem()
+        {
+            CoCreateInstance(CLSID_VirtualDesktopManager, NullRef<IUnknown>(), CLSCTX_INPROC_SERVER, in IID_IVirtualDesktopManager, out _virtualDesktopManager);
+        }
+
         private IntPtr _windowHandle;
         public IntPtr WindowHandle { get => _windowHandle; set => SetField(ref _windowHandle, value, extraAction: RefreshBaseInfo); }
 
@@ -93,6 +104,9 @@ namespace WindowDebugger.ViewModels
 
         private bool _isTouchWindow;
         public bool IsTouchWindow { get => _isTouchWindow; }
+
+        private string _virtualDesktopID;
+        public string VirtualDesktopID { get => _virtualDesktopID; }
 
         private void SetError()
         {
@@ -359,6 +373,7 @@ namespace WindowDebugger.ViewModels
             RefreshOwnerWindowHandle();
             RefreshScreenShot();
             RefreshIsTouchWindow();
+            RefreshVirtualDesktopID();
         }
 
         public void RefreshText()
@@ -490,6 +505,20 @@ namespace WindowDebugger.ViewModels
         {
             var result = IsTouchWindow(WindowHandle, out _);
             SetField(ref _isTouchWindow, result, propertyName: nameof(IsTouchWindow));
+        }
+
+        public void RefreshVirtualDesktopID()
+        {
+            if (_virtualDesktopManager != NULL)
+            {
+                unsafe
+                {
+                    if (((IVirtualDesktopManager*)_virtualDesktopManager)->GetWindowDesktopId(WindowHandle, out var id))
+                    {
+                        SetField(ref _virtualDesktopID, id.ToString(), propertyName: nameof(VirtualDesktopID));
+                    }
+                }
+            }
         }
 
         public override string ToString() => $"0x{WindowHandle.ToString("X8")}{(!Text.IsNullOrEmpty() ? $"({Text})" : "")}";

@@ -52,8 +52,11 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" MaxHeight="30"/>
+                <RowDefinition Height="*" MaxHeight="30"/>
             </Grid.RowDefinitions>
-            <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="IsTouchWindow" IsChecked="{Binding IsTouchWindow, Mode=OneWay}" IsEnabled="False"/>
+            <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Content="IsTouchWindow" IsChecked="{Binding IsTouchWindow, Mode=OneWay}" IsEnabled="False"/>
+            <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" Text="Virtual Desktop ID"/>
+            <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" Text="{Binding VirtualDesktopID, Mode=OneWay}" IsEnabled="False"/>
         </Grid>
     </Border>
 </TabItem>

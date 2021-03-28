@@ -1,4 +1,5 @@
 ﻿using Lsj.Util.Text;
+using Lsj.Util.Win32;
 using Lsj.Util.Win32.Extensions;
 using Lsj.Util.WPF;
 using System;
@@ -25,6 +26,9 @@ namespace WindowDebugger.ViewModels
 
         public void RefreshWindowList()
         {
+            Dwmapi.DwmIsCompositionEnabled(out var isEnabled);
+            SetField(ref _dwmIsCompositionEnabled, isEnabled, propertyName: nameof(DwmIsCompositionEnabled));
+
             var windows = WindowExtensions.GetAllWindowHandle();
             Windows.Clear();
             foreach (var handle in windows)
@@ -68,5 +72,9 @@ namespace WindowDebugger.ViewModels
 
         private WindowItem _currentWindow;
         public WindowItem SelectedWindow { get => _currentWindow; set => SetField(ref _currentWindow, value, extraAction: () => { value?.RefreshItem(); value?.RefreshScreenShot(); }); }
+
+        private bool _dwmIsCompositionEnabled;
+
+        public bool DwmIsCompositionEnabled { get => _dwmIsCompositionEnabled; }
     }
 }

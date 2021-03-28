@@ -20,6 +20,7 @@ namespace WindowDebugger
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
+            _ = UpdateHelper.CheckUpdate();
             RefreshWindowList(null, null);
         }
 

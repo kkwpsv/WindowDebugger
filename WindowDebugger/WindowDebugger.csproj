@@ -4,16 +4,16 @@
     <OutputType>WinExe</OutputType>
     <TargetFrameworks>netcoreapp3.1;net48;net5-windows;net45</TargetFrameworks>
     <UseWPF>true</UseWPF>
-    <Version>0.0.6</Version>
+    <Version>0.0.7</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Lsj.Util.JSON" Version="5.0.1" />
-    <PackageReference Include="Lsj.Util.Win32" Version="5.1.0-debug1926" />
-    <PackageReference Include="Lsj.Util.WPF" Version="5.1.0-debug1926" />
+    <PackageReference Include="Lsj.Util.JSON" Version="5.1.0" />
+    <PackageReference Include="Lsj.Util.Win32" Version="5.1.0" />
+    <PackageReference Include="Lsj.Util.WPF" Version="5.1.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="Walterlv.Themes.FluentDesign" Version="5.13.0" />
   </ItemGroup>

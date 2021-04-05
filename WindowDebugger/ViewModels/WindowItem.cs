@@ -31,6 +31,7 @@ using static Lsj.Util.Win32.Ole32;
 using static Lsj.Util.Win32.ComInterfaces.CLSIDs;
 using static Lsj.Util.Win32.ComInterfaces.IIDs;
 using static Lsj.Util.Win32.Enums.CLSCTX;
+using static Lsj.Util.Win32.Enums.DWMWINDOWATTRIBUTE;
 
 namespace WindowDebugger.ViewModels
 {
@@ -102,6 +103,18 @@ namespace WindowDebugger.ViewModels
         private BitmapSource _screenshot;
         public BitmapSource Screenshot { get => _screenshot; set => SetField(ref _screenshot, value); }
 
+        private bool _dwmNcRenderingEnabled;
+        public bool DWMNcRenderingEnabled { get => _dwmNcRenderingEnabled; }
+
+        private RECT _dwmCaptionButtonBounds;
+        public RECT DWMCaptionButtonBounds { get => _dwmCaptionButtonBounds; }
+
+        private RECT _dwmExtendedFrameBounds;
+        public RECT DWMExtendedFrameBounds { get => _dwmExtendedFrameBounds; }
+
+        private DWM_CLOAKED _dwmCloaked;
+        public DWM_CLOAKED DWMCloaked { get => _dwmCloaked; }
+
         private bool _isTouchWindow;
         public bool IsTouchWindow { get => _isTouchWindow; }
 
@@ -111,6 +124,11 @@ namespace WindowDebugger.ViewModels
         private void SetError()
         {
             LastError = ErrorMessageExtensions.GetSystemErrorMessageFromCode((uint)Marshal.GetLastWin32Error());
+        }
+
+        private void SetError(HRESULT hresult)
+        {
+            LastError = ErrorMessageExtensions.GetSystemErrorMessageFromCode(hresult & 0x0000FFFF);
         }
 
         public bool SetForeground()
@@ -374,6 +392,7 @@ namespace WindowDebugger.ViewModels
             RefreshScreenShot();
             RefreshIsTouchWindow();
             RefreshVirtualDesktopID();
+            RefreshDWMAttributes();
         }
 
         public void RefreshText()
@@ -518,6 +537,57 @@ namespace WindowDebugger.ViewModels
                         SetField(ref _virtualDesktopID, id.ToString(), propertyName: nameof(VirtualDesktopID));
                     }
                 }
+            }
+        }
+
+        public void RefreshDWMAttributes()
+        {
+            if ((Styles & WS_CHILD) != 0)
+            {
+                //Child Window will fail.
+                return;
+            }
+            BOOL boolVal = false;
+            RECT rectVal = new RECT();
+            DWM_CLOAKED cloakedVal = 0;
+            var result = Dwmapi.DwmGetWindowAttribute(WindowHandle, DWMWA_NCRENDERING_ENABLED, AsPointer(ref boolVal), SizeOf<BOOL>());
+            if (result)
+            {
+                SetField(ref _dwmNcRenderingEnabled, boolVal, propertyName: nameof(DWMNcRenderingEnabled));
+            }
+            else
+            {
+                SetError(result);
+            }
+
+            result = Dwmapi.DwmGetWindowAttribute(WindowHandle, DWMWA_CAPTION_BUTTON_BOUNDS, AsPointer(ref rectVal), SizeOf<RECT>());
+            if (result)
+            {
+                SetField(ref _dwmCaptionButtonBounds, rectVal, propertyName: nameof(DWMCaptionButtonBounds));
+            }
+            else
+            {
+                SetError(result);
+            }
+
+            result = Dwmapi.DwmGetWindowAttribute(WindowHandle, DWMWA_EXTENDED_FRAME_BOUNDS, AsPointer(ref rectVal), SizeOf<RECT>());
+            if (result)
+            {
+                SetField(ref _dwmExtendedFrameBounds, rectVal, propertyName: nameof(DWMExtendedFrameBounds));
+            }
+            else
+            {
+                SetError(result);
+            }
+
+            result = Dwmapi.DwmGetWindowAttribute(WindowHandle, DWMWA_CLOAKED, AsPointer(ref cloakedVal), SizeOf<DWM_CLOAKED>());
+            if (result)
+            {
+                SetField(ref _dwmCloaked, cloakedVal, propertyName: nameof(DWMCloaked));
+            }
+            else
+            {
+                SetError(result);
             }
         }
 

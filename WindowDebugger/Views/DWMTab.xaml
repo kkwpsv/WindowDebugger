@@ -14,6 +14,8 @@
     <Border Padding="10,10,10,0">
         <Grid>
             <Grid.Resources>
+                <converters:RECTToStringConverter x:Key="RECTToStringConverter"/>
+                <converters:DWM_CLOAKEDToStringConverter x:Key="DWM_CLOAKEDToStringConverter"/>
                 <Style TargetType="TextBlock">
                     <Style.Setters>
                         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -49,9 +51,28 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <CheckBox Grid.Row="0" Grid.Column="0" Content="DwmIsCompositionEnabled" IsChecked="{Binding DwmIsCompositionEnabled, Source={x:Static viewmodels:ViewModel.Instance}, Mode=OneWay}" IsEnabled="False"/>
-            <Grid Grid.Row="1" IsEnabled="{Binding DwmIsCompositionEnabled, Source={x:Static viewmodels:ViewModel.Instance}, Mode=OneWay}">
-                <GroupBox Header="">
-                    
+            <Grid Grid.Row="1" IsEnabled="{Binding DwmIsCompositionEnabled, Source={x:Static viewmodels:ViewModel.Instance}, Mode=OneWay}" Margin="0 5">
+                <GroupBox Header="DWM Attributes">
+                    <Grid Margin="5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="2*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="3*"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*" MaxHeight="30"/>
+                            <RowDefinition Height="*" MaxHeight="30"/>
+                            <RowDefinition Height="*" MaxHeight="30"/>
+                            <RowDefinition Height="*" MaxHeight="30"/>
+                        </Grid.RowDefinitions>
+                        <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="NCRENDERING ENABLED" IsChecked="{Binding DWMNcRenderingEnabled, Mode=OneWay}" IsEnabled="False"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Text="CAPTION BUTTON BOUNDS"/>
+                        <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding DWMCaptionButtonBounds, Converter={StaticResource RECTToStringConverter}, Mode=OneWay}" IsReadOnly="True"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Text="EXTENDED FRAME BOUNDS"/>
+                        <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding DWMExtendedFrameBounds, Converter={StaticResource RECTToStringConverter}, Mode=OneWay}" IsReadOnly="True"/>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Text="CLOAKED"/>
+                        <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Text="{Binding DWMCloaked, Converter={StaticResource DWM_CLOAKEDToStringConverter}, Mode=OneWay}" IsReadOnly="True"/>
+                    </Grid>
                 </GroupBox>
             </Grid>
         </Grid>

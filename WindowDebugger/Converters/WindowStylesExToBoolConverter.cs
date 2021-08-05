@@ -12,7 +12,7 @@ namespace WindowDebugger.Converters
         {
             if (values.Length == 2 && values[0] is WindowStylesEx styles && Enum.TryParse<WindowStylesEx>((string)values[1], out var style))
             {
-                return style == 0 || (styles & style) != style;
+                return style == 0 || (styles & style) == style;
             }
             return DependencyProperty.UnsetValue;
         }

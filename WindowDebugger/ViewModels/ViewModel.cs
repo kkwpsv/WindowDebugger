@@ -33,9 +33,7 @@ namespace WindowDebugger.ViewModels
             Windows.Clear();
             foreach (var handle in windows)
             {
-                var item = new WindowItem { WindowHandle = handle };
-                item.RefreshOwnerWindowHandle();
-                item.RefreshParentWindowHandle();
+                var item = new WindowItem(handle);
                 if (!_searchText.IsNullOrEmpty())
                 {
                     if ((item.Text?.IndexOf(_searchText, StringComparison.CurrentCultureIgnoreCase) > -1)

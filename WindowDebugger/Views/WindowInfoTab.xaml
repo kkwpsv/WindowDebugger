@@ -89,13 +89,13 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="Left" HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Left, Mode=TwoWay}"/>
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="TextBoxRectLeft" Text="{Binding Left, Mode=OneWay}"/>
                 <TextBlock Grid.Row="0" Grid.Column="2" Text="Top" HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="0" Grid.Column="3" Text="{Binding Top, Mode=TwoWay}"/>
+                <TextBox Grid.Row="0" Grid.Column="3" x:Name="TextBoxRectTop" Text="{Binding Top, Mode=OneWay}"/>
                 <TextBlock Grid.Row="1" Grid.Column="0" Text="Width" HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Width, Mode=TwoWay}"/>
+                <TextBox Grid.Row="1" Grid.Column="1" x:Name="TextBoxRectWidth" Text="{Binding Width, Mode=OneWay}"/>
                 <TextBlock Grid.Row="1" Grid.Column="2" Text="Height" HorizontalAlignment="Center"/>
-                <TextBox Grid.Row="1" Grid.Column="3" Text="{Binding Height, Mode=TwoWay}"/>
+                <TextBox Grid.Row="1" Grid.Column="3" x:Name="TextBoxRectHeight" Text="{Binding Height, Mode=OneWay}"/>
             </Grid>
             <Button Grid.Row="5" Grid.Column="2" Click="UpdateRect" Content="Update"/>
             <TextBlock Grid.Row="6" Grid.Column="0" Text="WindowShowStates"/>

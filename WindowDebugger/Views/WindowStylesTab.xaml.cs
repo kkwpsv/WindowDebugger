@@ -60,7 +60,7 @@ namespace WindowDebugger.Views
 
         private void RefreshStyles(object sender, RoutedEventArgs e)
         {
-            ViewModel.Instance.SelectedWindow.RefreshStyles();
+            TextBoxStyle.GetBindingExpression(TextBox.TextProperty).UpdateTarget();
         }
     }
 }

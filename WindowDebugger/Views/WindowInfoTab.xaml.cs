@@ -36,7 +36,7 @@ namespace WindowDebugger.Views
         {
             if (!ValidationHelper.GetHasErrorWithChildren(GridRect))
             {
-                ViewModel.Instance.SelectedWindow.SetWindowRect();
+                (DataContext as WindowItem).UpdateWindowRect(int.Parse(TextBoxRectLeft.Text), int.Parse(TextBoxRectTop.Text), int.Parse(TextBoxRectWidth.Text), int.Parse(TextBoxRectHeight.Text));
             }
         }
 

@@ -64,12 +64,12 @@ namespace WindowDebugger
 
         private void WindowItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (sender is WindowItem item && e.PropertyName == nameof(WindowItem.LastError))
+            if (sender is WindowItem item && e.PropertyName == nameof(WindowItem.ErrorString))
             {
-                if (item.LastError != null)
+                if (item.ErrorString != null)
                 {
-                    MessageBox.Show(this, item.LastError);
-                    item.LastError = null;
+                    MessageBox.Show(this, item.ErrorString);
+                    item.ErrorString = null;
                 }
             }
         }

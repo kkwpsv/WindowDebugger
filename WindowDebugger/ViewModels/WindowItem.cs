@@ -1,31 +1,22 @@
 ﻿using Lsj.Util.Text;
 using Lsj.Util.Win32;
 using Lsj.Util.Win32.BaseTypes;
-using Lsj.Util.Win32.ComInterfaces;
 using Lsj.Util.Win32.Enums;
 using Lsj.Util.Win32.Extensions;
-using Lsj.Util.Win32.Marshals;
 using Lsj.Util.Win32.NativeUI;
 using Lsj.Util.Win32.Structs;
 using Lsj.Util.WPF;
 using System;
-using System.ComponentModel;
-using System.IO;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
 using System.Windows.Media.Imaging;
+using static Lsj.Util.Win32.BaseTypes.HRESULT;
 using static Lsj.Util.Win32.Constants;
-using static Lsj.Util.Win32.Enums.DWMWINDOWATTRIBUTE;
-using static Lsj.Util.Win32.Enums.GetAncestorFlags;
-using static Lsj.Util.Win32.Enums.GetWindowCommands;
 using static Lsj.Util.Win32.Enums.ProcessAccessRights;
 using static Lsj.Util.Win32.Enums.RedrawWindowFlags;
-using static Lsj.Util.Win32.Enums.SetWindowPosFlags;
 using static Lsj.Util.Win32.Enums.ThreadAccessRights;
 using static Lsj.Util.Win32.Enums.WindowsMessages;
-using static Lsj.Util.Win32.Enums.WindowStyles;
 using static Lsj.Util.Win32.Extensions.WindowExtensions;
 using static Lsj.Util.Win32.Gdi32;
 using static Lsj.Util.Win32.Kernel32;
@@ -41,6 +32,7 @@ namespace WindowDebugger.ViewModels
         public WindowItem(HWND hwnd)
         {
             _window = new Win32Window(hwnd);
+            _window.CustomErrorHandler = OnError;
         }
 
         public IntPtr WindowHandle { get => _window.Handle; }
@@ -48,13 +40,13 @@ namespace WindowDebugger.ViewModels
         private string _errorString;
         public string ErrorString { get => _errorString; set => SetField(ref _errorString, value); }
 
-        public string Text { get => _window.Text; set => SetWithCatchError(() => { _window.Text = value; }); }
+        public string Text { get => _window.Text; set => _window.Text = value; }
 
-        public WindowStyles Styles { get => _window.WindowStyles; set => SetWithCatchError(() => { _window.WindowStyles = value; }); }
+        public WindowStyles Styles { get => _window.WindowStyles; set => _window.WindowStyles = value; }
 
-        public WindowStylesEx StylesEx { get => _window.WindowStylesEx; set => SetWithCatchError(() => { _window.WindowStylesEx = value; }); }
+        public WindowStylesEx StylesEx { get => _window.WindowStylesEx; set => _window.WindowStylesEx = value; }
 
-        public ClassStyles ClassStyles { get => _window.ClassStyles; set => SetWithCatchError(() => { _window.ClassStyles = value; }); }
+        public ClassStyles ClassStyles { get => _window.ClassStyles; set => _window.ClassStyles = value; }
 
         public int ProcessID { get => _window.ProcessID; }
 
@@ -72,7 +64,7 @@ namespace WindowDebugger.ViewModels
 
         public int Height { get => _window.Rect.bottom - _window.Rect.top; }
 
-        public ShowWindowCommands WindowShowStates { get => _window.ShowStates; set => SetWithCatchError(() => { _window.ShowStates = value; }); }
+        public ShowWindowCommands WindowShowStates { get => _window.ShowStates; set => _window.ShowStates = value; }
 
         public DPI_AWARENESS DpiAwareness { get => _window.DpiAwareness; }
 
@@ -81,22 +73,17 @@ namespace WindowDebugger.ViewModels
             get => _window.ParentWindowHandle;
             set
             {
-                SetWithCatchError(() => { _window.ParentWindowHandle = value; });
+                _window.ParentWindowHandle = value;
                 OnPropertyChanged(nameof(DpiAwareness));//may be reset by system
             }
         }
 
-        public IntPtr OwnerWindowHandle { get => _window.OwnerWindowHandle; set => SetWithCatchError(() => { _window.OwnerWindowHandle = value; }); }
+        public IntPtr OwnerWindowHandle { get => _window.OwnerWindowHandle; set => _window.OwnerWindowHandle = value; }
 
         private BitmapSource _screenshot;
         public BitmapSource Screenshot { get => _screenshot; set => SetField(ref _screenshot, value); }
 
-        public bool DWMNcRenderingEnabled { get => _window.DWMInfo.IsNonClientRenderingEnabled; }
-
-        public RECT DWMCaptionButtonBounds { get => _window.DWMInfo.CaptionButtonBounds; }
-
-        public RECT DWMExtendedFrameBounds { get => _window.DWMInfo.ExtendFrameBounds; }
-        public DWM_CLOAKED DWMCloaked { get => _window.DWMInfo.Cloaked; }
+        public DWMInfo DWMInfo { get => _window.ParentWindowHandle == GetDesktopWindow() ? _window.DWMInfo : null; }
 
         public bool IsTouchWindow { get => _window.IsTouchWindow; }
 
@@ -105,11 +92,6 @@ namespace WindowDebugger.ViewModels
         private void SetError()
         {
             ErrorString = ErrorMessageExtensions.GetSystemErrorMessageFromCode((uint)Marshal.GetLastWin32Error());
-        }
-
-        private void SetError(HRESULT hresult)
-        {
-            ErrorString = ErrorMessageExtensions.GetSystemErrorMessageFromCode(hresult & 0x0000FFFF);
         }
 
         public bool SetForeground()
@@ -243,21 +225,22 @@ namespace WindowDebugger.ViewModels
 
         public override string ToString() => $"0x{WindowHandle.ToString("X8")}{(!Text.IsNullOrEmpty() ? $"({Text})" : "")}";
 
-        private void SetWithCatchError(Action setAction, [CallerMemberName] string caller = null)
+        private void OnError(SystemErrorCodes? win32ErrorCode, HRESULT? hResult)
         {
-            try
+            if (win32ErrorCode != null)
             {
-                setAction();
+                ErrorString = ErrorMessageExtensions.GetSystemErrorMessageFromCode(win32ErrorCode.Value);
             }
-            catch (Win32Exception e)
+            if (hResult.HasValue)
             {
-                ErrorString = ErrorMessageExtensions.GetSystemErrorMessageFromCode(e.NativeErrorCode);
+                if (hResult.Value == TYPE_E_ELEMENTNOTFOUND)
+                {
+                    //Getting VirtualDesktopID may get this eroor
+                    //Ignore
+                    return;
+                }
+                ErrorString = Marshal.GetExceptionForHR(hResult.Value).Message;
             }
-            catch (Exception e)
-            {
-                ErrorString = e.ToString();
-            }
-            OnPropertyChanged(caller);
         }
     }
 }

@@ -5,6 +5,7 @@
          xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
          xmlns:converters="clr-namespace:WindowDebugger.Converters"
          xmlns:viewmodels="clr-namespace:WindowDebugger.ViewModels"
+         xmlns:win32Enum="clr-namespace:Lsj.Util.Win32.Enums;assembly=Lsj.Util.Win32" xmlns:system="clr-namespace:System;assembly=System.Runtime"
          mc:Ignorable="d"
          d:DesignHeight="500" d:DesignWidth="500" d:DataContext="{d:DesignInstance Type=viewmodels:WindowItem}" Header="{Binding Content, RelativeSource={RelativeSource Self}, Mode=OneWay}">
     <Border Padding="10,10,10,0">
@@ -48,31 +49,107 @@
             </Grid.RowDefinitions>
             <CheckBox Grid.Row="0" Grid.Column="0" Content="DwmIsCompositionEnabled" IsChecked="{Binding DwmIsCompositionEnabled, Source={x:Static viewmodels:ViewModel.Instance}, Mode=OneWay}" IsEnabled="False"/>
             <Grid Grid.Row="1" IsEnabled="{Binding DwmIsCompositionEnabled, Source={x:Static viewmodels:ViewModel.Instance}, Mode=OneWay}" Margin="0 5">
-                <GroupBox Header="DWM Attributes" DataContext="{Binding DWMInfo}">
+                <GroupBox x:Name="DWMAttributesGroupBox" Header="DWM Attributes">
                     <Grid Margin="5">
+                        <Grid.Resources>
+                            <system:Boolean x:Key="True">true</system:Boolean>
+                            <system:Boolean x:Key="False">false</system:Boolean>
+                        </Grid.Resources>
                         <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="2*"/>
                             <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="3*"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
                             <RowDefinition Height="*" MaxHeight="30"/>
                             <RowDefinition Height="*" MaxHeight="30"/>
                             <RowDefinition Height="*" MaxHeight="30"/>
                             <RowDefinition Height="*" MaxHeight="30"/>
+                            <RowDefinition Height="*" MaxHeight="30"/>
+                            <RowDefinition Height="*" MaxHeight="30"/>
+                            <RowDefinition Height="*" MaxHeight="30"/>
+                            <RowDefinition Height="*" MaxHeight="30"/>
+                            <RowDefinition Height="*" MaxHeight="30"/>
+                            <RowDefinition Height="*" MaxHeight="30"/>
+                            <RowDefinition Height="*" MaxHeight="30"/>
+                            <RowDefinition Height="*" MaxHeight="30"/>
+                            <RowDefinition Height="*" MaxHeight="30"/>
+                            <RowDefinition Height="*" MaxHeight="30"/>
                         </Grid.RowDefinitions>
-                        <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Content="IsNonClientRenderingEnabled"
-                                  IsChecked="{Binding IsNonClientRenderingEnabled, Mode=OneWay}" IsEnabled="False"
+                        <CheckBox Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="3" Content="IsNonClientRenderingEnabled"
+                                  IsChecked="{Binding DWMInfo.IsNonClientRenderingEnabled, Mode=OneWay}" IsEnabled="False"
                                   ToolTip="DWMWA_NCRENDERING_ENABLED"/>
-                        <TextBlock Grid.Row="1" Grid.Column="0" Text="CaptionButtonBounds" ToolTip="DWMWA_CAPTION_BUTTON_BOUNDS"/>
+                        <TextBlock Grid.Row="1" Grid.Column="0" Margin="0 0 10 0"  Text="Caption Button Bounds" ToolTip="DWMWA_CAPTION_BUTTON_BOUNDS"/>
                         <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" IsReadOnly="True"
-                                 Text="{Binding CaptionButtonBounds, Converter={StaticResource RECTToStringConverter}, Mode=OneWay}"/>
-                        <TextBlock Grid.Row="2" Grid.Column="0" Text="ExtendFrameBounds" ToolTip="DWMWA_EXTENDED_FRAME_BOUNDS"/>
+                                 Text="{Binding DWMInfo.CaptionButtonBounds, Converter={StaticResource RECTToStringConverter}, Mode=OneWay}"/>
+                        <TextBlock Grid.Row="2" Grid.Column="0" Margin="0 0 10 0"  Text="Extend Frame Bounds" ToolTip="DWMWA_EXTENDED_FRAME_BOUNDS"/>
                         <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" IsReadOnly="True"
-                                 Text="{Binding ExtendFrameBounds, Converter={StaticResource RECTToStringConverter}, Mode=OneWay}"/>
-                        <TextBlock Grid.Row="3" Grid.Column="0" Text="Cloaked" ToolTip="DWMWA_CLOAKED"/>
+                                 Text="{Binding DWMInfo.ExtendFrameBounds, Converter={StaticResource RECTToStringConverter}, Mode=OneWay}"/>
+                        <TextBlock Grid.Row="3" Grid.Column="0" Margin="0 0 10 0" Text="Cloaked" ToolTip="DWMWA_CLOAKED"/>
                         <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" IsReadOnly="True"
-                                 Text="{Binding Cloaked, Converter={StaticResource DWM_CLOAKEDToStringConverter}, Mode=OneWay}"/>
+                                 Text="{Binding DWMInfo.Cloaked, Converter={StaticResource DWM_CLOAKEDToStringConverter}, Mode=OneWay}"/>
+                        <TextBlock Grid.Row="4" Grid.Column="0" Margin="0 0 10 0" Text="Non-Client Rendering Policy" ToolTip="DWMWA_NCRENDERING_POLICY"/>
+                        <ComboBox x:Name="NonClientRenderingPolicyComboBox" Grid.Row="4" Grid.Column="1">
+                            <ComboBoxItem Content="DWMNCRP_USEWINDOWSTYLE" Tag="{x:Static win32Enum:DWMNCRENDERINGPOLICY.DWMNCRP_USEWINDOWSTYLE}"/>
+                            <ComboBoxItem Content="DWMNCRP_DISABLED" Tag="{x:Static win32Enum:DWMNCRENDERINGPOLICY.DWMNCRP_DISABLED}"/>
+                            <ComboBoxItem Content="DWMNCRP_ENABLED" Tag="{x:Static win32Enum:DWMNCRENDERINGPOLICY.DWMNCRP_ENABLED}"/>
+                        </ComboBox>
+                        <Button Grid.Row="4" Grid.Column="2" Content="Set" Click="NonClientRenderingPolicyButton_Click"/>
+                        <TextBlock Grid.Row="5" Grid.Column="0" Margin="0 0 10 0" Text="Is DWM TransitionsEnabled" ToolTip="DWMWA_TRANSITIONS_FORCEDISABLED"/>
+                        <ComboBox x:Name="IsDWMTransitionsEnabledComboBox" Grid.Row="5" Grid.Column="1">
+                            <ComboBoxItem Content="True" Tag="{StaticResource True}"/>
+                            <ComboBoxItem Content="False" Tag="{StaticResource False}"/>
+                        </ComboBox>
+                        <Button  Grid.Row="5" Grid.Column="2" Content="Set" Click="IsDWMTransitionsEnabledButton_Click"/>
+                        <TextBlock Grid.Row="6" Grid.Column="0" Margin="0 0 10 0" Text="Is Non-Client Area Content Right-To-Left Layout" ToolTip="DWMWA_NONCLIENT_RTL_LAYOUT"/>
+                        <ComboBox x:Name="IsNonClientContentRightToLeftLayoutComboBox" Grid.Row="6" Grid.Column="1">
+                            <ComboBoxItem Content="True" Tag="{StaticResource True}"/>
+                            <ComboBoxItem Content="False" Tag="{StaticResource False}"/>
+                        </ComboBox>
+                        <Button Grid.Row="6" Grid.Column="2" Content="Set"/>
+                        <TextBlock Grid.Row="7" Grid.Column="0" Margin="0 0 10 0" Text="Is Force Iconic Representation" ToolTip="DWMWA_FORCE_ICONIC_REPRESENTATION"/>
+                        <ComboBox x:Name="IsForceIconicRepresentationComboBox" Grid.Row="7" Grid.Column="1">
+                            <ComboBoxItem Content="True" Tag="{StaticResource True}"/>
+                            <ComboBoxItem Content="False" Tag="{StaticResource False}"/>
+                        </ComboBox>
+                        <Button Grid.Row="7" Grid.Column="2" Content="Set" Click="IsForceIconicRepresentationButton_Click"/>
+                        <TextBlock Grid.Row="8" Grid.Column="0" Margin="0 0 10 0" Text="Flip3D Policy" ToolTip="DWMWA_FLIP3D_POLICY"/>
+                        <ComboBox x:Name="Flip3DPolicyComboBox" Grid.Row="8" Grid.Column="1">
+                            <ComboBoxItem Content="DWMFLIP3D_DEFAULT" Tag="{x:Static win32Enum:DWMFLIP3DWINDOWPOLICY.DWMFLIP3D_DEFAULT}"/>
+                            <ComboBoxItem Content="DWMFLIP3D_EXCLUDEBELOW" Tag="{x:Static win32Enum:DWMFLIP3DWINDOWPOLICY.DWMFLIP3D_EXCLUDEBELOW}"/>
+                            <ComboBoxItem Content="DWMFLIP3D_EXCLUDEABOVE" Tag="{x:Static win32Enum:DWMFLIP3DWINDOWPOLICY.DWMFLIP3D_EXCLUDEABOVE}"/>
+                        </ComboBox>
+                        <Button Grid.Row="8" Grid.Column="2" Content="Set" Click="Flip3DPolicyButton_Click"/>
+                        <TextBlock Grid.Row="9" Grid.Column="0" Margin="0 0 10 0" Text="Has Iconic Bitmap" ToolTip="DWMWA_HAS_ICONIC_BITMAP"/>
+                        <ComboBox x:Name="HasIconicBitmapComboBox" Grid.Row="9" Grid.Column="1">
+                            <ComboBoxItem Content="True" Tag="{StaticResource True}"/>
+                            <ComboBoxItem Content="False" Tag="{StaticResource False}"/>
+                        </ComboBox>
+                        <Button Grid.Row="9" Grid.Column="2" Content="Set" Click="HasIconicBitmapButton_Click"/>
+                        <TextBlock Grid.Row="10" Grid.Column="0" Margin="0 0 10 0" Text="Is Disallow Peek" ToolTip="DWMWA_DISALLOW_PEEK"/>
+                        <ComboBox x:Name="IsDisallowPeekComboBox" Grid.Row="10" Grid.Column="1">
+                            <ComboBoxItem Content="True" Tag="{StaticResource True}"/>
+                            <ComboBoxItem Content="False" Tag="{StaticResource False}"/>
+                        </ComboBox>
+                        <Button Grid.Row="10" Grid.Column="2" Content="Set" Click="IsDisallowPeekButton_Click"/>
+                        <TextBlock Grid.Row="11" Grid.Column="0" Margin="0 0 10 0" Text="Is Excluded From Peek" ToolTip="DWMWA_EXCLUDED_FROM_PEEK"/>
+                        <ComboBox x:Name="IsExcludedFromPeekComboBox" Grid.Row="11" Grid.Column="1">
+                            <ComboBoxItem Content="True" Tag="{StaticResource True}"/>
+                            <ComboBoxItem Content="False" Tag="{StaticResource False}"/>
+                        </ComboBox>
+                        <Button Grid.Row="11" Grid.Column="2" Content="Set" Click="IsExcludedFromPeekButton_Click"/>
+                        <TextBlock Grid.Row="12" Grid.Column="0" Margin="0 0 10 0" Text="Is Cloak" ToolTip="DWMWA_CLOAK"/>
+                        <ComboBox x:Name="IsCloakComboBox" Grid.Row="12" Grid.Column="1">
+                            <ComboBoxItem Content="True" Tag="{StaticResource True}"/>
+                            <ComboBoxItem Content="False" Tag="{StaticResource False}"/>
+                        </ComboBox>
+                        <Button Grid.Row="12" Grid.Column="2" Content="Set" Click="IsCloakButton_Click"/>
+                        <TextBlock Grid.Row="13" Grid.Column="0" Margin="0 0 10 0" Text="Is Freeze Representation" ToolTip="DWMWA_FREEZE_REPRESENTATION"/>
+                        <ComboBox x:Name="IsFreezeRepresentationComboBox" Grid.Row="13" Grid.Column="1">
+                            <ComboBoxItem Content="True" Tag="{StaticResource True}"/>
+                            <ComboBoxItem Content="False" Tag="{StaticResource False}"/>
+                        </ComboBox>
+                        <Button Grid.Row="13" Grid.Column="2" Content="Set" Click="IsFreezeRepresentationButton_Click"/>
                     </Grid>
                 </GroupBox>
             </Grid>

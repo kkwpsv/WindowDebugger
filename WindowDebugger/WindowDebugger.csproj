@@ -12,9 +12,9 @@
 
   <ItemGroup>
     <PackageReference Include="Lsj.Util.JSON" Version="5.1.1" />
-    <PackageReference Include="Lsj.Util.Win32" Version="5.1.5-debug1997" />
+    <PackageReference Include="Lsj.Util.Win32" Version="5.1.5-debug1999" />
     <PackageReference Include="Lsj.Util.WPF" Version="5.1.1" />
-    <PackageReference Include="Lsj.Util.Win32.NativeUI" Version="5.2.3" />
+    <PackageReference Include="Lsj.Util.Win32.NativeUI" Version="5.2.4-debug1999" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="Walterlv.Themes.FluentDesign" Version="6.0.0" />
   </ItemGroup>

@@ -17,7 +17,7 @@ using static Lsj.Util.Win32.Enums.DPI_AWARENESS;
 using static Lsj.Util.Win32.Enums.ProcessAccessRights;
 using static Lsj.Util.Win32.Enums.RedrawWindowFlags;
 using static Lsj.Util.Win32.Enums.ThreadAccessRights;
-using static Lsj.Util.Win32.Enums.WindowsMessages;
+using static Lsj.Util.Win32.Enums.WindowMessages;
 using static Lsj.Util.Win32.Extensions.WindowExtensions;
 using static Lsj.Util.Win32.Gdi32;
 using static Lsj.Util.Win32.Kernel32;

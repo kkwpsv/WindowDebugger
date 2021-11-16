@@ -227,6 +227,12 @@ namespace WindowDebugger.ViewModels
 
         private void OnError(SystemErrorCodes? win32ErrorCode, HRESULT? hResult)
         {
+            if (win32ErrorCode == SystemErrorCodes.ERROR_INVALID_WINDOW_HANDLE)
+            {
+                // The window is closed
+                // Ignore
+                return;
+            }
             if (win32ErrorCode != null)
             {
                 ErrorString = ErrorMessageExtensions.GetSystemErrorMessageFromCode(win32ErrorCode.Value);

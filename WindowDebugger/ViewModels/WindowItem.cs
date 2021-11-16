@@ -13,6 +13,7 @@ using System.Windows.Interop;
 using System.Windows.Media.Imaging;
 using static Lsj.Util.Win32.BaseTypes.HRESULT;
 using static Lsj.Util.Win32.Constants;
+using static Lsj.Util.Win32.Enums.DPI_AWARENESS;
 using static Lsj.Util.Win32.Enums.ProcessAccessRights;
 using static Lsj.Util.Win32.Enums.RedrawWindowFlags;
 using static Lsj.Util.Win32.Enums.ThreadAccessRights;
@@ -66,7 +67,7 @@ namespace WindowDebugger.ViewModels
 
         public ShowWindowCommands WindowShowStates { get => _window.ShowStates; set => _window.ShowStates = value; }
 
-        public DPI_AWARENESS DpiAwareness { get => _window.DpiAwareness; }
+        public DPI_AWARENESS DpiAwareness => GetWithDefaultValueWhenException(() => _window.DpiAwareness, DPI_AWARENESS_UNAWARE);
 
         public IntPtr ParentWindowHandle
         {
@@ -87,7 +88,7 @@ namespace WindowDebugger.ViewModels
 
         public bool IsTouchWindow { get => _window.IsTouchWindow; }
 
-        public string VirtualDesktopID { get => _window.DesktopID.ToString(); }
+        public string VirtualDesktopID => GetWithDefaultValueWhenException(() => _window.DesktopID.ToString(), null);
 
         private void SetError()
         {
@@ -246,6 +247,18 @@ namespace WindowDebugger.ViewModels
                     return;
                 }
                 ErrorString = Marshal.GetExceptionForHR(hResult.Value).Message;
+            }
+        }
+
+        private T GetWithDefaultValueWhenException<T>(Func<T> getAction, T defaultValue)
+        {
+            try
+            {
+                return getAction();
+            }
+            catch
+            {
+                return default;
             }
         }
     }

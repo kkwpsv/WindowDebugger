@@ -15,6 +15,7 @@
         <Grid>
             <Grid.Resources>
                 <utilconverters:IntPtrToHexConverter x:Key="IntPtrToHexConverter"/>
+                <converters:ParentWindowHandleToCanUpdateOwnerConverter x:Key="ParentWindowHandleToCanUpdateOwnerConverter"/>
                 <Style TargetType="TextBlock">
                     <Style.Setters>
                         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -110,7 +111,8 @@
             <Button Grid.Row="8" Grid.Column="2" Click="UpdateParentWindowHandle" Content="Update"/>
             <TextBlock Grid.Row="9" Grid.Column="0" Text="Owner Window"/>
             <TextBox Grid.Row="9" Grid.Column="1" x:Name="TextBoxOwnerWindowHandle" Text="{Binding OwnerWindowHandle, Converter={StaticResource IntPtrToHexConverter}, UpdateSourceTrigger=Explicit}"/>
-            <Button Grid.Row="9" Grid.Column="2" Click="UpdateOwnerWindowHandle" Content="Update" IsEnabled="{Binding CanUpdateOwner}"/>
+            <Button Grid.Row="9" Grid.Column="2" Click="UpdateOwnerWindowHandle" Content="Update"
+                    IsEnabled="{Binding ParentWindowHandle,Converter={StaticResource ParentWindowHandleToCanUpdateOwnerConverter}}"/>
             <Border Grid.Row="10" Grid.Column="0" Grid.ColumnSpan="3" BorderThickness="2" BorderBrush="{StaticResource Brush.Theme}"
                     HorizontalAlignment="Center" VerticalAlignment="Center">
                 <Image Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Source="{Binding Screenshot}" RenderOptions.BitmapScalingMode="Fant"/>

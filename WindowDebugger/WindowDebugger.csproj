@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFrameworks>netcoreapp3.1;net48;net5-windows;net45</TargetFrameworks>
     <UseWPF>true</UseWPF>
-    <Version>0.0.7</Version>
+    <Version>0.0.8</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

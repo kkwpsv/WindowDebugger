@@ -1,20 +1,21 @@
-﻿<TabItem x:Name="tabItem" x:Class="WindowDebugger.Views.WindowStylesExTab"
+﻿<TabItem x:Name="tabItem" x:Class="WindowDebugger.Views.Tabs.WindowStylesExTab"
          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-         xmlns:local="clr-namespace:WindowDebugger.Views"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:local="clr-namespace:WindowDebugger.Views.Tabs"
          xmlns:converters="clr-namespace:WindowDebugger.Converters"
          xmlns:viewmodels="clr-namespace:WindowDebugger.ViewModels"
          mc:Ignorable="d"
          d:DesignHeight="500" d:DesignWidth="500" d:DataContext="{d:DesignInstance Type=viewmodels:WindowItem}" Header="{Binding Content, RelativeSource={RelativeSource Self}, Mode=OneWay}">
-    <Border Padding="10">
+    <ScrollViewer Padding="12 12 12 0">
         <Grid ButtonBase.Click="Grid_Click">
-            <Grid.Resources>
+            <FrameworkElement.Resources>
                 <converters:WindowStylesExToBoolConverter x:Key="WindowStylesExToBoolConverter"/>
                 <converters:WindowStylesExToStringConverter x:Key="WindowStylesExToStringConverter"/>
                 <converters:EnumToDisplayNameConverter x:Key="EnumToDisplayNameConverter"/>
-                <Style TargetType="CheckBox">
+                <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                    <Setter Property="Margin" Value="0 8" />
                     <Setter Property="VerticalAlignment" Value="Center"/>
                     <Setter Property="Content" Value="{Binding Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource EnumToDisplayNameConverter}}"/>
                     <Setter Property="IsChecked">
@@ -28,39 +29,43 @@
                         </Setter.Value>
                     </Setter>
                 </Style>
-            </Grid.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Padding" Value="8 0" />
+                    <Setter Property="Height" Value="32" />
+                </Style>
+            </FrameworkElement.Resources>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" MinHeight="30"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.ColumnSpan="2">
+            <Grid Grid.ColumnSpan="2" Margin="0 0 0 8">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" MinWidth="100"/>
+                    <ColumnDefinition Width="Auto" MinWidth="120"/>
                     <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="*" MinWidth="70"/>
-                    <ColumnDefinition Width="*" MinWidth="70"/>
+                    <ColumnDefinition Width="*" MaxWidth="120" />
+                    <ColumnDefinition Width="*" MaxWidth="120" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Window Styles:" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" x:Name="TextBoxStyleEx" Text="{Binding Path=StylesEx, Converter={StaticResource WindowStylesExToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=Explicit}" MaxHeight="20"/>
-                <Button Grid.Column="2" Content="Update" MaxHeight="20" Margin="15 0 0 0" Click="UpdateStylesEx"/>
-                <Button Grid.Column="3" Content="Refresh" MaxHeight="20" Margin="15 0 0 0" Click="RefreshStylesEx"/>
+                <TextBox Grid.Column="1" x:Name="TextBoxStyleEx" Text="{Binding Path=StylesEx, Converter={StaticResource WindowStylesExToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=Explicit}" />
+                <Button Grid.Column="2" Content="Change" Margin="8 0" Click="UpdateStylesEx"/>
+                <Button Grid.Column="3" Content="Reload" Click="RefreshStylesEx"/>
             </Grid>
             <CheckBox Grid.Row="1" Grid.Column="0" Tag="WS_EX_LEFT"/>
             <CheckBox Grid.Row="1" Grid.Column="1" Tag="WS_EX_LTRREADING"/>
@@ -90,5 +95,5 @@
             <CheckBox Grid.Row="13" Grid.Column="1" Tag="WS_EX_COMPOSITED"/>
             <CheckBox Grid.Row="14" Grid.Column="0" Tag="WS_EX_NOACTIVATE"/>
         </Grid>
-    </Border>
+    </ScrollViewer>
 </TabItem>

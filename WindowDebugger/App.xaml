@@ -5,15 +5,23 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <ResourceDictionary>
+
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="/Themes/Core.xaml" />
-                <ResourceDictionary Source="/Themes/FDS/Window.xaml" />
-                <ResourceDictionary Source="/Themes/FDS/Button.xaml" />
-                <ResourceDictionary Source="/Themes/FDS/ScrollBar.xaml" />
-                <ResourceDictionary Source="/Themes/FDS/ScrollViewer.xaml" />
-                <ResourceDictionary Source="/Themes/FDS/ListBox.xaml" />
-                <ResourceDictionary Source="/Themes/FDS/TabControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/WPFUI;component/Styles/Theme/Dark.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/WPFUI;component/Styles/WPFUI.xaml" />
+                <ResourceDictionary Source="/Themes/Windows11/WPFUIFix.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <Style TargetType="{x:Type ScrollViewer}" BasedOn="{StaticResource UiScrollViewer}" />
+
+            <!--  Colors depending on the theme should be changed by the Manager  -->
+            <Color x:Key="SystemAccentColor">#1570a6</Color>
+
+            <!--  While the name remains Light to stay with the official nomenclature, it's made dark in Dark Theme  -->
+            <Color x:Key="SystemAccentColorLight1">#3396cf</Color>
+            <Color x:Key="SystemAccentColorLight2">#80b9ee</Color>
+            <Color x:Key="SystemAccentColorLight3">#add8ff</Color>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

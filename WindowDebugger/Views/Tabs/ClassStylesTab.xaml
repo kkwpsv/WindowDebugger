@@ -1,58 +1,71 @@
-﻿<TabItem x:Name="tabItem" x:Class="WindowDebugger.Views.ClassStylesTab"
+﻿<TabItem x:Name="tabItem" x:Class="WindowDebugger.Views.Tabs.ClassStylesTab"
          xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
          xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-         xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-         xmlns:local="clr-namespace:WindowDebugger.Views"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:local="clr-namespace:WindowDebugger.Views.Tabs"
          xmlns:converters="clr-namespace:WindowDebugger.Converters"
          xmlns:viewmodels="clr-namespace:WindowDebugger.ViewModels"
          mc:Ignorable="d"
          d:DesignHeight="500" d:DesignWidth="500" d:DataContext="{d:DesignInstance Type=viewmodels:WindowItem}" Header="{Binding Content, RelativeSource={RelativeSource Self}, Mode=OneWay}">
-    <Border Padding="10">
+    <ScrollViewer Padding="12 12 12 0">
         <Grid ButtonBase.Click="Grid_Click">
-            <Grid.Resources>
+            <FrameworkElement.Resources>
                 <converters:ClassStylesToBoolConverter x:Key="ClassStylesToBoolConverter"/>
                 <converters:ClassStylesToStringConverter x:Key="ClassStylesToStringConverter"/>
                 <converters:EnumToDisplayNameConverter x:Key="EnumToDisplayNameConverter"/>
-                <Style TargetType="CheckBox">
+                <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                    <Setter Property="Margin" Value="0 8" />
                     <Setter Property="VerticalAlignment" Value="Center"/>
                     <Setter Property="Content" Value="{Binding Tag, RelativeSource={RelativeSource Self}, Converter={StaticResource EnumToDisplayNameConverter}}"/>
                     <Setter Property="IsChecked">
                         <Setter.Value>
                             <MultiBinding Converter="{StaticResource ClassStylesToBoolConverter}" Mode="OneWay">
                                 <MultiBinding.Bindings>
-                                    <Binding Path="ClassStyles"/>
+                                    <Binding Path="StylesEx"/>
                                     <Binding Path="Tag" RelativeSource="{RelativeSource Self}"/>
                                 </MultiBinding.Bindings>
                             </MultiBinding>
                         </Setter.Value>
                     </Setter>
                 </Style>
-            </Grid.Resources>
+                <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                    <Setter Property="Padding" Value="8 0" />
+                    <Setter Property="Height" Value="32" />
+                </Style>
+            </FrameworkElement.Resources>
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" MinHeight="30"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.ColumnSpan="2">
+            <Grid Grid.ColumnSpan="2" Margin="0 0 0 8">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" MinWidth="100"/>
+                    <ColumnDefinition Width="Auto" MinWidth="120"/>
                     <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="*" MinWidth="70"/>
-                    <ColumnDefinition Width="*" MinWidth="70"/>
+                    <ColumnDefinition Width="*" MaxWidth="120" />
+                    <ColumnDefinition Width="*" MaxWidth="120" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="0" Text="Class Styles:" VerticalAlignment="Center"/>
-                <TextBox Grid.Column="1" x:Name="TextBoxClassStyle" Text="{Binding Path=ClassStyles, Converter={StaticResource ClassStylesToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=Explicit}" MaxHeight="20"/>
-                <Button Grid.Column="2" Content="Update" MaxHeight="20" Margin="15 0 0 0" Click="UpdateClassStyles"/>
-                <Button Grid.Column="3" Content="Refresh" MaxHeight="20" Margin="15 0 0 0" Click="RefreshClassStyles"/>
+                <TextBox Grid.Column="1" x:Name="TextBoxClassStyle" Text="{Binding Path=ClassStyles, Converter={StaticResource ClassStylesToStringConverter}, Mode=TwoWay, UpdateSourceTrigger=Explicit}" />
+                <Button Grid.Column="2" Content="Change" Margin="8 0" Click="UpdateClassStyles"/>
+                <Button Grid.Column="3" Content="Reload" Click="RefreshClassStyles"/>
             </Grid>
             <CheckBox Grid.Row="1" Grid.Column="0" Tag="CS_VREDRAW"/>
             <CheckBox Grid.Row="1" Grid.Column="1" Tag="CS_HREDRAW"/>
@@ -67,5 +80,5 @@
             <CheckBox Grid.Row="6" Grid.Column="0" Tag="CS_GLOBALCLASS"/>
             <CheckBox Grid.Row="6" Grid.Column="1" Tag="CS_DROPSHADOW"/>
         </Grid>
-    </Border>
+    </ScrollViewer>
 </TabItem>

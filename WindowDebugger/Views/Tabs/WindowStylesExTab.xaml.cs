@@ -17,7 +17,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using WindowDebugger.ViewModels;
 
-namespace WindowDebugger.Views
+namespace WindowDebugger.Views.Tabs
 {
     /// <summary>
     /// WindowStylesTab.xaml 的交互逻辑

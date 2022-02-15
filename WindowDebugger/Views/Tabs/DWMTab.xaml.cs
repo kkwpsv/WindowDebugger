@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using WindowDebugger.ViewModels;
 
-namespace WindowDebugger.Views
+namespace WindowDebugger.Views.Tabs
 {
     /// <summary>
     /// DWMTab.xaml 的交互逻辑

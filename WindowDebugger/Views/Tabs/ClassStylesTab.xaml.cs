@@ -5,7 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using WindowDebugger.ViewModels;
 
-namespace WindowDebugger.Views
+namespace WindowDebugger.Views.Tabs
 {
     /// <summary>
     /// WindowStylesTab.xaml 的交互逻辑

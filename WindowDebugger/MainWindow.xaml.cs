@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Interop;
@@ -12,66 +13,21 @@ namespace WindowDebugger
     /// </summary>
     public partial class MainWindow : Window
     {
-        ViewModel Model => ViewModel.Instance;
         public MainWindow()
         {
+            WPFUI.Background.Manager.Apply(this);
             InitializeComponent();
         }
 
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private void Window_SourceInitialized(object sender, EventArgs e)
         {
-            _ = UpdateHelper.CheckUpdate();
-            RefreshWindowList(null, null);
+            var hwnd = new WindowInteropHelper(this).Handle;
+            WPFUI.Background.Manager.Apply(WPFUI.Background.BackgroundType.Mica, hwnd);
         }
 
-        private void RefreshWindowList(object sender, RoutedEventArgs e)
+        private void Window_ContentRendered(object sender, EventArgs e)
         {
-            var selectedNew = Model.SelectedWindow;
-            var selected = default(WindowItem);
-
-            Model.RefreshWindowList();
-
-            if (selectedNew != null)
-            {
-                selected = Model.Windows.FirstOrDefault(x => x.WindowHandle == selectedNew.WindowHandle);
-            }
-
-            Model.SelectedWindow = selected ?? Model.Windows.FirstOrDefault(x => x.WindowHandle == new WindowInteropHelper(this).Handle);
-            if (Model.SelectedWindow != null)
-            {
-                WindowList.ScrollIntoView(WindowList.Items[WindowList.Items.Count - 1]);
-                WindowList.ScrollIntoView(Model.SelectedWindow);
-            }
-        }
-
-        private void RefreshCurrent(object sender, RoutedEventArgs e)
-        {
-            Model.SelectedWindow?.RefreshItem();
-            Model.SelectedWindow?.RefreshScreenShot();
-        }
-
-        private void TabControl_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (e.OldValue is WindowItem olditem)
-            {
-                olditem.PropertyChanged -= WindowItem_PropertyChanged;
-            }
-            if (e.NewValue is WindowItem newitem)
-            {
-                newitem.PropertyChanged += WindowItem_PropertyChanged;
-            }
-        }
-
-        private void WindowItem_PropertyChanged(object sender, PropertyChangedEventArgs e)
-        {
-            if (sender is WindowItem item && e.PropertyName == nameof(WindowItem.ErrorString))
-            {
-                if (item.ErrorString != null)
-                {
-                    MessageBox.Show(this, item.ErrorString);
-                    item.ErrorString = null;
-                }
-            }
+            RootNavigation.Navigate("windows", false);
         }
     }
 }

@@ -6,6 +6,8 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
+using WPFUI.Theme;
+
 namespace WindowDebugger
 {
     /// <summary>
@@ -13,5 +15,10 @@ namespace WindowDebugger
     /// </summary>
     public partial class App : Application
     {
+        protected override void OnStartup(StartupEventArgs e)
+        {
+            base.OnStartup(e);
+            Watcher.Start(true, true);
+        }
     }
 }

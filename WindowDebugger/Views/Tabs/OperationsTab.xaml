@@ -1,0 +1,55 @@
+﻿<TabItem x:Name="tabItem" x:Class="WindowDebugger.Views.Tabs.OperationsTab"
+         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+         xmlns:local="clr-namespace:WindowDebugger.Views.Tabs"
+         xmlns:viewmodels="clr-namespace:WindowDebugger.ViewModels"
+         xmlns:win11="clr-namespace:WPFUI.Controls;assembly=WPFUI"
+         mc:Ignorable="d"
+         d:DesignHeight="500" d:DesignWidth="500" d:DataContext="{d:DesignInstance Type=viewmodels:WindowItem}" Header="{Binding Content, RelativeSource={RelativeSource Self}, Mode=OneWay}">
+    <ScrollViewer Padding="12 12 12 0">
+        <StackPanel>
+            <FrameworkElement.Resources>
+                <Style TargetType="{x:Type win11:CardControl}" BasedOn="{StaticResource {x:Type win11:CardControl}}">
+                    <Setter Property="Margin" Value="0 0 0 8" />
+                </Style>
+                <Style TargetType="{x:Type win11:Button}" BasedOn="{StaticResource {x:Type win11:Button}}">
+                    <Setter Property="MinWidth" Value="160" />
+                    <Setter Property="Margin" Value="8 0 0 0" />
+                </Style>
+            </FrameworkElement.Resources>
+            <win11:CardControl Title="Window operations" Icon="WindowHeaderHorizontal20" Subtitle="Control the window.">
+                <StackPanel Orientation="Horizontal">
+                    <win11:Button Appearance="Secondary" Content="Set foreground" Click="ButtonSetForeground_Click" />
+                    <win11:Button Appearance="Secondary" Content="Close" Click="ButtonCloseWindow_Click" />
+                </StackPanel>
+            </win11:CardControl>
+            <win11:CardControl Title="Window interactions" Icon="WindowInprivate20" Subtitle="Let the window interop with the system features.">
+                <StackPanel Orientation="Horizontal">
+                    <win11:Button Appearance="Secondary" Content="Redraw window" Click="ButtonRedrawWindow_Click" />
+                    <win11:Button Appearance="Secondary" Content="Flash window" Click="ButtonFlashWindow_Click" />
+                </StackPanel>
+            </win11:CardControl>
+            <win11:CardControl Title="Process operations" Subtitle="Kill the process with a normal method or a danger method.">
+                <StackPanel Orientation="Horizontal">
+                    <win11:Button Appearance="Secondary" Content="Kill" Click="ButtonKillProcess_Click" />
+                    <win11:Button Appearance="Danger" Content="Force kill" Click="ButtonForceKillProcess_Click" />
+                </StackPanel>
+            </win11:CardControl>
+            <win11:CardControl Title="Thread operations" Subtitle="Operate the thread which the window runs on.">
+                <StackPanel Orientation="Horizontal">
+                    <FrameworkElement.Resources>
+                        <Style TargetType="{x:Type win11:Button}" BasedOn="{StaticResource {x:Type win11:Button}}">
+                            <Setter Property="MinWidth" Value="84" />
+                            <Setter Property="Margin" Value="8 0 0 0" />
+                        </Style>
+                    </FrameworkElement.Resources>
+                    <win11:Button Appearance="Secondary" Content="Suspend" Click="ButtonSuspendThread_Click" />
+                    <win11:Button Appearance="Secondary" Content="Resume" Click="ButtonResumeThread_Click" />
+                    <win11:Button Appearance="Danger" Content="Kill" Click="ButtonKillThread_Click" />
+                </StackPanel>
+            </win11:CardControl>
+        </StackPanel>
+    </ScrollViewer>
+</TabItem>

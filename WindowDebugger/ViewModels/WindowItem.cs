@@ -43,11 +43,35 @@ namespace WindowDebugger.ViewModels
 
         public string Text { get => _window.Text; set => _window.Text = value; }
 
-        public WindowStyles Styles { get => _window.WindowStyles; set => _window.WindowStyles = value; }
+        public WindowStyles Styles
+        {
+            get => _window.WindowStyles;
+            set
+            {
+                _window.WindowStyles = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public WindowStylesEx StylesEx { get => _window.WindowStylesEx; set => _window.WindowStylesEx = value; }
+        public WindowStylesEx StylesEx
+        {
+            get => _window.WindowStylesEx;
+            set
+            {
+                _window.WindowStylesEx = value;
+                OnPropertyChanged();
+            }
+        }
 
-        public ClassStyles ClassStyles { get => _window.ClassStyles; set => _window.ClassStyles = value; }
+        public ClassStyles ClassStyles
+        {
+            get => _window.ClassStyles;
+            set
+            {
+                _window.ClassStyles = value;
+                OnPropertyChanged();
+            }
+        }
 
         public int ProcessID { get => _window.ProcessID; }
 

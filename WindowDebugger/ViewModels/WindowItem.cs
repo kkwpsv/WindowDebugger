@@ -7,6 +7,7 @@ using Lsj.Util.Win32.NativeUI;
 using Lsj.Util.Win32.Structs;
 using Lsj.Util.WPF;
 using System;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Interop;
@@ -89,7 +90,25 @@ namespace WindowDebugger.ViewModels
 
         public int Height { get => _window.Rect.bottom - _window.Rect.top; }
 
-        public ShowWindowCommands WindowShowStates { get => _window.ShowStates; set => _window.ShowStates = value; }
+        public ShowWindowCommands WindowShowStates
+        {
+            get => _window.ShowStates;
+            set
+            {
+                _window.ShowStates = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public WindowDisplayAffinities WindowDisplayAffinity
+        {
+            get => ProcessID == Process.GetCurrentProcess().Id && (Styles & WindowStyles.WS_CHILD) == 0 ? _window.DisplayAffinity : default;
+            set
+            {
+                _window.DisplayAffinity = value;
+                OnPropertyChanged();
+            }
+        }
 
         public DPI_AWARENESS DpiAwareness => GetWithDefaultValueWhenException(() => _window.DpiAwareness, DPI_AWARENESS_UNAWARE);
 

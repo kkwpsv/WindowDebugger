@@ -17,8 +17,9 @@
         <FrameworkElement.Resources>
             <utilconverters:IntPtrToHexConverter x:Key="IntPtrToHexConverter"/>
             <converters:ParentWindowHandleToCanUpdateOwnerConverter x:Key="ParentWindowHandleToCanUpdateOwnerConverter"/>
+            <converters:WindowItemToCanSetDisplayAffinityConverter x:Key="WindowItemToCanSetDisplayAffinityConverter"/>
             <Style TargetType="TextBlock">
-                 <Setter Property="VerticalAlignment" Value="Center"/>
+                <Setter Property="VerticalAlignment" Value="Center"/>
             </Style>
         </FrameworkElement.Resources>
         <StackPanel>
@@ -85,6 +86,7 @@
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
                     <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
                 </Grid.RowDefinitions>
                 <FrameworkElement.Resources>
                     <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
@@ -127,15 +129,21 @@
                 <Button Grid.Row="1" Grid.Column="2" Click="UpdateRect" Content="Change"/>
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="WindowShowStates"/>
                 <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ComboBoxWindowShowStates"
-                      SelectedValue="{Binding WindowShowStates, Mode=TwoWay}"
-                      ItemsSource="{markupExtensions:EnumToItemSource {x:Type win32Enums:ShowWindowCommands}}"
-                      DisplayMemberPath="DisplayName" SelectedValuePath="Value"/>
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="Parent Window"/>
-                <TextBox Grid.Row="3" Grid.Column="1" x:Name="TextBoxParentWindowHandle" Text="{Binding ParentWindowHandle, Converter={StaticResource IntPtrToHexConverter}, UpdateSourceTrigger=Explicit}"/>
-                <Button Grid.Row="3" Grid.Column="2" Click="UpdateParentWindowHandle" Content="Change"/>
-                <TextBlock Grid.Row="4" Grid.Column="0" Text="Owner Window"/>
-                <TextBox Grid.Row="4" Grid.Column="1" x:Name="TextBoxOwnerWindowHandle" Text="{Binding OwnerWindowHandle, Converter={StaticResource IntPtrToHexConverter}, UpdateSourceTrigger=Explicit}"/>
-                <Button Grid.Row="4" Grid.Column="2" Click="UpdateOwnerWindowHandle" Content="Change"
+                          SelectedValue="{Binding WindowShowStates, Mode=TwoWay}"
+                          ItemsSource="{markupExtensions:EnumToItemSource {x:Type win32Enums:ShowWindowCommands}}"
+                          DisplayMemberPath="DisplayName" SelectedValuePath="Value"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="WindowShowStates"/>
+                <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ComboBoxWindowDisplayAffinities"
+                          SelectedValue="{Binding WindowDisplayAffinity, Mode=TwoWay}"
+                          ItemsSource="{markupExtensions:EnumToItemSource {x:Type win32Enums:WindowDisplayAffinities}}"
+                          IsEnabled="{Binding Converter={StaticResource WindowItemToCanSetDisplayAffinityConverter}}"
+                          DisplayMemberPath="DisplayName" SelectedValuePath="Value"/>
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="Parent Window"/>
+                <TextBox Grid.Row="4" Grid.Column="1" x:Name="TextBoxParentWindowHandle" Text="{Binding ParentWindowHandle, Converter={StaticResource IntPtrToHexConverter}, UpdateSourceTrigger=Explicit}"/>
+                <Button Grid.Row="4" Grid.Column="2" Click="UpdateParentWindowHandle" Content="Change"/>
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Owner Window"/>
+                <TextBox Grid.Row="5" Grid.Column="1" x:Name="TextBoxOwnerWindowHandle" Text="{Binding OwnerWindowHandle, Converter={StaticResource IntPtrToHexConverter}, UpdateSourceTrigger=Explicit}"/>
+                <Button Grid.Row="5" Grid.Column="2" Click="UpdateOwnerWindowHandle" Content="Change"
                     IsEnabled="{Binding ParentWindowHandle,Converter={StaticResource ParentWindowHandleToCanUpdateOwnerConverter}}"/>
             </Grid>
         </StackPanel>

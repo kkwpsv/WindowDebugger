@@ -12,6 +12,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <SupportedPlatform Include="Windows" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Lsj.Util.JSON" Version="6.0.0" />
     <PackageReference Include="Lsj.Util.Win32" Version="6.2.1" />
     <PackageReference Include="Lsj.Util.WPF" Version="6.0.0" />

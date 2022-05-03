@@ -72,8 +72,10 @@
                         </Style>
                     </StackPanel.Resources>
                     <TextBlock Text="Filter Options:" />
-                    <CheckBox Content="Visible windows only" />
-                    <CheckBox Content="Titled windows only" />
+                    <CheckBox Content="Include non-visible windows" IsChecked="{Binding IncludeNonVisibleWindows}"/>
+                    <CheckBox Content="Include non-titled windows" IsChecked="{Binding IncludeNonTitledWindows}"/>
+                    <CheckBox Content="Include child windows" IsChecked="{Binding IncludeChildWindows}"/>
+                    <CheckBox Content="Include message-only windows" IsChecked="{Binding IncludeMessageOnlyWindows}"/>
                 </StackPanel>
             </Expander>
 

@@ -32,10 +32,10 @@
         <win11:NavigationStore x:Name="RootNavigation" Grid.Row="1" Grid.Column="0"
                                Margin="6,0,6,0" Frame="{Binding ElementName=RootFrame}">
             <win11:NavigationStore.Items>
-                <win11:NavigationItem Content="Windows" Icon="PictureInPicture24" Tag="windows" Type="{x:Type pages:WindowsPage}" />
+                <win11:NavigationItem Content="Windows" Icon="PictureInPicture24" Tag="windows" Page="{x:Type pages:WindowsPage}" />
             </win11:NavigationStore.Items>
             <win11:NavigationStore.Footer>
-                <win11:NavigationItem Content="About" Icon="Info24" Tag="about" Type="{x:Type pages:AboutPage}" />
+                <win11:NavigationItem Content="About" Icon="Info24" Tag="about" Page="{x:Type pages:AboutPage}" />
             </win11:NavigationStore.Footer>
         </win11:NavigationStore>
 

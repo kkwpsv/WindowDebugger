@@ -5,7 +5,7 @@
     <TargetFrameworks>net6.0-windows;net5.0-windows;netcoreapp3.1;net48</TargetFrameworks>
     <UseWPF>true</UseWPF>
     <LangVersion>latest</LangVersion>
-    <Version>0.0.8</Version>
+    <Version>0.0.9</Version>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>

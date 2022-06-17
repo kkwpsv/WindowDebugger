@@ -112,6 +112,8 @@ namespace WindowDebugger.ViewModels
 
         public DPI_AWARENESS DpiAwareness => GetWithDefaultValueWhenException(() => _window.DpiAwareness, DPI_AWARENESS_UNAWARE);
 
+        public int Dpi => _window.Dpi;
+
         public IntPtr ParentWindowHandle
         {
             get => _window.ParentWindowHandle;

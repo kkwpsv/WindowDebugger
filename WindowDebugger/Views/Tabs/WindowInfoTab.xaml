@@ -30,15 +30,12 @@
                     <ColumnDefinition Width="2*" MinWidth="200"/>
                 </Grid.ColumnDefinitions>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="42" />
+                    <RowDefinition Height="42" />
+                    <RowDefinition Height="42" />
+                    <RowDefinition Height="42" />
+                    <RowDefinition Height="42" />
+                    <RowDefinition Height="42" />
                 </Grid.RowDefinitions>
                 <FrameworkElement.Resources>
                     <Style TargetType="TextBox" BasedOn="{StaticResource {x:Type TextBox}}">
@@ -48,7 +45,7 @@
                         <Setter Property="Background" Value="Transparent" />
                     </Style>
                 </FrameworkElement.Resources>
-                <Border Grid.Row="0" Grid.RowSpan="20" Grid.Column="2" BorderThickness="1" BorderBrush="{DynamicResource ControlElevationBorderBrush}"
+                <Border Grid.Row="0" Grid.RowSpan="6" Grid.Column="2" BorderThickness="1" BorderBrush="{DynamicResource ControlElevationBorderBrush}"
                         HorizontalAlignment="Center" VerticalAlignment="Top" Margin="16 4 4 0" MaxHeight="320">
                     <Image Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="3" Source="{Binding Screenshot}" RenderOptions.BitmapScalingMode="Fant"/>
                 </Border>
@@ -67,6 +64,8 @@
                 <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ClassName, Mode=OneWay}" IsReadOnly="True"/>
                 <TextBlock Grid.Row="4" Grid.Column="0" Text="DpiAwareness"/>
                 <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding DpiAwareness, Mode=OneWay}" IsReadOnly="True"/>
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="Dpi"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Dpi, Mode=OneWay}" IsReadOnly="True"/>
             </Grid>
             <Border Height="1" Background="{DynamicResource ControlElevationBorderBrush}" Margin="0 16" />
             <Grid>

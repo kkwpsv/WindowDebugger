@@ -239,7 +239,7 @@ namespace WindowDebugger.ViewModels
 
         public void UpdateWindowRect(int left, int top, int width, int height)
         {
-            _window.Rect = new RECT { left = left, top = top, right = Left + width, bottom = Top + height };
+            _window.Rect = new RECT { left = left, top = top, right = left + width, bottom = top + height };
             OnPropertyChanged(nameof(Left));
             OnPropertyChanged(nameof(Top));
             OnPropertyChanged(nameof(Width));

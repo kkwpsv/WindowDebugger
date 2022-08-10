@@ -131,7 +131,7 @@
                           SelectedValue="{Binding WindowShowStates, Mode=TwoWay}"
                           ItemsSource="{markupExtensions:EnumToItemSource {x:Type win32Enums:ShowWindowCommands}}"
                           DisplayMemberPath="DisplayName" SelectedValuePath="Value"/>
-                <TextBlock Grid.Row="3" Grid.Column="0" Text="WindowShowStates"/>
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="WindowDisplayAffinity"/>
                 <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ComboBoxWindowDisplayAffinities"
                           SelectedValue="{Binding WindowDisplayAffinity, Mode=TwoWay}"
                           ItemsSource="{markupExtensions:EnumToItemSource {x:Type win32Enums:WindowDisplayAffinities}}"

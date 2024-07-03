@@ -12,15 +12,22 @@
   <ItemGroup>
     <PackageReference Include="Avalonia" Version="11.1.0-rc1" />
     <PackageReference Include="Avalonia.Desktop" Version="11.1.0-rc1" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0-rc1" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.1.0-rc1" Condition="'$(Configuration)' == 'Debug'" />
     <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.0-rc1" />
-    <PackageReference Condition="'$(Configuration)' == 'Debug'" Include="Avalonia.Diagnostics" Version="11.1.0-rc1" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.1.0-rc1" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0-rc1" />
     <PackageReference Include="dotnetCampus.Logger" Version="1.1.0-alpha04" />
     <PackageReference Include="dotnetCampus.SourceLocalizations" Version="0.1.0-alpha04" />
+    <PackageReference Include="Lsj.Util.Win32" Version="6.2.3" />
+    <PackageReference Include="Lsj.Util.Win32.NativeUI" Version="6.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <LocalizationFile Include="Localizations\**\*.toml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Services\NativeWindows\Linux\" />
   </ItemGroup>
 
 </Project>

@@ -9,6 +9,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>WindowDebugger</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

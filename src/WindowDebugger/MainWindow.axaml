@@ -2,8 +2,33 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="clr-namespace:WindowDebugger.Views"
+        xmlns:l="clr-namespace:WindowDebugger.Localizations"
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="WindowDebugger.MainWindow"
-        Title="WindowDebugger">
-    Welcome to Avalonia!
+        x:Name="MainWindowInstance"
+        Width="1024" Height="768" WindowStartupLocation="CenterScreen"
+        TransparencyLevelHint="Mica,AcrylicBlur,Blur"
+        ExtendClientAreaToDecorationsHint="True"
+        Title="{Binding Product.LocalizedName, Source={x:Static l:Lang.Current}}">
+
+    <Border Margin="{Binding #MainWindowInstance.OffScreenMargin}">
+        <Grid RowDefinitions="32,*">
+            <ExperimentalAcrylicBorder Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False">
+                <ExperimentalAcrylicBorder.Material>
+                    <ExperimentalAcrylicMaterial
+                        BackgroundSource="Digger"
+                        TintColor="{DynamicResource ControlSolidFillColorDefault}"
+                        TintOpacity="0"
+                        MaterialOpacity="0" />
+                </ExperimentalAcrylicBorder.Material>
+            </ExperimentalAcrylicBorder>
+            <Grid Grid.Row="0">
+                <TextBlock Margin="12 0 0 0" VerticalAlignment="Center"
+                           Text="{Binding Product.LocalizedName, Source={x:Static l:Lang.Current}}" />
+            </Grid>
+            <views:MainView Grid.Row="1" Margin="{Binding #MainWindowInstance.WindowDecorationMargin}" />
+        </Grid>
+    </Border>
+
 </Window>

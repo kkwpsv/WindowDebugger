@@ -1,5 +1,6 @@
 ﻿using Avalonia;
 using System;
+using WindowDebugger.Startup;
 
 namespace WindowDebugger;
 
@@ -16,6 +17,6 @@ class Program
     public static AppBuilder BuildAvaloniaApp()
         => AppBuilder.Configure<App>()
             .UsePlatformDetect()
-            .WithInterFont()
+            .UseLocalizedSystemDefaultFont()
             .LogToTrace();
 }

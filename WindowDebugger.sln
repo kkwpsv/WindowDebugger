@@ -20,6 +20,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{E169165C
 		LICENSE = LICENSE
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WindowDebugger", "src\WindowDebugger\WindowDebugger.csproj", "{C381BD8F-08A0-4833-B16D-E0ECB65EB62F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -30,6 +32,10 @@ Global
 		{29BD45C3-4086-4145-B7E6-46C09A20870C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{29BD45C3-4086-4145-B7E6-46C09A20870C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{29BD45C3-4086-4145-B7E6-46C09A20870C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C381BD8F-08A0-4833-B16D-E0ECB65EB62F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C381BD8F-08A0-4833-B16D-E0ECB65EB62F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C381BD8F-08A0-4833-B16D-E0ECB65EB62F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C381BD8F-08A0-4833-B16D-E0ECB65EB62F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

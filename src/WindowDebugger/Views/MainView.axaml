@@ -3,16 +3,61 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:l="clr-namespace:WindowDebugger.Localizations"
-             xmlns:svg="clr-namespace:Svg;assembly=Svg.Custom"
+             xmlns:nativeWindows="clr-namespace:WindowDebugger.Services.NativeWindows"
+             xmlns:views="clr-namespace:WindowDebugger.Views"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="WindowDebugger.Views.MainView" UseLayoutRounding="True">
+             x:Class="WindowDebugger.Views.MainView" UseLayoutRounding="True"
+             x:DataType="views:MainViewModel">
+
+    <UserControl.Resources>
+        <x:Double x:Key="ComboBoxThemeMinWidth">0</x:Double>
+    </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="ComboBox">
-            <Setter Property="BorderBrush" Value="#20FFFFFF" />
+            <Setter Property="Background" Value="#20FFFFFF" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="8 0 -12 0" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="MinHeight" Value="24" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Style Selector="^ /template/ ContentControl">
+                <Setter Property="FontSize" Value="10" />
+            </Style>
+            <Style Selector="^ /template/ PathIcon#DropDownGlyph">
+                <Setter Property="RenderTransform" Value="scale(0.75) translate(4px,0px)" />
+            </Style>
+        </Style>
+        <Style Selector="DropDownButton">
+            <Setter Property="Foreground" Value="#80FFFFFF" />
+            <Setter Property="Background" Value="#20FFFFFF" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="8 0 -4 0" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="MinHeight" Value="24" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Style Selector="^ /template/ ContentPresenter">
+                <Setter Property="FontSize" Value="10" />
+            </Style>
+            <Style Selector="^ /template/ PathIcon#DropDownGlyph">
+                <Setter Property="RenderTransform" Value="scale(0.75) translate(4px,0px)" />
+            </Style>
         </Style>
         <Style Selector="AutoCompleteBox">
             <Setter Property="BorderBrush" Value="#20FFFFFF" />
+        </Style>
+        <Style Selector="TextBlock.FlyoutTitle">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style Selector="TextBlock.FlyoutDescription">
+            <Setter Property="Foreground" Value="#666666" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style Selector="Separator">
+            <Setter Property="Background" Value="#20FFFFFF" />
         </Style>
         <Style Selector="Button.ToolButton">
             <Setter Property="Width" Value="40"/>
@@ -33,46 +78,104 @@
                     <Button Classes="ToolButton" Content="❌" />
                     <Button Classes="ToolButton" Content="❌" />
                 </StackPanel>
-                <Separator Height="1" Margin="0" Background="#20FFFFFF" />
-                <AutoCompleteBox Margin="8"
+                <AutoCompleteBox Margin="8 0" CornerRadius="12"
                                  Watermark="{Binding App.UI.SearchWatermark, Source={x:Static l:Lang.Current}}" />
-                <ScrollViewer Margin="0 -4 0 8" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                <ScrollViewer Margin="0 8" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
                     <StackPanel Margin="8 0" Orientation="Horizontal">
-                        <ComboBox SelectedIndex="0" Foreground="#80FFFFFF">
-                            <ComboBoxItem>所有窗口</ComboBoxItem>
-                            <ComboBoxItem>不可见窗口</ComboBoxItem>
-                            <ComboBoxItem>无标题窗口</ComboBoxItem>
-                            <ComboBoxItem>子窗口</ComboBoxItem>
-                            <ComboBoxItem>纯消息窗口</ComboBoxItem>
-                        </ComboBox>
-                        <ComboBox Margin="4 0 0 0" SelectedIndex="0" Foreground="#80FFFFFF">
-                            <ComboBoxItem>按进程分组</ComboBoxItem>
-                            <ComboBoxItem>不分组</ComboBoxItem>
-                        </ComboBox>
-                        <ComboBox Margin="4 0 0 0" SelectedIndex="0" Foreground="#80FFFFFF">
-                            <ComboBoxItem>不排序</ComboBoxItem>
-                            <ComboBoxItem>按句柄排序</ComboBoxItem>
-                            <ComboBoxItem>按窗口标题排序</ComboBoxItem>
-                        </ComboBox>
+                        <DropDownButton Content="{Binding App.UI.Filter.DefaultFilter, Source={x:Static l:Lang.Current}}">
+                            <DropDownButton.Flyout>
+                                <Flyout>
+                                    <StackPanel>
+                                        <TextBlock Classes="FlyoutTitle" Text="{Binding App.UI.Filter.FilterTitle, Source={x:Static l:Lang.Current}}" />
+                                        <Separator Margin="-12 12" />
+                                        <CheckBox Content="{Binding App.UI.Filter.IncludingInvisibleWindow, Source={x:Static l:Lang.Current}}" />
+                                        <CheckBox Content="{Binding App.UI.Filter.IncludingEmptyTitleWindow, Source={x:Static l:Lang.Current}}" />
+                                        <CheckBox Content="{Binding App.UI.Filter.IncludingChildWindow, Source={x:Static l:Lang.Current}}" />
+                                        <CheckBox Content="{Binding App.UI.Filter.IncludingMessageOnlyWindow, Source={x:Static l:Lang.Current}}" />
+                                        <Separator Margin="-12 12" />
+                                        <TextBlock Classes="FlyoutDescription" TextWrapping="WrapWithOverflow" MaxWidth="240"
+                                                   Text="{Binding App.UI.Filter.FilterDescription, Source={x:Static l:Lang.Current}}" />
+                                    </StackPanel>
+                                </Flyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                        <DropDownButton Margin="8 0 0 0" Content="{Binding App.UI.Filter.DefaultGroup, Source={x:Static l:Lang.Current}}">
+                            <DropDownButton.Flyout>
+                                <Flyout>
+                                    <StackPanel>
+                                        <TextBlock Classes="FlyoutTitle" Text="{Binding App.UI.Filter.GroupTitle, Source={x:Static l:Lang.Current}}" />
+                                        <Separator Margin="-12 12" />
+                                        <RadioButton Content="{Binding App.UI.Filter.GroupByProcessTopLevelChild, Source={x:Static l:Lang.Current}}" IsChecked="True" />
+                                        <RadioButton Content="{Binding App.UI.Filter.GroupByTopLevelChild, Source={x:Static l:Lang.Current}}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.GroupByProcessWindow, Source={x:Static l:Lang.Current}}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.NoGroup, Source={x:Static l:Lang.Current}}" />
+                                    </StackPanel>
+                                </Flyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                        <DropDownButton Margin="8 0 0 0" Content="{Binding App.UI.Filter.DefaultSearch, Source={x:Static l:Lang.Current}}">
+                            <DropDownButton.Flyout>
+                                <Flyout>
+                                    <StackPanel>
+                                        <TextBlock Classes="FlyoutTitle" Text="{Binding App.UI.Filter.SearchTitle, Source={x:Static l:Lang.Current}}" />
+                                        <Separator Margin="-12 12" />
+                                        <CheckBox Content="{Binding App.UI.Filter.SearchIncludingHwnd, Source={x:Static l:Lang.Current}}" IsChecked="True" />
+                                        <CheckBox Content="{Binding App.UI.Filter.SearchIncludingTitle, Source={x:Static l:Lang.Current}}" IsChecked="True" />
+                                        <CheckBox Content="{Binding App.UI.Filter.SearchIncludingProcessName, Source={x:Static l:Lang.Current}}" IsChecked="True"/>
+                                    </StackPanel>
+                                </Flyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                        <Separator Width="1" Height="12" Margin="8 0 0 0" />
+                        <DropDownButton Margin="8 0 0 0" Content="{Binding App.UI.Filter.DefaultSort, Source={x:Static l:Lang.Current}}">
+                            <DropDownButton.Flyout>
+                                <Flyout>
+                                    <StackPanel>
+                                        <TextBlock Classes="FlyoutTitle" Text="{Binding App.UI.Filter.SortTitle, Source={x:Static l:Lang.Current}}" />
+                                        <Separator Margin="-12 12" />
+                                        <RadioButton Content="{Binding App.UI.Filter.NoSort, Source={x:Static l:Lang.Current}}" IsChecked="True" />
+                                        <RadioButton Content="{Binding App.UI.Filter.SortByHwnd, Source={x:Static l:Lang.Current}}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.SortByTitle, Source={x:Static l:Lang.Current}}" />
+                                    </StackPanel>
+                                </Flyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
                     </StackPanel>
                 </ScrollViewer>
+                <Separator Height="1" Margin="0" />
             </StackPanel>
-            <ListBox Grid.Row="1" Background="Transparent">
-                <ListBoxItem>列表项 1</ListBoxItem>
-                <ListBoxItem>列表项 2</ListBoxItem>
-                <ListBoxItem>列表项 3</ListBoxItem>
-                <ListBoxItem>列表项 4</ListBoxItem>
-                <ListBoxItem>列表项 5</ListBoxItem>
-                <ListBoxItem>列表项 6</ListBoxItem>
+            <ListBox Grid.Row="1" Background="Transparent"
+                     ItemsSource="{Binding NativeWindows}"
+                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                     ScrollViewer.VerticalScrollBarVisibility="Visible">
+                <ListBox.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Margin="0 4" />
+                    </ItemsPanelTemplate>
+                </ListBox.ItemsPanel>
+                <ListBox.ItemTemplate>
+                    <DataTemplate x:DataType="nativeWindows:NativeWindowModel">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <TextBlock Grid.Column="0"
+                                       FontSize="11" Foreground="#999999" FontFamily="Consolas"
+                                       VerticalAlignment="Center" Margin="0 0 8 0"
+                                       Text="{Binding Id, StringFormat=X8}" />
+                            <TextBlock Grid.Column="1"
+                                       FontSize="13" Foreground="#CCCCCC" VerticalAlignment="Center"
+                                       Text="{Binding Title}"
+                                       TextTrimming="CharacterEllipsis" />
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
             </ListBox>
             <StackPanel Grid.Row="2">
-                <Separator Height="1" Margin="0" Background="#20FFFFFF" />
+                <Separator Height="1" Margin="0" />
                 <Button Background="Transparent" CornerRadius="0"
                         Margin="-0.5" Height="40"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding App.UI.AboutButton, Source={x:Static l:Lang.Current}}" />
+                        <TextBlock Text="{Binding App.UI.SettingsButton, Source={x:Static l:Lang.Current}}" />
                     </StackPanel>
                 </Button>
             </StackPanel>

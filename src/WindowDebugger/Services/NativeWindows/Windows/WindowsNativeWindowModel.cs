@@ -46,8 +46,14 @@ public record WindowsNativeWindowModel : NativeWindowModel
     public string Text
     {
         get => _window.Text;
-        set => _window.Text = value;
+        set
+        {
+            _window.Text = value;
+            this.RaisePropertyChanged(nameof(Title));
+        }
     }
+
+    public override string? Title => Text;
 
     public WindowStyles Styles
     {
@@ -79,7 +85,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
         }
     }
 
-    public int ProcessID
+    public override int ProcessId
     {
         get => _window.ProcessID;
     }
@@ -89,7 +95,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
         get => _window.ProcessName;
     }
 
-    public int ThreadID
+    public int ThreadId
     {
         get => _window.ThreadID;
     }
@@ -131,7 +137,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
 
     public WindowDisplayAffinities WindowDisplayAffinity
     {
-        get => ProcessID == Process.GetCurrentProcess().Id && (Styles & WindowStyles.WS_CHILD) == 0 ? _window.DisplayAffinity : default;
+        get => ProcessId == Process.GetCurrentProcess().Id && (Styles & WindowStyles.WS_CHILD) == 0 ? _window.DisplayAffinity : default;
         set
         {
             _window.DisplayAffinity = value;
@@ -183,6 +189,11 @@ public record WindowsNativeWindowModel : NativeWindowModel
         ErrorString = ErrorMessageExtensions.GetSystemErrorMessageFromCode((uint)Marshal.GetLastWin32Error());
     }
 
+    public override nint GetParent()
+    {
+        return ParentWindowHandle;
+    }
+
     public bool SetForeground()
     {
         var result = SetForegroundWindow(WindowHandle);
@@ -210,7 +221,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
 
     public void KillProcess()
     {
-        var process = OpenProcess(PROCESS_TERMINATE, false, ProcessID);
+        var process = OpenProcess(PROCESS_TERMINATE, false, ProcessId);
         if (process == NULL || !TerminateProcess(process, 0xFFFFFFFF) || !CloseHandle(process))
         {
             SetError();
@@ -219,7 +230,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
 
     public void ForceKillProcess()
     {
-        var process = OpenProcess(PROCESS_CREATE_THREAD, false, ProcessID);
+        var process = OpenProcess(PROCESS_CREATE_THREAD, false, ProcessId);
         if (process != NULL)
         {
             var threadHandle = CreateRemoteThread(process, NullRef<SECURITY_ATTRIBUTES>(), 0, null, NULL, 0, out NullRef<DWORD>());
@@ -240,7 +251,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
 
     public void SuspendThread()
     {
-        var thread = OpenThread(THREAD_SUSPEND_RESUME, false, ThreadID);
+        var thread = OpenThread(THREAD_SUSPEND_RESUME, false, ThreadId);
         if (thread == NULL || Kernel32.SuspendThread(thread) == (DWORD)(-1) || !CloseHandle(thread))
         {
             SetError();
@@ -249,7 +260,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
 
     public void ResumeThread()
     {
-        var thread = OpenThread(THREAD_SUSPEND_RESUME, false, ThreadID);
+        var thread = OpenThread(THREAD_SUSPEND_RESUME, false, ThreadId);
         if (thread == NULL || Kernel32.ResumeThread(thread) == (DWORD)(-1) || !CloseHandle(thread))
         {
             SetError();
@@ -258,7 +269,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
 
     public void KillThread()
     {
-        var thread = OpenThread(THREAD_TERMINATE, false, ThreadID);
+        var thread = OpenThread(THREAD_TERMINATE, false, ThreadId);
         if (thread != NULL)
         {
             TerminateThread(thread, 0xFFFFFFFF);

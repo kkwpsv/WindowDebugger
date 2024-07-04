@@ -7,7 +7,7 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="WindowDebugger.MainWindow"
         x:Name="MainWindowInstance"
-        Width="1024" Height="768" WindowStartupLocation="CenterScreen"
+        Width="1280" Height="960" WindowStartupLocation="CenterScreen"
         TransparencyLevelHint="Mica,AcrylicBlur,Blur"
         ExtendClientAreaToDecorationsHint="True"
         Title="{Binding Product.LocalizedName, Source={x:Static l:Lang.Current}}">
@@ -24,10 +24,11 @@
                 </ExperimentalAcrylicBorder.Material>
             </ExperimentalAcrylicBorder>
             <Grid Grid.Row="0">
-                <TextBlock Margin="12 0 0 0" VerticalAlignment="Center"
+                <TextBlock Margin="12 0 0 0" FontSize="11"
+                           VerticalAlignment="Center"
                            Text="{Binding Product.LocalizedName, Source={x:Static l:Lang.Current}}" />
             </Grid>
-            <views:MainView Grid.Row="1" Margin="{Binding #MainWindowInstance.WindowDecorationMargin}" />
+            <views:MainView Grid.Row="1" />
         </Grid>
     </Border>
 

@@ -1,2 +1,4 @@
 Product.LocalizedName = "Window Debugger"
+App.UI.SearchWatermark = "Search"
 App.UI.SettingsButton = "Settings"
+App.UI.AboutButton = "Settings"

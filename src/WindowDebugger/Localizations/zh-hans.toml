@@ -1,2 +1,4 @@
-Product.LocalizedName = "窗口调试器"
+Product.LocalizedName = "Window Debugger - 少珺窗口调试神器"
+App.UI.SearchWatermark = "搜索"
 App.UI.SettingsButton = "设置"
+App.UI.AboutButton = "关于"

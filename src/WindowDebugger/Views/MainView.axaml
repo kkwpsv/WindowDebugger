@@ -2,7 +2,84 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:l="clr-namespace:WindowDebugger.Localizations"
+             xmlns:svg="clr-namespace:Svg;assembly=Svg.Custom"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="WindowDebugger.Views.MainView">
-    Welcome to Avalonia!
+             x:Class="WindowDebugger.Views.MainView" UseLayoutRounding="True">
+
+    <UserControl.Styles>
+        <Style Selector="ComboBox">
+            <Setter Property="BorderBrush" Value="#20FFFFFF" />
+        </Style>
+        <Style Selector="AutoCompleteBox">
+            <Setter Property="BorderBrush" Value="#20FFFFFF" />
+        </Style>
+        <Style Selector="Button.ToolButton">
+            <Setter Property="Width" Value="40"/>
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid ColumnDefinitions="360,*">
+        <Grid Grid.Column="0" RowDefinitions="Auto,*,Auto">
+            <StackPanel Grid.Row="0">
+                <StackPanel Margin="4 0" Orientation="Horizontal">
+                    <Button Classes="ToolButton" Content="❌" />
+                    <Button Classes="ToolButton" Content="❌" />
+                    <Button Classes="ToolButton" Content="❌" />
+                    <Button Classes="ToolButton" Content="❌" />
+                    <Button Classes="ToolButton" Content="❌" />
+                </StackPanel>
+                <Separator Height="1" Margin="0" Background="#20FFFFFF" />
+                <AutoCompleteBox Margin="8"
+                                 Watermark="{Binding App.UI.SearchWatermark, Source={x:Static l:Lang.Current}}" />
+                <ScrollViewer Margin="0 -4 0 8" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled">
+                    <StackPanel Margin="8 0" Orientation="Horizontal">
+                        <ComboBox SelectedIndex="0" Foreground="#80FFFFFF">
+                            <ComboBoxItem>所有窗口</ComboBoxItem>
+                            <ComboBoxItem>不可见窗口</ComboBoxItem>
+                            <ComboBoxItem>无标题窗口</ComboBoxItem>
+                            <ComboBoxItem>子窗口</ComboBoxItem>
+                            <ComboBoxItem>纯消息窗口</ComboBoxItem>
+                        </ComboBox>
+                        <ComboBox Margin="4 0 0 0" SelectedIndex="0" Foreground="#80FFFFFF">
+                            <ComboBoxItem>按进程分组</ComboBoxItem>
+                            <ComboBoxItem>不分组</ComboBoxItem>
+                        </ComboBox>
+                        <ComboBox Margin="4 0 0 0" SelectedIndex="0" Foreground="#80FFFFFF">
+                            <ComboBoxItem>不排序</ComboBoxItem>
+                            <ComboBoxItem>按句柄排序</ComboBoxItem>
+                            <ComboBoxItem>按窗口标题排序</ComboBoxItem>
+                        </ComboBox>
+                    </StackPanel>
+                </ScrollViewer>
+            </StackPanel>
+            <ListBox Grid.Row="1" Background="Transparent">
+                <ListBoxItem>列表项 1</ListBoxItem>
+                <ListBoxItem>列表项 2</ListBoxItem>
+                <ListBoxItem>列表项 3</ListBoxItem>
+                <ListBoxItem>列表项 4</ListBoxItem>
+                <ListBoxItem>列表项 5</ListBoxItem>
+                <ListBoxItem>列表项 6</ListBoxItem>
+            </ListBox>
+            <StackPanel Grid.Row="2">
+                <Separator Height="1" Margin="0" Background="#20FFFFFF" />
+                <Button Background="Transparent" CornerRadius="0"
+                        Margin="-0.5" Height="40"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding App.UI.AboutButton, Source={x:Static l:Lang.Current}}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+        <Border Grid.Column="1" CornerRadius="8 0 0 0" Background="#10FFFFFF">
+
+        </Border>
+    </Grid>
+
 </UserControl>

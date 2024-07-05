@@ -36,7 +36,7 @@
                                       Padding="{TemplateBinding Padding}"
                                       VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
                                       HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" />
-                    <Border Name="SelectionIndicator"
+                    <Border Name="PART_SelectedPipe"
                             Width="4" Margin="0 10" MaxHeight="32" CornerRadius="4"
                             HorizontalAlignment="Left"
                             Background="Transparent" />
@@ -67,7 +67,7 @@
                 <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}" />
                 <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
             </Style>
-            <Style Selector="^ /template/ Border#SelectionIndicator">
+            <Style Selector="^ /template/ Border#PART_SelectedPipe">
                 <Setter Property="Background" Value="{DynamicResource SystemControlHighlightAccentBrush}" />
             </Style>
 

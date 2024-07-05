@@ -15,6 +15,11 @@
     </UserControl.Resources>
 
     <UserControl.Styles>
+        <Style Selector="Svg.ButtonIcon">
+            <Setter Property="Width" Value="16" />
+            <Setter Property="Height" Value="16" />
+            <Setter Property="Stretch" Value="Uniform" />
+        </Style>
         <Style Selector="TextBlock.FlyoutTitle">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="FontWeight" Value="Bold" />
@@ -24,11 +29,20 @@
             <Setter Property="FontSize" Value="12" />
         </Style>
         <Style Selector="Button.ToolButton">
-            <Setter Property="Width" Value="40"/>
-            <Setter Property="Height" Value="40"/>
+            <Setter Property="MinWidth" Value="40"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="CornerRadius" Value="8" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Background" Value="#10FFFFFF" />
+        </Style>
+        <Style Selector="ToggleButton.ToolButton">
+            <Setter Property="MinWidth" Value="40"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="Background" Value="#10FFFFFF" />
         </Style>
         <Style Selector="TabItem">
             <Setter Property="FontSize" Value="16" />
@@ -41,16 +55,46 @@
     <Grid ColumnDefinitions="360,*">
         <Grid Grid.Column="0" RowDefinitions="Auto,*,Auto">
             <StackPanel Grid.Row="0">
-                <StackPanel Margin="4 0" Orientation="Horizontal">
-                    <Button Classes="ToolButton" Content="❌" />
-                    <Button Classes="ToolButton" Content="❌" />
-                    <Button Classes="ToolButton" Content="❌" />
-                    <Button Classes="ToolButton" Content="❌" />
-                    <Button Classes="ToolButton" Content="❌" />
-                </StackPanel>
-                <AutoCompleteBox Margin="8 0" CornerRadius="12"
+                <Grid Margin="8 0" ColumnDefinitions="Auto,Auto,*,Auto">
+                    <Button Grid.Column="0" Classes="ToolButton"
+                            Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
+                            Background="#10FFFFFF">
+                        <ToolTip.Tip>
+                            <TextBlock LineHeight="24">
+                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.ReloadButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                                <LineBreak />
+                                <Run Text="{Binding App.UI.ReloadButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                            </TextBlock>
+                        </ToolTip.Tip>
+                        <Grid ColumnDefinitions="32,Auto">
+                            <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/reload-svgrepo-com.svg" />
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
+                        </Grid>
+                    </Button>
+                    <ToggleButton Grid.Column="1" Margin="4 0 0 0" Classes="ToolButton">
+                        <ToolTip.Tip>
+                            <TextBlock LineHeight="24">
+                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.TopmostButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                                <LineBreak />
+                                <Run Text="{Binding App.UI.TopmostButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                            </TextBlock>
+                        </ToolTip.Tip>
+                        <Svg Classes="ButtonIcon" Path="/Assets/UI/layers-svgrepo-com.svg" />
+                    </ToggleButton>
+                    <Button Grid.Column="3" Classes="ToolButton">
+                        <ToolTip.Tip>
+                            <TextBlock LineHeight="24">
+                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.UacButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                                <LineBreak />
+                                <Run Text="{Binding App.UI.UacButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                            </TextBlock>
+                        </ToolTip.Tip>
+                        <Svg Classes="ButtonIcon" Path="/Assets/UI/shield-antivirus-svgrepo-com.svg" />
+                    </Button>
+                </Grid>
+                <AutoCompleteBox Margin="8" CornerRadius="12"
                                  Watermark="{Binding App.UI.SearchWatermark, Source={x:Static l:Lang.Current}}" />
-                <ScrollViewer Margin="0 8" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
+                <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
                     <StackPanel Margin="8 0" Orientation="Horizontal">
                         <DropDownButton Content="{Binding App.UI.Filter.DefaultFilter, Source={x:Static l:Lang.Current}}">
                             <DropDownButton.Flyout>
@@ -112,12 +156,12 @@
                         </DropDownButton>
                     </StackPanel>
                 </ScrollViewer>
-                <Separator Height="1" Margin="0" />
+                <Separator Height="1" Margin="0 8 0 0" />
             </StackPanel>
             <ListBox x:Name="WindowListBox" Grid.Row="1" Background="Transparent"
                      ItemsSource="{Binding NativeWindows}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     ScrollViewer.VerticalScrollBarVisibility="Visible">
+                     ScrollViewer.VerticalScrollBarVisibility="Auto">
                 <ListBox.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel Margin="0 4" />
@@ -141,23 +185,27 @@
             <StackPanel Grid.Row="2">
                 <Separator Height="1" Margin="0" />
                 <Button Background="Transparent" CornerRadius="0"
-                        Margin="-0.5" Height="40"
+                        Margin="-0.5" Height="48"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="{Binding App.UI.SettingsButton, Source={x:Static l:Lang.Current}}" />
+                        <Svg Classes="ButtonIcon" Path="/Assets/UI/settings-gear-svgrepo-com.svg" />
+                        <TextBlock Margin="8 0 0 0" VerticalAlignment="Center"
+                                   Text="{Binding App.UI.SettingsButton, Source={x:Static l:Lang.Current}}" />
                     </StackPanel>
                 </Button>
             </StackPanel>
         </Grid>
-        <Border Grid.Column="1" CornerRadius="8 0 0 0" Background="#10FFFFFF"
+        <Border Grid.Column="1" CornerRadius="12 0 0 0" Background="#10FFFFFF"
                 DataContext="{Binding #WindowListBox.SelectedItem}">
             <Grid RowDefinitions="Auto,*" Margin="32" x:DataType="nativeWindows:NativeWindowModel">
-                <Grid Grid.Row="0" RowDefinitions="2*,*" ColumnDefinitions="64,*">
+                <Grid Grid.Row="0" RowDefinitions="*,Auto" ColumnDefinitions="64,*" Height="64">
                     <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
                             CornerRadius="8" Width="64" Height="64" HorizontalAlignment="Left"
                             Background="Transparent">
-                        <Image Source="/Assets/Icons/icon.256x256.png" Stretch="Uniform" />
+                        <Grid>
+                            <Image Source="/Assets/UI/browser-ui-svgrepo-com.256.png" Width="64" Height="64" Stretch="Uniform" />
+                        </Grid>
                     </Border>
                     <TextBox Grid.Row="0" Grid.Column="1" Classes="CopyableText"
                              Margin="8 0 0 0" VerticalAlignment="Center"
@@ -165,7 +213,7 @@
                              Text="{Binding Title, Mode=OneWay}"
                              Watermark="{Binding App.UI.WindowDetail.EmptyWindowName, Source={x:Static l:Lang.Current}}" />
                     <TextBox Grid.Row="1" Grid.Column="1" Classes="CopyableText"
-                             Margin="8 0 0 0" VerticalAlignment="Center"
+                             Margin="8 4" VerticalAlignment="Center"
                              FontSize="14" Foreground="#666666"
                              Text="{Binding ProcessId, Converter={StaticResource ProcessIdToProcessPathConverter}, Mode=OneWay}" />
                 </Grid>

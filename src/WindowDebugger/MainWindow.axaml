@@ -10,6 +10,7 @@
         Width="1280" Height="960" WindowStartupLocation="CenterScreen"
         TransparencyLevelHint="Mica,AcrylicBlur,Blur"
         ExtendClientAreaToDecorationsHint="True" ExtendClientAreaTitleBarHeightHint="40"
+        Icon="/Assets/Icons/icon.ico"
         Title="{Binding Product.LocalizedName, Source={x:Static l:Lang.Current}}">
 
     <Border Margin="{Binding #MainWindowInstance.OffScreenMargin}">

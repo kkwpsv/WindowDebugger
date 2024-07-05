@@ -28,7 +28,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\NativeWindows\Linux\" />
+    <AvaloniaResource Include="Assets\**\*" />
   </ItemGroup>
 
 </Project>

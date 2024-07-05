@@ -5,12 +5,14 @@
              xmlns:l="clr-namespace:WindowDebugger.Localizations"
              xmlns:nativeWindows="clr-namespace:WindowDebugger.Services.NativeWindows"
              xmlns:views="clr-namespace:WindowDebugger.Views"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:vc="clr-namespace:WindowDebugger.Views.Converters"
+             mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
              x:Class="WindowDebugger.Views.MainView" UseLayoutRounding="True"
              x:DataType="views:MainViewModel">
 
     <UserControl.Resources>
         <x:Double x:Key="ComboBoxThemeMinWidth">0</x:Double>
+        <vc:ProcessIdToProcessPathConverter x:Key="ProcessIdToProcessPathConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -65,6 +67,23 @@
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="TextBox.CopyableText">
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Style Selector="^:pointerover /template/ Border#PART_BorderElement">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+            <Style Selector="^:focus /template/ Border#PART_BorderElement">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
         </Style>
     </UserControl.Styles>
 
@@ -144,7 +163,7 @@
                 </ScrollViewer>
                 <Separator Height="1" Margin="0" />
             </StackPanel>
-            <ListBox Grid.Row="1" Background="Transparent"
+            <ListBox x:Name="WindowListBox" Grid.Row="1" Background="Transparent"
                      ItemsSource="{Binding NativeWindows}"
                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      ScrollViewer.VerticalScrollBarVisibility="Visible">
@@ -180,8 +199,35 @@
                 </Button>
             </StackPanel>
         </Grid>
-        <Border Grid.Column="1" CornerRadius="8 0 0 0" Background="#10FFFFFF">
-
+        <Border Grid.Column="1" CornerRadius="8 0 0 0" Background="#10FFFFFF"
+                DataContext="{Binding #WindowListBox.SelectedItem}">
+            <Grid RowDefinitions="Auto,*" Margin="32" x:DataType="nativeWindows:NativeWindowModel">
+                <Grid Grid.Row="0" RowDefinitions="2*,*" ColumnDefinitions="64,*">
+                    <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                            CornerRadius="8" Width="64" Height="64" HorizontalAlignment="Left"
+                            Background="Transparent">
+                        <Image Source="/Assets/Icons/icon.256x256.png" Stretch="Uniform" />
+                    </Border>
+                    <TextBox Grid.Row="0" Grid.Column="1" Classes="CopyableText"
+                             Margin="8 0 0 0" VerticalAlignment="Center"
+                             FontSize="24" FontWeight="Thin"
+                             Text="{Binding Title, Mode=OneWay}"
+                             Watermark="{Binding App.UI.WindowDetail.EmptyWindowName, Source={x:Static l:Lang.Current}}" />
+                    <TextBox Grid.Row="1" Grid.Column="1" Classes="CopyableText"
+                             Margin="8 0 0 0" VerticalAlignment="Center"
+                             FontSize="14" Foreground="#666666"
+                             Text="{Binding ProcessId, Converter={StaticResource ProcessIdToProcessPathConverter}, Mode=OneWay}" />
+                </Grid>
+                <TabControl Grid.Row="1" Margin="-12 12 -12 0">
+                    <TabItem Header="信息" Content="xxx" />
+                    <TabItem Header="Styles" Content="xxx" />
+                    <TabItem Header="StyleExes" Content="xxx" />
+                    <TabItem Header="ClassStyles" Content="xxx" />
+                    <TabItem Header="Operations" Content="xxx" />
+                    <TabItem Header="DWM" Content="xxx" />
+                    <TabItem Header="Others" Content="xxx" />
+                </TabControl>
+            </Grid>
         </Border>
     </Grid>
 

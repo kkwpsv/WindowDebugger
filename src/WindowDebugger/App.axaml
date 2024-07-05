@@ -3,6 +3,21 @@
              x:Class="WindowDebugger.App"
              RequestedThemeVariant="Dark">
 
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="Themes/ListBoxItem.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <x:Double x:Key="ComboBoxThemeMinWidth">0</x:Double>
+            <FontFamily x:Key="MonoFontFamily">/Assets/Fonts/FiraCode-Regular.ttf#Fira Code</FontFamily>
+            <FontFamily x:Key="MonoFontFamilyLight">/Assets/Fonts/FiraCode-Light.ttf#Fira Code Light</FontFamily>
+            <FontFamily x:Key="MonoFontFamilyBold">/Assets/Fonts/FiraCode-Retina.ttf#Fira Code Retina</FontFamily>
+
+        </ResourceDictionary>
+    </Application.Resources>
+
     <Application.Styles>
 
         <FluentTheme />
@@ -50,18 +65,10 @@
             </Style>
         </Style>
 
+        <Style Selector="TextBox.Code">
+            <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
+        </Style>
+
     </Application.Styles>
-
-    <Application.Resources>
-        <ResourceDictionary>
-
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceInclude Source="Themes/ListBoxItem.axaml" />
-            </ResourceDictionary.MergedDictionaries>
-
-            <x:Double x:Key="ComboBoxThemeMinWidth">0</x:Double>
-
-        </ResourceDictionary>
-    </Application.Resources>
 
 </Application>

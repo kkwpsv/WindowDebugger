@@ -28,7 +28,7 @@
             <Setter Property="Foreground" Value="#666666" />
             <Setter Property="FontSize" Value="12" />
         </Style>
-        <Style Selector="Button.ToolButton">
+        <Style Selector="Button.GlobalToolButton">
             <Setter Property="MinWidth" Value="40"/>
             <Setter Property="Height" Value="32"/>
             <Setter Property="CornerRadius" Value="8" />
@@ -36,7 +36,7 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="Background" Value="#10FFFFFF" />
         </Style>
-        <Style Selector="ToggleButton.ToolButton">
+        <Style Selector="ToggleButton.GlobalToolButton">
             <Setter Property="MinWidth" Value="40"/>
             <Setter Property="Height" Value="32"/>
             <Setter Property="CornerRadius" Value="8" />
@@ -50,13 +50,16 @@
             <Setter Property="MinHeight" Value="0" />
             <Setter Property="Height" Value="32" />
         </Style>
+        <Style Selector="TabControl /template/ ItemsPresenter#PART_ItemsPresenter WrapPanel">
+            <Setter Property="Margin" Value="32 0" />
+        </Style>
     </UserControl.Styles>
 
     <Grid ColumnDefinitions="360,*">
         <Grid Grid.Column="0" RowDefinitions="Auto,*,Auto">
             <StackPanel Grid.Row="0">
                 <Grid Margin="8 0" ColumnDefinitions="Auto,Auto,*,Auto">
-                    <Button Grid.Column="0" Classes="ToolButton"
+                    <Button Grid.Column="0" Classes="GlobalToolButton"
                             Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
                             Background="#10FFFFFF">
                         <ToolTip.Tip>
@@ -71,7 +74,7 @@
                             <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
                         </Grid>
                     </Button>
-                    <ToggleButton Grid.Column="1" Margin="4 0 0 0" Classes="ToolButton">
+                    <ToggleButton Grid.Column="1" Margin="4 0 0 0" Classes="GlobalToolButton">
                         <ToolTip.Tip>
                             <TextBlock LineHeight="24">
                                 <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.TopmostButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
@@ -81,7 +84,7 @@
                         </ToolTip.Tip>
                         <Svg Classes="ButtonIcon" Path="/Assets/UI/layers-svgrepo-com.svg" />
                     </ToggleButton>
-                    <Button Grid.Column="3" Classes="ToolButton">
+                    <Button Grid.Column="3" Classes="GlobalToolButton">
                         <ToolTip.Tip>
                             <TextBlock LineHeight="24">
                                 <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.UacButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
@@ -171,8 +174,9 @@
                     <DataTemplate x:DataType="nativeWindows:NativeWindowModel">
                         <Grid ColumnDefinitions="Auto,*">
                             <TextBlock Grid.Column="0"
-                                       FontSize="11" Foreground="#999999" FontFamily="Consolas"
+                                       FontSize="11" Foreground="#999999"
                                        VerticalAlignment="Center" Margin="0 0 8 0"
+                                       FontFamily="{StaticResource MonoFontFamily}"
                                        Text="{Binding Id, StringFormat=X8}" />
                             <TextBlock Grid.Column="1"
                                        FontSize="13" Foreground="#CCCCCC" VerticalAlignment="Center"
@@ -198,8 +202,9 @@
         </Grid>
         <Border Grid.Column="1" CornerRadius="12 0 0 0" Background="#10FFFFFF"
                 DataContext="{Binding #WindowListBox.SelectedItem}">
-            <Grid RowDefinitions="Auto,*" Margin="32" x:DataType="nativeWindows:NativeWindowModel">
-                <Grid Grid.Row="0" RowDefinitions="*,Auto" ColumnDefinitions="64,*" Height="64">
+            <Grid RowDefinitions="Auto,Auto,*" x:DataType="nativeWindows:NativeWindowModel">
+                <Grid Grid.Row="0" RowDefinitions="*,Auto" ColumnDefinitions="64,*"
+                      Height="64" Margin="32 32 32 0">
                     <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
                             CornerRadius="8" Width="64" Height="64" HorizontalAlignment="Left"
                             Background="Transparent">
@@ -212,13 +217,30 @@
                              FontSize="24" FontWeight="Thin"
                              Text="{Binding Title, Mode=OneWay}"
                              Watermark="{Binding App.UI.WindowDetail.EmptyWindowName, Source={x:Static l:Lang.Current}}" />
-                    <TextBox Grid.Row="1" Grid.Column="1" Classes="CopyableText"
+                    <TextBox Grid.Row="1" Grid.Column="1" Classes="CopyableText Code"
                              Margin="8 4" VerticalAlignment="Center"
-                             FontSize="14" Foreground="#666666"
+                             FontSize="16" Foreground="#666666"
                              Text="{Binding ProcessId, Converter={StaticResource ProcessIdToProcessPathConverter}, Mode=OneWay}" />
                 </Grid>
-                <TabControl x:Name="WindowDetailTabControl" Grid.Row="1"
-                            Margin="-12 12 -12 0" />
+                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="24 12">
+                    <Button Classes="GlobalToolButton"
+                            Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
+                            Background="#10FFFFFF">
+                        <ToolTip.Tip>
+                            <TextBlock LineHeight="24">
+                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.WindowDetail.ReloadButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                                <LineBreak />
+                                <Run Text="{Binding App.UI.WindowDetail.ReloadButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                            </TextBlock>
+                        </ToolTip.Tip>
+                        <Grid ColumnDefinitions="32,Auto">
+                            <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/reload-svgrepo-com.svg" />
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.WindowDetail.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
+                        </Grid>
+                    </Button>
+                </StackPanel>
+                <TabControl x:Name="WindowDetailTabControl" Grid.Row="2"
+                            Margin="-12 -4 -12 0" />
             </Grid>
         </Border>
     </Grid>

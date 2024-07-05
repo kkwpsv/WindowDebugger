@@ -1,0 +1,151 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vc="clr-namespace:WindowDebugger.Views.Converters"
+             xmlns:nww="clr-namespace:WindowDebugger.Services.NativeWindows.Windows"
+             xmlns:l="clr-namespace:WindowDebugger.Localizations"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="WindowDebugger.Views.Details.WindowsInfoPage"
+             x:DataType="nww:WindowsNativeWindowModel"
+             Grid.IsSharedSizeScope="True">
+
+    <UserControl.Resources>
+        <vc:ProcessIdToProcessNameConverter x:Key="ProcessIdToProcessNameConverter" />
+        <vc:WindowsNativeWindowModelToCanSetDisplayAffinityConverter x:Key="WindowToCanSetDisplayAffinityConverter" />
+        <vc:ParentWindowHandleToCanUpdateOwnerConverter x:Key="ParentWindowHandleToCanUpdateOwnerConverter" />
+        <vc:IntPtrToHexConverter x:Key="IntPtrToHexConverter" />
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="Margin" Value="0 4 12 4" />
+            <Setter Property="Foreground" Value="#EEEEEE" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Margin" Value="0 4" />
+            <Setter Property="Padding" Value="8 4" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
+            <Style Selector="^[IsReadOnly=True]">
+                <Setter Property="Foreground" Value="#999999" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="#40FFFFFF" />
+                <Style Selector="^:pointerover /template/ Border#PART_BorderElement">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="#40FFFFFF" />
+                </Style>
+                <Style Selector="^:focus /template/ Border#PART_BorderElement">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="#40FFFFFF" />
+                </Style>
+            </Style>
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="Margin" Value="0 4" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Margin" Value="8 0 0 0" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="32 12">
+            <Grid ColumnDefinitions="*,*">
+
+                <Border Grid.Column="1"
+                        CornerRadius="12" Background="#10FFFFFF">
+                </Border>
+
+                <Grid Grid.Column="0" RowDefinitions="*,*,*,*,*,*,*" Margin="0 0 16 0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" SharedSizeGroup="InfoHeader" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.WindowHandle, Source={x:Static l:Lang.Current}}"/>
+                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Id, StringFormat=X8, Mode=OneWay}" IsReadOnly="True" />
+
+                    <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.ProcessName, Source={x:Static l:Lang.Current}}"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Height="NaN" Text="{Binding ProcessId, Converter={StaticResource ProcessIdToProcessNameConverter}, Mode=OneWay}" IsReadOnly="True" />
+
+                    <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.ProcessId, Source={x:Static l:Lang.Current}}"/>
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ProcessId, StringFormat=X8, Mode=OneWay}" IsReadOnly="True" />
+
+                    <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.ThreadId, Source={x:Static l:Lang.Current}}"/>
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ThreadId, Mode=OneWay}" IsReadOnly="True" />
+
+                    <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.ClassName, Source={x:Static l:Lang.Current}}"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Height="NaN" Text="{Binding ClassName, Mode=OneWay}" IsReadOnly="True" />
+
+                    <TextBlock Grid.Row="5" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.DpiAwareness, Source={x:Static l:Lang.Current}}"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" Height="NaN" Text="{Binding DpiAwareness, Mode=OneWay}" IsReadOnly="True" />
+
+                    <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.Dpi, Source={x:Static l:Lang.Current}}"/>
+                    <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Dpi, Mode=OneWay}" IsReadOnly="True" />
+
+                </Grid>
+            </Grid>
+
+            <Separator Margin="-12 16" />
+
+            <Grid RowDefinitions="*,*,*,*,*,*,*">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="InfoHeader" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" SharedSizeGroup="InfoAction" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.WindowTitle, Source={x:Static l:Lang.Current}}"/>
+                <TextBox Grid.Row="0" Grid.Column="1" x:Name="TextBoxText" Text="{Binding Text, UpdateSourceTrigger=Explicit}"/>
+                <Button Grid.Row="0" Grid.Column="2" Click="UpdateText" Content="{Binding App.UI.WindowDetail.ApplyButton, Source={x:Static l:Lang.Current}}"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0">
+                    <Run Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.Bounds.Title, Source={x:Static l:Lang.Current}}" />
+                    <LineBreak />
+                    <Run Foreground="#666666" FontSize="12" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.Bounds.Description, Source={x:Static l:Lang.Current}}" />
+                </TextBlock>
+                <UniformGrid Grid.Row="1" Grid.Column="1" x:Name="GridRect" Columns="4">
+                    <TextBlock Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.Bounds.Left, Source={x:Static l:Lang.Current}}" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="TextBoxRectLeft" Text="{Binding Left, Mode=OneWay}"/>
+                    <TextBlock Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.Bounds.Top, Source={x:Static l:Lang.Current}}" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="TextBoxRectTop" Text="{Binding Top, Mode=OneWay}"/>
+                    <TextBlock Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.Bounds.Width, Source={x:Static l:Lang.Current}}" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="TextBoxRectWidth" Text="{Binding Width, Mode=OneWay}"/>
+                    <TextBlock Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.Bounds.Height, Source={x:Static l:Lang.Current}}" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="TextBoxRectHeight" Text="{Binding Height, Mode=OneWay}"/>
+                </UniformGrid>
+                <Button Grid.Row="1" Grid.Column="2" Click="UpdateRect" Content="{Binding App.UI.WindowDetail.ApplyButton, Source={x:Static l:Lang.Current}}"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.WindowShowStates, Source={x:Static l:Lang.Current}}"/>
+                <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ComboBoxWindowShowStates"
+                          SelectedValue="{Binding WindowShowStates, Mode=TwoWay}" />
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.WindowDisplayAffinity, Source={x:Static l:Lang.Current}}"/>
+                <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ComboBoxWindowDisplayAffinities"
+                          SelectedValue="{Binding WindowDisplayAffinity, Mode=TwoWay}"
+                          IsEnabled="{Binding Converter={StaticResource WindowToCanSetDisplayAffinityConverter}}" />
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.ParentWindowHandle, Source={x:Static l:Lang.Current}}"/>
+                <TextBox Grid.Row="4" Grid.Column="1" x:Name="TextBoxParentWindowHandle" Text="{Binding ParentWindowHandle, Converter={StaticResource IntPtrToHexConverter}, UpdateSourceTrigger=Explicit}"/>
+                <Button Grid.Row="4" Grid.Column="2" Click="UpdateParentWindowHandle" Content="{Binding App.UI.WindowDetail.ApplyButton, Source={x:Static l:Lang.Current}}"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.OwnerWindowHandle, Source={x:Static l:Lang.Current}}"/>
+                <TextBox Grid.Row="5" Grid.Column="1" x:Name="TextBoxOwnerWindowHandle" Text="{Binding OwnerWindowHandle, Converter={StaticResource IntPtrToHexConverter}, UpdateSourceTrigger=Explicit}"/>
+                <Button Grid.Row="5" Grid.Column="2" Click="UpdateOwnerWindowHandle" Content="{Binding App.UI.WindowDetail.ApplyButton, Source={x:Static l:Lang.Current}}"
+                        IsEnabled="{Binding ParentWindowHandle,Converter={StaticResource ParentWindowHandleToCanUpdateOwnerConverter}}"/>
+
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

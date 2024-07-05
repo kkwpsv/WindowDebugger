@@ -33,6 +33,11 @@
     <AvaloniaResource Include="Assets\Icons\**\*.ico" />
     <AvaloniaResource Include="Assets\UI\**\*.svg" />
     <AvaloniaResource Include="Assets\UI\**\*.png" />
+    <AvaloniaResource Include="Assets\Fonts\**\*.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Assets\Fonts\" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,5 @@
 ﻿using System.Diagnostics;
 using System.Runtime.InteropServices;
-using System.Runtime.Versioning;
 using Avalonia.Media.Imaging;
 using Lsj.Util.Win32;
 using Lsj.Util.Win32.BaseTypes;
@@ -22,7 +21,6 @@ using static Lsj.Util.Win32.User32;
 
 namespace WindowDebugger.Services.NativeWindows.Windows;
 
-[SupportedOSPlatform("windows")]
 public record WindowsNativeWindowModel : NativeWindowModel
 {
     private readonly Win32Window _window;

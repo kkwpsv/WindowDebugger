@@ -21,59 +21,67 @@ public partial class MainView : UserControl
         DataContext = vm;
 
         await vm.ReloadWindows();
+
+        var selfId = Environment.ProcessId;
+        WindowListBox.SelectedItem = vm.NativeWindows.FirstOrDefault(x => x.ProcessId == selfId);
     }
 
     private void InitializePlatformPages()
     {
-        WindowDetailTabControl.Items.Add(new TabItem
-        {
-            Header = Lang.Current.App.UI.WindowDetail.Common.Info.Title,
-            Content = new InfoPage(),
-        });
         if (OperatingSystem.IsLinux())
         {
             WindowDetailTabControl.Items.Add(new TabItem
             {
-                Header = Lang.Current.App.UI.WindowDetail.Linux.Properties.Title,
-                Content = new InfoPage(),
+                Header = Lang.Current.App.UI.WindowDetail.Pages.Linux.Info.Title,
+                Content = new WindowsInfoPage(),
             });
             WindowDetailTabControl.Items.Add(new TabItem
             {
-                Header = Lang.Current.App.UI.WindowDetail.Linux.Operations.Title,
-                Content = new InfoPage(),
+                Header = Lang.Current.App.UI.WindowDetail.Pages.Linux.Properties.Title,
+                Content = new WindowsInfoPage(),
+            });
+            WindowDetailTabControl.Items.Add(new TabItem
+            {
+                Header = Lang.Current.App.UI.WindowDetail.Pages.Linux.Operations.Title,
+                Content = new WindowsInfoPage(),
             });
         }
         else if (OperatingSystem.IsWindows())
         {
             WindowDetailTabControl.Items.Add(new TabItem
             {
-                Header = Lang.Current.App.UI.WindowDetail.Windows.Styles.Title,
-                Content = new InfoPage(),
+                Header = Lang.Current.App.UI.WindowDetail.Pages.Windows.Info.Title,
+                Content = new WindowsInfoPage(),
             });
             WindowDetailTabControl.Items.Add(new TabItem
             {
-                Header = Lang.Current.App.UI.WindowDetail.Windows.StyleExes.Title,
-                Content = new InfoPage(),
+                Header = Lang.Current.App.UI.WindowDetail.Pages.Windows.Styles.Title,
+                Content = new WindowsInfoPage(),
             });
             WindowDetailTabControl.Items.Add(new TabItem
             {
-                Header = Lang.Current.App.UI.WindowDetail.Windows.ClassStyles.Title,
-                Content = new InfoPage(),
+                Header = Lang.Current.App.UI.WindowDetail.Pages.Windows.StyleExes.Title,
+                Content = new WindowsInfoPage(),
             });
             WindowDetailTabControl.Items.Add(new TabItem
             {
-                Header = Lang.Current.App.UI.WindowDetail.Windows.Operations.Title,
-                Content = new InfoPage(),
+                Header = Lang.Current.App.UI.WindowDetail.Pages.Windows.ClassStyles.Title,
+                Content = new WindowsInfoPage(),
             });
             WindowDetailTabControl.Items.Add(new TabItem
             {
-                Header = Lang.Current.App.UI.WindowDetail.Windows.Dwm.Title,
-                Content = new InfoPage(),
+                Header = Lang.Current.App.UI.WindowDetail.Pages.Windows.Operations.Title,
+                Content = new WindowsInfoPage(),
             });
             WindowDetailTabControl.Items.Add(new TabItem
             {
-                Header = Lang.Current.App.UI.WindowDetail.Windows.Others.Title,
-                Content = new InfoPage(),
+                Header = Lang.Current.App.UI.WindowDetail.Pages.Windows.Dwm.Title,
+                Content = new WindowsInfoPage(),
+            });
+            WindowDetailTabControl.Items.Add(new TabItem
+            {
+                Header = Lang.Current.App.UI.WindowDetail.Pages.Windows.Others.Title,
+                Content = new WindowsInfoPage(),
             });
         }
     }

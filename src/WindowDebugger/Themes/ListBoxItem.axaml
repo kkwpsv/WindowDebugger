@@ -16,6 +16,15 @@
         </Border>
     </Design.PreviewWith>
 
+    <ControlTheme x:Key="EmptyThemeListBoxItem" TargetType="ListBoxItem">
+        <Setter Property="Template">
+            <ControlTemplate TargetType="ListBoxItem">
+                <ContentPresenter ContentTemplate="{TemplateBinding ContentTemplate}"
+                                  Content="{TemplateBinding Content}" />
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+
     <ControlTheme x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
         <Setter Property="Margin" Value="8 2" />
         <Setter Property="CornerRadius" Value="6" />

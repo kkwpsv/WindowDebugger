@@ -14,7 +14,7 @@ public partial class WindowsStylesPage : UserControl
     {
         InitializeComponent();
 
-        _manager = new EnumPageManager<WindowStyles>(WindowStyleListBox);
+        _manager = new EnumPageManager<WindowStyles>(WindowStyleListBox, v => (long)v, v => (WindowStyles)v);
 
         DataContextChanged += (sender, args) => UpdateView();
         Loaded += (sender, args) => UpdateView();

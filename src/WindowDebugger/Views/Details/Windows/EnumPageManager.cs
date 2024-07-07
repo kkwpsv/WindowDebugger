@@ -2,11 +2,10 @@ using System.Collections.Immutable;
 using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.VisualTree;
-using Lsj.Util.Win32.Enums;
 
 namespace WindowDebugger.Views.Details.Windows;
 
-public class EnumPageManager<T>(ItemsControl listBox)
+public class EnumPageManager<T>(ItemsControl listBox, Func<T, long> numberConverter, Func<long, T> reverseNumberConverter)
     where T : struct, Enum
 {
     public static ImmutableArray<T> AllValues { get; } = [..Enum.GetValues<T>()];
@@ -17,7 +16,7 @@ public class EnumPageManager<T>(ItemsControl listBox)
     {
         get
         {
-            nint value = default;
+            long value = default;
             if (listBox.FindDescendantOfType<UniformGrid>() is { } panel)
             {
                 try
@@ -25,7 +24,7 @@ public class EnumPageManager<T>(ItemsControl listBox)
                     IsReloading = true;
                     foreach (var checkBox in panel.Children.Select(x => x.FindDescendantOfType<CheckBox>()).OfType<CheckBox>())
                     {
-                        var v = (nint)(object)(T)checkBox.DataContext!;
+                        var v = numberConverter((T)checkBox.DataContext!);
                         if (checkBox.IsChecked == true)
                         {
                             value |= v;
@@ -37,7 +36,7 @@ public class EnumPageManager<T>(ItemsControl listBox)
                     IsReloading = false;
                 }
             }
-            return (T)(object)value;
+            return reverseNumberConverter(value);
         }
         set
         {

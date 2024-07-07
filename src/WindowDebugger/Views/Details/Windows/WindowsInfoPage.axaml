@@ -5,8 +5,10 @@
              xmlns:vc="clr-namespace:WindowDebugger.Views.Converters"
              xmlns:nww="clr-namespace:WindowDebugger.Services.NativeWindows.Windows"
              xmlns:l="clr-namespace:WindowDebugger.Localizations"
+             xmlns:sys="clr-namespace:System;assembly=System.Runtime"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="WindowDebugger.Views.Details.Windows.WindowsInfoPage"
+             x:Name="WindowInfoPageInstance"
              x:DataType="nww:WindowsNativeWindowModel"
              Grid.IsSharedSizeScope="True">
 
@@ -15,6 +17,11 @@
         <vc:WindowsNativeWindowModelToCanSetDisplayAffinityConverter x:Key="WindowToCanSetDisplayAffinityConverter" />
         <vc:ParentWindowHandleToCanUpdateOwnerConverter x:Key="ParentWindowHandleToCanUpdateOwnerConverter" />
         <vc:IntPtrToHexConverter x:Key="IntPtrToHexConverter" />
+        <vc:DpiAwarenessLocalizationConverter x:Key="DpiAwarenessLocalizationConverter" />
+        <vc:DpiToDisplayDpiAndScaleConverter x:Key="DpiToDisplayDpiAndScaleConverter" />
+        <DataTemplate x:Key="EnumDataConverter" DataType="sys:Enum">
+            <TextBlock Text="{Binding}" />
+        </DataTemplate>
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -29,7 +36,6 @@
             <Setter Property="Height" Value="32" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="TextWrapping" Value="Wrap" />
-            <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
             <Style Selector="^[IsReadOnly=True]">
                 <Setter Property="Foreground" Value="#999999" />
                 <Setter Property="Background" Value="Transparent" />
@@ -73,7 +79,7 @@
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.WindowHandle, Source={x:Static l:Lang.Current}}"/>
-                    <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding Id, StringFormat=X8, Mode=OneWay}" IsReadOnly="True" />
+                    <TextBox Grid.Row="0" Grid.Column="1" Classes="Code" Text="{Binding Id, StringFormat=X8, Mode=OneWay}" IsReadOnly="True" />
 
                     <TextBlock Grid.Row="1" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.ProcessName, Source={x:Static l:Lang.Current}}"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Height="NaN" Text="{Binding ProcessId, Converter={StaticResource ProcessIdToProcessNameConverter}, Mode=OneWay}" IsReadOnly="True" />
@@ -85,13 +91,13 @@
                     <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ThreadId, Mode=OneWay}" IsReadOnly="True" />
 
                     <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.ClassName, Source={x:Static l:Lang.Current}}"/>
-                    <TextBox Grid.Row="4" Grid.Column="1" Height="NaN" Text="{Binding ClassName, Mode=OneWay}" IsReadOnly="True" />
+                    <TextBox Grid.Row="4" Grid.Column="1" Classes="Code" Height="NaN" Text="{Binding ClassName, Mode=OneWay}" IsReadOnly="True" />
 
                     <TextBlock Grid.Row="5" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.DpiAwareness, Source={x:Static l:Lang.Current}}"/>
-                    <TextBox Grid.Row="5" Grid.Column="1" Height="NaN" Text="{Binding DpiAwareness, Mode=OneWay}" IsReadOnly="True" />
+                    <TextBox Grid.Row="5" Grid.Column="1" Height="NaN" Text="{Binding DpiAwareness, Mode=OneWay, Converter={StaticResource DpiAwarenessLocalizationConverter}}" IsReadOnly="True" />
 
                     <TextBlock Grid.Row="6" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.Dpi, Source={x:Static l:Lang.Current}}"/>
-                    <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Dpi, Mode=OneWay}" IsReadOnly="True" />
+                    <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Dpi, Mode=OneWay, Converter={StaticResource DpiToDisplayDpiAndScaleConverter}}" IsReadOnly="True" />
 
                 </Grid>
             </Grid>
@@ -107,7 +113,7 @@
 
                 <TextBlock Grid.Row="0" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.WindowTitle, Source={x:Static l:Lang.Current}}"/>
                 <TextBox Grid.Row="0" Grid.Column="1" x:Name="TextBoxText" Text="{Binding Text, UpdateSourceTrigger=Explicit}"/>
-                <Button Grid.Row="0" Grid.Column="2" Click="UpdateText" Content="{Binding App.UI.WindowDetail.ApplyButton, Source={x:Static l:Lang.Current}}"/>
+                <Button Grid.Row="0" Grid.Column="2" Click="UpdateText" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}"/>
 
                 <TextBlock Grid.Row="1" Grid.Column="0">
                     <Run Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.Bounds.Title, Source={x:Static l:Lang.Current}}" />
@@ -124,24 +130,28 @@
                     <TextBlock Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.Bounds.Height, Source={x:Static l:Lang.Current}}" HorizontalAlignment="Center"/>
                     <TextBox x:Name="TextBoxRectHeight" Text="{Binding Height, Mode=OneWay}"/>
                 </UniformGrid>
-                <Button Grid.Row="1" Grid.Column="2" Click="UpdateRect" Content="{Binding App.UI.WindowDetail.ApplyButton, Source={x:Static l:Lang.Current}}"/>
+                <Button Grid.Row="1" Grid.Column="2" Click="UpdateRect" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}"/>
 
                 <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.WindowShowStates, Source={x:Static l:Lang.Current}}"/>
-                <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ComboBoxWindowShowStates"
-                          SelectedValue="{Binding WindowShowStates, Mode=TwoWay}" />
+                <ComboBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" Classes="Code" x:Name="ComboBoxWindowShowStates"
+                          ItemsSource="{Binding #WindowInfoPageInstance.AllShowWindowCommands}"
+                          SelectedValue="{Binding WindowShowStates, Mode=TwoWay}"
+                          ItemTemplate="{StaticResource EnumDataConverter}" />
 
                 <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.WindowDisplayAffinity, Source={x:Static l:Lang.Current}}"/>
-                <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" x:Name="ComboBoxWindowDisplayAffinities"
+                <ComboBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" Classes="Code" x:Name="ComboBoxWindowDisplayAffinities"
+                          ItemsSource="{Binding #WindowInfoPageInstance.AllWindowDisplayAffinities}"
                           SelectedValue="{Binding WindowDisplayAffinity, Mode=TwoWay}"
-                          IsEnabled="{Binding Converter={StaticResource WindowToCanSetDisplayAffinityConverter}}" />
+                          IsEnabled="{Binding Converter={StaticResource WindowToCanSetDisplayAffinityConverter}}"
+                          ItemTemplate="{StaticResource EnumDataConverter}" />
 
                 <TextBlock Grid.Row="4" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.ParentWindowHandle, Source={x:Static l:Lang.Current}}"/>
-                <TextBox Grid.Row="4" Grid.Column="1" x:Name="TextBoxParentWindowHandle" Text="{Binding ParentWindowHandle, Converter={StaticResource IntPtrToHexConverter}, UpdateSourceTrigger=Explicit}"/>
-                <Button Grid.Row="4" Grid.Column="2" Click="UpdateParentWindowHandle" Content="{Binding App.UI.WindowDetail.ApplyButton, Source={x:Static l:Lang.Current}}"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Classes="Code" x:Name="TextBoxParentWindowHandle" Text="{Binding ParentWindowHandle, Converter={StaticResource IntPtrToHexConverter}, UpdateSourceTrigger=Explicit}"/>
+                <Button Grid.Row="4" Grid.Column="2" Click="UpdateParentWindowHandle" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}"/>
 
                 <TextBlock Grid.Row="5" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.OwnerWindowHandle, Source={x:Static l:Lang.Current}}"/>
-                <TextBox Grid.Row="5" Grid.Column="1" x:Name="TextBoxOwnerWindowHandle" Text="{Binding OwnerWindowHandle, Converter={StaticResource IntPtrToHexConverter}, UpdateSourceTrigger=Explicit}"/>
-                <Button Grid.Row="5" Grid.Column="2" Click="UpdateOwnerWindowHandle" Content="{Binding App.UI.WindowDetail.ApplyButton, Source={x:Static l:Lang.Current}}"
+                <TextBox Grid.Row="5" Grid.Column="1" Classes="Code" x:Name="TextBoxOwnerWindowHandle" Text="{Binding OwnerWindowHandle, Converter={StaticResource IntPtrToHexConverter}, UpdateSourceTrigger=Explicit}"/>
+                <Button Grid.Row="5" Grid.Column="2" Click="UpdateOwnerWindowHandle" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}"
                         IsEnabled="{Binding ParentWindowHandle,Converter={StaticResource ParentWindowHandleToCanUpdateOwnerConverter}}"/>
 
             </Grid>

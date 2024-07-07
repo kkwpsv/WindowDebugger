@@ -68,6 +68,9 @@
         <Style Selector="TextBox.Code">
             <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
         </Style>
+        <Style Selector="ComboBox.Code">
+            <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
+        </Style>
 
     </Application.Styles>
 

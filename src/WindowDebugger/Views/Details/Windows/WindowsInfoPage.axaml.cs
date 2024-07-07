@@ -1,5 +1,7 @@
+using System.Collections.Immutable;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Lsj.Util.Win32.Enums;
 
 namespace WindowDebugger.Views.Details.Windows;
 
@@ -9,6 +11,10 @@ public partial class WindowsInfoPage : UserControl
     {
         InitializeComponent();
     }
+
+    public ImmutableArray<ShowWindowCommands> AllShowWindowCommands { get; } = [..Enum.GetValues<ShowWindowCommands>()];
+
+    public ImmutableArray<WindowDisplayAffinities> AllWindowDisplayAffinities { get; } = [..Enum.GetValues<WindowDisplayAffinities>()];
 
     private void UpdateText(object sender, RoutedEventArgs e)
     {

@@ -1,7 +1,7 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Threading;
 using WindowDebugger.Localizations;
+using WindowDebugger.Services.NativeWindows.Windows;
 using WindowDebugger.Views.Details.Windows;
 
 namespace WindowDebugger.Views;
@@ -33,6 +33,13 @@ public partial class MainView : UserControl
             WindowListBox.ScrollIntoView(vm.NativeWindows[Math.Max(0, index - 1)]);
             WindowListBox.SelectedItem = defaultSelection;
         }
+    }
+
+    private void ReloadButton_Click(object? sender, RoutedEventArgs e)
+    {
+        var oldSelection = WindowListBox.SelectedItem as WindowsNativeWindowModel;
+        WindowListBox.SelectedItem = null;
+        WindowListBox.SelectedItem = oldSelection;
     }
 
     private void InitializePlatformPages()

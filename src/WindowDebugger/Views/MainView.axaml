@@ -226,7 +226,8 @@
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="24 12">
                     <Button Classes="GlobalToolButton"
                             Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
-                            Background="#10FFFFFF">
+                            Background="#10FFFFFF"
+                            Click="ReloadButton_Click">
                         <ToolTip.Tip>
                             <TextBlock LineHeight="24">
                                 <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.WindowDetail.ReloadButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />

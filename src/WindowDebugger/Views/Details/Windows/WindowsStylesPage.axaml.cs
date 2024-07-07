@@ -1,8 +1,6 @@
 using System.Collections.Immutable;
 using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
-using Avalonia.VisualTree;
 using Lsj.Util.Win32.Enums;
 using WindowDebugger.Services.NativeWindows.Windows;
 
@@ -10,98 +8,53 @@ namespace WindowDebugger.Views.Details.Windows;
 
 public partial class WindowsStylesPage : UserControl
 {
-    private bool _isReloading;
+    private readonly EnumPageManager<WindowStyles> _manager;
 
     public WindowsStylesPage()
     {
         InitializeComponent();
-        DataContextChanged += OnDataContextChanged;
-        Loaded += OnLoaded;
+
+        _manager = new EnumPageManager<WindowStyles>(WindowStyleListBox);
+
+        DataContextChanged += (sender, args) => UpdateView();
+        Loaded += (sender, args) => UpdateView();
     }
 
-    public ImmutableArray<WindowStyles> AllWindowStyles { get; } = [..Enum.GetValues<WindowStyles>()];
+    public ImmutableArray<WindowStyles> AllWindowStyles => EnumPageManager<WindowStyles>.AllValues;
 
-    public WindowStyles CheckedValue
+    private void UpdateView()
     {
-        get
+        if (DataContext is WindowsNativeWindowModel { Styles: var value })
         {
-            WindowStyles value = 0;
-            if (WindowStyleListBox.FindDescendantOfType<UniformGrid>() is { } panel)
-            {
-                try
-                {
-                    _isReloading = true;
-                    foreach (var checkBox in panel.Children.Select(x => x.FindDescendantOfType<CheckBox>()).OfType<CheckBox>())
-                    {
-                        var v = (WindowStyles)checkBox.DataContext!;
-                        if (checkBox.IsChecked == true)
-                        {
-                            value |= v;
-                        }
-                    }
-                }
-                finally
-                {
-                    _isReloading = false;
-                }
-            }
-            return value;
+            ValueTextBox.Text = ((uint)value).ToString("X8");
+            _manager.CheckedValue = value;
         }
-        set
+    }
+
+    private void ChangeButton_Click(object? sender, RoutedEventArgs e)
+    {
+        if (DataContext is WindowsNativeWindowModel vm)
         {
-            if (WindowStyleListBox.FindDescendantOfType<UniformGrid>() is { } panel)
+            if (uint.TryParse(ValueTextBox.Text, System.Globalization.NumberStyles.HexNumber, null, out var value))
             {
-                try
-                {
-                    _isReloading = true;
-                    foreach (var checkBox in panel.Children.Select(x => x.FindDescendantOfType<CheckBox>()).OfType<CheckBox>())
-                    {
-                        var v = (WindowStyles)checkBox.DataContext!;
-                        checkBox.IsChecked = value.HasFlag(v);
-                    }
-                }
-                finally
-                {
-                    _isReloading = false;
-                }
+                vm.Styles = (WindowStyles)value;
+                UpdateView();
             }
         }
-    }
-
-    private void OnDataContextChanged(object? sender, EventArgs e)
-    {
-        TryUpdateView();
-    }
-
-    private void OnLoaded(object? sender, RoutedEventArgs e)
-    {
-        TryUpdateView();
-    }
-
-    private void TryUpdateView()
-    {
-        if(DataContext is not WindowsNativeWindowModel vm)
-        {
-            return;
-        }
-
-        var value = vm.Styles;
-        ValueTextBox.Text = ((uint)value).ToString("X8");
-        CheckedValue = value;
     }
 
     private void ToggleButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
     {
-        if (_isReloading)
+        if (_manager.IsReloading)
         {
             return;
         }
 
-        var value = CheckedValue;
+        var value = _manager.CheckedValue;
         if (DataContext is WindowsNativeWindowModel vm)
         {
             vm.Styles = value;
-            CheckedValue = vm.Styles;
+            UpdateView();
         }
     }
 }

@@ -32,13 +32,15 @@
 
     <ScrollViewer>
         <StackPanel Margin="32 12 32 32">
-            <TextBlock FontSize="15" Foreground="#EEEEEE" Text="Window Styles" />
+            <TextBlock FontSize="15" Foreground="#EEEEEE"
+                       Text="{Binding App.UI.WindowDetail.Pages.Windows.Styles.Subtitle, Source={x:Static l:Lang.Current}}" />
             <HyperlinkButton Margin="-8 0"
-                             Content="https://learn.microsoft.com/en-us/windows/win32/winmsg/window-styles"
-                             NavigateUri="https://learn.microsoft.com/en-us/windows/win32/winmsg/window-styles" />
+                             Content="{Binding App.UI.WindowDetail.Pages.Windows.Styles.DocumentLink, Source={x:Static l:Lang.Current}}"
+                             NavigateUri="{Binding App.UI.WindowDetail.Pages.Windows.Styles.DocumentLink.Value, Source={x:Static l:Lang.Current}}" />
             <Grid ColumnDefinitions="*,Auto">
                 <TextBox Grid.Column="0" Classes="Code" x:Name="ValueTextBox" />
-                <Button Grid.Column="1" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}" />
+                <Button Grid.Column="1" Click="ChangeButton_Click"
+                        Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}" />
             </Grid>
             <ItemsControl x:Name="WindowStyleListBox" Margin="0 12 0 0" Background="Transparent"
                           ItemsSource="{Binding #WindowsStylesPageInstance.AllWindowStyles}">

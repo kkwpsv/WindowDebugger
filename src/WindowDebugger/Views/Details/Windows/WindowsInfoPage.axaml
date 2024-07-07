@@ -85,7 +85,7 @@
                     <TextBox Grid.Row="1" Grid.Column="1" Height="NaN" Text="{Binding ProcessId, Converter={StaticResource ProcessIdToProcessNameConverter}, Mode=OneWay}" IsReadOnly="True" />
 
                     <TextBlock Grid.Row="2" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.ProcessId, Source={x:Static l:Lang.Current}}"/>
-                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ProcessId, StringFormat=X8, Mode=OneWay}" IsReadOnly="True" />
+                    <TextBox Grid.Row="2" Grid.Column="1" Text="{Binding ProcessId, Mode=OneWay}" IsReadOnly="True" />
 
                     <TextBlock Grid.Row="3" Grid.Column="0" Text="{Binding App.UI.WindowDetail.Pages.Windows.Info.ThreadId, Source={x:Static l:Lang.Current}}"/>
                     <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding ThreadId, Mode=OneWay}" IsReadOnly="True" />

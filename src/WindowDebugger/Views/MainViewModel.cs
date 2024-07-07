@@ -1,14 +1,19 @@
-using System.Collections.Immutable;
 using Avalonia.Collections;
 using ReactiveUI;
 using WindowDebugger.Services.NativeWindows;
+using WindowDebugger.Services.NativeWindows.Windows;
+using WindowDebugger.Utils;
 
 namespace WindowDebugger.Views;
 
 public record MainViewModel : ReactiveRecord
 {
     private readonly NativeWindowCollectionManager _nativeWindowCollectionManager;
-    private ImmutableArray<NativeTreeNode> _tree = [];
+    private string? _searchText;
+    private bool _includingInvisibleWindow;
+    private bool _includingEmptyTitleWindow;
+    private bool _includingChildWindow;
+    private bool _includingMessageOnlyWindow;
 
     public MainViewModel()
     {
@@ -17,15 +22,46 @@ public record MainViewModel : ReactiveRecord
 
     public AvaloniaList<NativeWindowModel> NativeWindows { get; } = [];
 
-    public ImmutableArray<NativeTreeNode> Tree
+    public string? SearchText
     {
-        get => _tree;
-        private set => this.RaiseAndSetIfChanged(ref _tree, value);
+        get => _searchText;
+        set => this.RaiseAndSetWithAction(ref _searchText, value, ReloadWindows);
     }
 
-    public async Task ReloadWindows()
+    public bool IncludingInvisibleWindow
     {
-        var nativeWindows = _nativeWindowCollectionManager.FindWindows();
+        get => _includingInvisibleWindow;
+        set => this.RaiseAndSetWithAction(ref _includingInvisibleWindow, value, ReloadWindows);
+    }
+
+    public bool IncludingEmptyTitleWindow
+    {
+        get => _includingEmptyTitleWindow;
+        set => this.RaiseAndSetWithAction(ref _includingEmptyTitleWindow, value, ReloadWindows);
+    }
+
+    public bool IncludingChildWindow
+    {
+        get => _includingChildWindow;
+        set => this.RaiseAndSetWithAction(ref _includingChildWindow, value, ReloadWindows);
+    }
+
+    public bool IncludingMessageOnlyWindow
+    {
+        get => _includingMessageOnlyWindow;
+        set => this.RaiseAndSetWithAction(ref _includingMessageOnlyWindow, value, ReloadWindows);
+    }
+
+    public void ReloadWindows()
+    {
+        var nativeWindows = _nativeWindowCollectionManager.FindWindows(new WindowSearchingFilter
+        {
+            SearchText = SearchText,
+            IncludingInvisibleWindow = IncludingInvisibleWindow,
+            IncludingEmptyTitleWindow = IncludingEmptyTitleWindow,
+            IncludingChildWindow = IncludingChildWindow,
+            IncludingMessageOnlyWindow = IncludingMessageOnlyWindow,
+        });
 
         NativeWindows.Clear();
         NativeWindows.AddRange(nativeWindows);

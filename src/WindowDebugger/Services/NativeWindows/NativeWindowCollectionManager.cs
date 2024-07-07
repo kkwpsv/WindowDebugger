@@ -4,9 +4,9 @@ using WindowDebugger.Services.NativeWindows.Windows;
 
 namespace WindowDebugger.Services.NativeWindows;
 
-public class NativeWindowCollectionManager
+public partial class NativeWindowCollectionManager
 {
-    public ImmutableArray<NativeWindowModel> FindWindows()
+    public ImmutableArray<NativeWindowModel> FindWindows(WindowSearchingFilter filter)
     {
         if (OperatingSystem.IsLinux())
         {
@@ -15,10 +15,7 @@ public class NativeWindowCollectionManager
 
         if (OperatingSystem.IsWindows())
         {
-            var list = WindowExtensions.GetAllWindowHandle()
-#pragma warning disable CA1416
-                .Select(x => new WindowsNativeWindowModel(x))
-#pragma warning restore CA1416
+            var list = FindWindowsOnWindows(filter)
                 .OfType<NativeWindowModel>()
                 .ToList();
             return [..list];

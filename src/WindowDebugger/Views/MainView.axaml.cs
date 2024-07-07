@@ -21,7 +21,7 @@ public partial class MainView : UserControl
         var vm = new MainViewModel();
         DataContext = vm;
 
-        await vm.ReloadWindows();
+        vm.ReloadWindows();
 
         var selfId = Environment.ProcessId;
         var defaultSelection = vm.NativeWindows.FirstOrDefault(x => x.ProcessId == selfId);

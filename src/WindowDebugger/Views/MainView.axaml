@@ -61,7 +61,8 @@
                 <Grid Margin="8 0" ColumnDefinitions="Auto,Auto,*,Auto">
                     <Button Grid.Column="0" Classes="GlobalToolButton"
                             Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
-                            Background="#10FFFFFF">
+                            Background="#10FFFFFF"
+                            Click="ReloadAllButton_Click">
                         <ToolTip.Tip>
                             <TextBlock LineHeight="24">
                                 <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.ReloadButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
@@ -74,7 +75,8 @@
                             <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
                         </Grid>
                     </Button>
-                    <ToggleButton Grid.Column="1" Margin="4 0 0 0" Classes="GlobalToolButton">
+                    <ToggleButton Grid.Column="1" Margin="4 0 0 0" Classes="GlobalToolButton"
+                                  IsCheckedChanged="TopMostToggleButton_IsCheckedChanged">
                         <ToolTip.Tip>
                             <TextBlock LineHeight="24">
                                 <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.TopmostButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
@@ -84,7 +86,8 @@
                         </ToolTip.Tip>
                         <Svg Classes="ButtonIcon" Path="/Assets/UI/layers-svgrepo-com.svg" />
                     </ToggleButton>
-                    <Button Grid.Column="3" Classes="GlobalToolButton">
+                    <Button Grid.Column="3" Classes="GlobalToolButton" Click="UacButton_Click"
+                            IsVisible="{OnPlatform False, Windows=True}">
                         <ToolTip.Tip>
                             <TextBlock LineHeight="24">
                                 <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.UacButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />

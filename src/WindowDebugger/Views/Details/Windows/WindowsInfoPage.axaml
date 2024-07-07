@@ -6,7 +6,7 @@
              xmlns:nww="clr-namespace:WindowDebugger.Services.NativeWindows.Windows"
              xmlns:l="clr-namespace:WindowDebugger.Localizations"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="WindowDebugger.Views.Details.WindowsInfoPage"
+             x:Class="WindowDebugger.Views.Details.Windows.WindowsInfoPage"
              x:DataType="nww:WindowsNativeWindowModel"
              Grid.IsSharedSizeScope="True">
 

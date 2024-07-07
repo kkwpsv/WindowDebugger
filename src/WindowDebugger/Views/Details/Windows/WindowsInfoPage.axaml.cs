@@ -1,9 +1,7 @@
-using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
-using Avalonia.Markup.Xaml;
 
-namespace WindowDebugger.Views.Details;
+namespace WindowDebugger.Views.Details.Windows;
 
 public partial class WindowsInfoPage : UserControl
 {

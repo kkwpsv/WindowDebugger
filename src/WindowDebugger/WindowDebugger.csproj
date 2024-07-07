@@ -40,4 +40,23 @@
     <Folder Include="Assets\Fonts\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Views\Details\Windows\WindowClassStylesPage.axaml.cs">
+      <DependentUpon>WindowClassStylesPage.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Details\Windows\WindowsInfoPage.axaml.cs">
+      <DependentUpon>WindowsInfoPage.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Details\Windows\WindowsStylesPage.axaml.cs">
+      <DependentUpon>WindowsStylesPage.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Views\Details\Windows\WindowStyleExesPage.axaml.cs">
+      <DependentUpon>WindowStyleExesPage.axaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

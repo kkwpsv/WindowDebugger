@@ -31,9 +31,9 @@
     </UserControl.Styles>
 
     <ScrollViewer>
-        <StackPanel Margin="32 12 32 32">
-            <TextBlock FontSize="15" Foreground="#EEEEEE"
-                       Text="{Binding App.UI.WindowDetail.Pages.Windows.StyleExes.Subtitle, Source={x:Static l:Lang.Current}}" />
+        <StackPanel Margin="32 4 32 32">
+            <TextBlock FontSize="16" Foreground="#EEEEEE"
+                       Text="{Binding App.UI.WindowDetail.Pages.Windows.StyleExes.FullTitle, Source={x:Static l:Lang.Current}}" />
             <HyperlinkButton Margin="-8 0"
                              Content="{Binding App.UI.WindowDetail.Pages.Windows.StyleExes.DocumentLink, Source={x:Static l:Lang.Current}}"
                              NavigateUri="{Binding App.UI.WindowDetail.Pages.Windows.StyleExes.DocumentLink.Value, Source={x:Static l:Lang.Current}}" />

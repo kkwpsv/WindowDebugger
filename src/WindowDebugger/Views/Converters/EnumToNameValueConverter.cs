@@ -25,3 +25,5 @@ public abstract class EnumToNameValueConverter<T> : IValueConverter
 public sealed class WindowStyleToNameValueConverter : EnumToNameValueConverter<WindowStyles>;
 
 public sealed class WindowStyleExToNameValueConverter : EnumToNameValueConverter<WindowStylesEx>;
+
+public sealed class ClassStylesToNameValueConverter : EnumToNameValueConverter<ClassStyles>;

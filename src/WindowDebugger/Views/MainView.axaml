@@ -243,6 +243,22 @@
                             <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.WindowDetail.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
                         </Grid>
                     </Button>
+                    <Button Classes="GlobalToolButton"
+                            Margin="8 0 0 0" Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
+                            Background="#10FFFFFF"
+                            Click="ReloadButton_Click">
+                        <ToolTip.Tip>
+                            <TextBlock LineHeight="24">
+                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.WindowDetail.OpenDirectory.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                                <LineBreak />
+                                <Run Text="{Binding App.UI.WindowDetail.OpenDirectory.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                            </TextBlock>
+                        </ToolTip.Tip>
+                        <Grid ColumnDefinitions="32,Auto">
+                            <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/folder-svgrepo-com.svg" />
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.WindowDetail.OpenDirectory.Content, Source={x:Static l:Lang.Current}}" />
+                        </Grid>
+                    </Button>
                 </StackPanel>
                 <TabControl x:Name="WindowDetailTabControl" Grid.Row="2"
                             Margin="-12 -4 -12 0" />

@@ -17,7 +17,7 @@ public class EnumPageManager<T>(ItemsControl listBox)
     {
         get
         {
-            long value = default;
+            nint value = default;
             if (listBox.FindDescendantOfType<UniformGrid>() is { } panel)
             {
                 try
@@ -25,7 +25,7 @@ public class EnumPageManager<T>(ItemsControl listBox)
                     IsReloading = true;
                     foreach (var checkBox in panel.Children.Select(x => x.FindDescendantOfType<CheckBox>()).OfType<CheckBox>())
                     {
-                        var v = (long)(object)(T)checkBox.DataContext!;
+                        var v = (nint)(object)(T)checkBox.DataContext!;
                         if (checkBox.IsChecked == true)
                         {
                             value |= v;
@@ -48,7 +48,7 @@ public class EnumPageManager<T>(ItemsControl listBox)
                     IsReloading = true;
                     foreach (var checkBox in panel.Children.Select(x => x.FindDescendantOfType<CheckBox>()).OfType<CheckBox>())
                     {
-                        var v = (WindowStyles)checkBox.DataContext!;
+                        var v = (T)checkBox.DataContext!;
                         checkBox.IsChecked = value.HasFlag(v);
                     }
                 }

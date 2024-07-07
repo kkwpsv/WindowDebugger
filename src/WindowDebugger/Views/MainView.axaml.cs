@@ -131,7 +131,7 @@ public partial class MainView : UserControl
             WindowDetailTabControl.Items.Add(new TabItem
             {
                 Header = Lang.Current.App.UI.WindowDetail.Pages.Windows.StyleExes.Title,
-                Content = new WipPage(),
+                Content = new WindowStyleExesPage(),
             });
             WindowDetailTabControl.Items.Add(new TabItem
             {

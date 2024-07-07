@@ -59,7 +59,7 @@
     </UserControl.Styles>
 
     <ScrollViewer>
-        <StackPanel Margin="32 12">
+        <StackPanel Margin="32 12 32 32">
             <Grid ColumnDefinitions="*,*">
 
                 <Border Grid.Column="1"

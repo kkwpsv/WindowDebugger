@@ -1,5 +1,6 @@
 ﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
+using Avalonia.Threading;
 using WindowDebugger.Localizations;
 using WindowDebugger.Views.Details.Windows;
 
@@ -23,7 +24,15 @@ public partial class MainView : UserControl
         await vm.ReloadWindows();
 
         var selfId = Environment.ProcessId;
-        WindowListBox.SelectedItem = vm.NativeWindows.FirstOrDefault(x => x.ProcessId == selfId);
+        var defaultSelection = vm.NativeWindows.FirstOrDefault(x => x.ProcessId == selfId);
+        if (defaultSelection is not null)
+        {
+            await Task.Delay(1);
+            var index = vm.NativeWindows.IndexOf(defaultSelection);
+            WindowListBox.ScrollIntoView(vm.NativeWindows[^1]);
+            WindowListBox.ScrollIntoView(vm.NativeWindows[Math.Max(0, index - 1)]);
+            WindowListBox.SelectedItem = defaultSelection;
+        }
     }
 
     private void InitializePlatformPages()

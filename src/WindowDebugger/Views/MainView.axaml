@@ -207,23 +207,22 @@
         <Border Grid.Column="1" CornerRadius="12 0 0 0" Background="#10FFFFFF"
                 DataContext="{Binding #WindowListBox.SelectedItem}">
             <Grid RowDefinitions="Auto,Auto,*" x:DataType="nativeWindows:NativeWindowModel">
-                <Grid Grid.Row="0" RowDefinitions="*,Auto" ColumnDefinitions="64,*"
-                      Height="64" Margin="32 32 32 0">
+                <Grid Grid.Row="0" RowDefinitions="32,16" ColumnDefinitions="48,*"
+                      Margin="32 32 32 0">
                     <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
-                            CornerRadius="8" Width="64" Height="64" HorizontalAlignment="Left"
-                            Background="Transparent">
+                            Background="Transparent" HorizontalAlignment="Left">
                         <Grid>
-                            <Image Source="/Assets/UI/browser-ui-svgrepo-com.256.png" Width="64" Height="64" Stretch="Uniform" />
+                            <Image Source="/Assets/UI/browser-ui-svgrepo-com.256.png" Stretch="Uniform" />
                         </Grid>
                     </Border>
                     <TextBox Grid.Row="0" Grid.Column="1" Classes="CopyableText"
-                             Margin="8 0 0 0" VerticalAlignment="Center"
-                             FontSize="24" FontWeight="Thin"
+                             Margin="12 0 0 0" VerticalAlignment="Center"
+                             FontSize="20" FontWeight="Thin"
                              Text="{Binding Title, Mode=OneWay}"
                              Watermark="{Binding App.UI.WindowDetail.EmptyWindowName, Source={x:Static l:Lang.Current}}" />
-                    <TextBox Grid.Row="1" Grid.Column="1" Classes="CopyableText Code"
-                             Margin="8 4" VerticalAlignment="Center"
-                             FontSize="16" Foreground="#666666"
+                    <TextBox Grid.Row="1" Grid.Column="1" Classes="CopyableText"
+                             Margin="12 0 -24 0" VerticalAlignment="Center"
+                             FontSize="12" Foreground="#666666"
                              Text="{Binding ProcessId, Converter={StaticResource ProcessIdToProcessPathConverter}, Mode=OneWay}" />
                 </Grid>
                 <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="24 12">

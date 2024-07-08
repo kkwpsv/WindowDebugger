@@ -1,18 +1,19 @@
-using System.Diagnostics;
 using System.Globalization;
 using Avalonia.Data.Converters;
-using Lsj.Util.Win32.Enums;
-using WindowDebugger.Services.NativeWindows.Windows;
+using Lsj.Util.Win32.Structs;
 
 namespace WindowDebugger.Views.Converters;
 
-public class WindowsNativeWindowModelToCanSetDisplayAffinityConverter : IValueConverter
+public class RectToDisplayStringConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        return value is WindowsNativeWindowModel item &&
-               item.ProcessId == Process.GetCurrentProcess().Id &&
-               (item.Styles & WindowStyles.WS_CHILD) == 0;
+        if (value is RECT rect)
+        {
+            return $"{rect.left}, {rect.top}, {rect.right}, {rect.bottom}";
+        }
+
+        return "";
     }
 
     public object? ConvertBack(object? value, Type targetType, object? parameter, CultureInfo culture)

@@ -16,9 +16,9 @@
         <vc:ProcessIdToProcessNameConverter x:Key="ProcessIdToProcessNameConverter" />
         <vc:WindowsNativeWindowModelToCanSetDisplayAffinityConverter x:Key="WindowToCanSetDisplayAffinityConverter" />
         <vc:ParentWindowHandleToCanUpdateOwnerConverter x:Key="ParentWindowHandleToCanUpdateOwnerConverter" />
-        <vc:IntPtrToHexConverter x:Key="IntPtrToHexConverter" />
+        <vc:IntPtrToDisplayStringConverter x:Key="IntPtrToHexConverter" />
         <vc:DpiAwarenessLocalizationConverter x:Key="DpiAwarenessLocalizationConverter" />
-        <vc:DpiToDisplayDpiAndScaleConverter x:Key="DpiToDisplayDpiAndScaleConverter" />
+        <vc:DpiToDisplayStringConverter x:Key="DpiToDisplayDpiAndScaleConverter" />
         <DataTemplate x:Key="EnumDataConverter" DataType="sys:Enum">
             <TextBlock Text="{Binding}" />
         </DataTemplate>

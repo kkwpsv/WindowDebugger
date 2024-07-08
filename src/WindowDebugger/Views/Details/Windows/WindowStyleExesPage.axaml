@@ -10,7 +10,7 @@
              x:Name="WindowStyleExesPageInstance">
 
     <UserControl.Resources>
-        <converters:WindowStyleExToNameValueConverter x:Key="WindowStyleExToNameValueConverter"/>
+        <converters:WindowStyleExToDisplayStringConverter x:Key="WindowStyleExToNameValueConverter"/>
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -32,12 +32,17 @@
 
     <ScrollViewer>
         <StackPanel Margin="32 4 32 32">
-            <TextBlock FontSize="16" Foreground="#EEEEEE"
-                       Text="{Binding App.UI.WindowDetail.Pages.Windows.StyleExes.FullTitle, Source={x:Static l:Lang.Current}}" />
-            <HyperlinkButton Margin="-8 0"
-                             Content="{Binding App.UI.WindowDetail.Pages.Windows.StyleExes.DocumentLink, Source={x:Static l:Lang.Current}}"
-                             NavigateUri="{Binding App.UI.WindowDetail.Pages.Windows.StyleExes.DocumentLink.Value, Source={x:Static l:Lang.Current}}" />
-            <Grid ColumnDefinitions="*,Auto">
+            <Border Padding="16 16 16 8" CornerRadius="8" BorderThickness="1"
+                    BorderBrush="#20FFFFFF" Background="#20000000">
+                <StackPanel>
+                    <TextBlock FontSize="16" Foreground="#EEEEEE"
+                               Text="{Binding App.UI.WindowDetail.Pages.Windows.StyleExes.FullTitle, Source={x:Static l:Lang.Current}}" />
+                    <HyperlinkButton Margin="-8 0"
+                                     Content="{Binding App.UI.WindowDetail.Pages.Windows.StyleExes.DocumentLink, Source={x:Static l:Lang.Current}}"
+                                     NavigateUri="{Binding App.UI.WindowDetail.Pages.Windows.StyleExes.DocumentLink.Value, Source={x:Static l:Lang.Current}}" />
+                </StackPanel>
+            </Border>
+            <Grid Margin="0 12 0 0" ColumnDefinitions="*,Auto">
                 <TextBox Grid.Column="0" Classes="Code" x:Name="ValueTextBox" />
                 <Button Grid.Column="1" Click="ChangeButton_Click"
                         Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}" />

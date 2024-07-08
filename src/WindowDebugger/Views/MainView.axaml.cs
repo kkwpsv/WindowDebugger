@@ -106,6 +106,10 @@ public partial class MainView : UserControl
         }
     }
 
+    private void CaptureButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
+    {
+    }
+
     private void InitializePlatformPages()
     {
         if (OperatingSystem.IsLinux())

@@ -69,7 +69,7 @@
         <!-- Left Side Bar -->
         <Grid Grid.Column="0" Margin="0 40 0 0" RowDefinitions="Auto,*,Auto">
             <StackPanel Grid.Row="0">
-                <Grid Margin="8 0" ColumnDefinitions="Auto,Auto,*,Auto">
+                <Grid Margin="8 0" ColumnDefinitions="Auto,Auto,*,Auto,Auto">
                     <Button Grid.Column="0" Classes="GlobalToolButton"
                             Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
                             Background="#10FFFFFF"
@@ -86,7 +86,19 @@
                             <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
                         </Grid>
                     </Button>
-                    <ToggleButton Grid.Column="1" Margin="4 0 0 0" Classes="GlobalToolButton"
+                    <ToggleButton Grid.Column="1" Classes="GlobalToolButton"
+                                  Margin="4 0 0 0" HorizontalContentAlignment="Stretch"
+                                  IsCheckedChanged="CaptureButton_IsCheckedChanged">
+                        <ToolTip.Tip>
+                            <TextBlock LineHeight="24">
+                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.CaptureButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                                <LineBreak />
+                                <Run Text="{Binding App.UI.CaptureButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                            </TextBlock>
+                        </ToolTip.Tip>
+                        <Svg Classes="ButtonIcon" Path="/Assets/UI/visibility-view-svgrepo-com.svg" />
+                    </ToggleButton>
+                    <ToggleButton Grid.Column="3" Margin="0 0 4 0" Classes="GlobalToolButton"
                                   IsCheckedChanged="TopMostToggleButton_IsCheckedChanged">
                         <ToolTip.Tip>
                             <TextBlock LineHeight="24">
@@ -97,7 +109,7 @@
                         </ToolTip.Tip>
                         <Svg Classes="ButtonIcon" Path="/Assets/UI/layers-svgrepo-com.svg" />
                     </ToggleButton>
-                    <Button Grid.Column="3" Classes="GlobalToolButton" Click="UacButton_Click"
+                    <Button Grid.Column="4" Classes="GlobalToolButton" Click="UacButton_Click"
                             IsVisible="{OnPlatform False, Windows=True}">
                         <ToolTip.Tip>
                             <TextBlock LineHeight="24">

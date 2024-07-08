@@ -3,6 +3,7 @@ using Avalonia.Controls;
 using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using WindowDebugger.Localizations;
+using WindowDebugger.Native;
 using WindowDebugger.Services.NativeWindows.Windows;
 using WindowDebugger.Views.Details;
 using WindowDebugger.Views.Details.Windows;
@@ -60,6 +61,15 @@ public partial class MainView : UserControl
         var oldSelection = WindowListBox.SelectedItem as WindowsNativeWindowModel;
         WindowListBox.SelectedItem = null;
         WindowListBox.SelectedItem = oldSelection;
+    }
+
+    private void RevealExecutableFileButton_Click(object? sender, RoutedEventArgs e)
+    {
+        var path = ProcessPathTextBox.Text;
+        if (path is not null && File.Exists(path))
+        {
+            NativeFileManager.RevealFile(path);
+        }
     }
 
     private async Task ReloadAllAsync()

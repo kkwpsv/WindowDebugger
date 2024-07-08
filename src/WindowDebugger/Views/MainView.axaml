@@ -60,7 +60,14 @@
             <ColumnDefinition Width="*" MinWidth="240" MaxWidth="400" />
             <ColumnDefinition Width="3*" />
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" RowDefinitions="Auto,*,Auto">
+
+        <!-- Background -->
+        <Border Grid.Column="1" Background="#10FFFFFF" IsHitTestVisible="False"
+                DataContext="{Binding #WindowListBox.SelectedItem}">
+        </Border>
+
+        <!-- Left Side Bar -->
+        <Grid Grid.Column="0" Margin="0 40 0 0" RowDefinitions="Auto,*,Auto">
             <StackPanel Grid.Row="0">
                 <Grid Margin="8 0" ColumnDefinitions="Auto,Auto,*,Auto">
                     <Button Grid.Column="0" Classes="GlobalToolButton"
@@ -208,65 +215,68 @@
                 </Button>
             </StackPanel>
         </Grid>
-        <Border Grid.Column="1" CornerRadius="12 0 0 0" Background="#10FFFFFF"
-                DataContext="{Binding #WindowListBox.SelectedItem}">
-            <Grid RowDefinitions="Auto,Auto,*" x:DataType="nativeWindows:NativeWindowModel">
-                <Grid Grid.Row="0" RowDefinitions="32,16" ColumnDefinitions="48,*"
-                      Margin="32 32 32 0">
-                    <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
-                            Background="Transparent" HorizontalAlignment="Left">
-                        <Grid>
-                            <Image Source="/Assets/UI/browser-ui-svgrepo-com.256.png" Stretch="Uniform" />
-                        </Grid>
-                    </Border>
-                    <TextBox Grid.Row="0" Grid.Column="1" Classes="CopyableText"
-                             Margin="12 0 0 0" VerticalAlignment="Center"
-                             FontSize="20" FontWeight="Thin"
-                             Text="{Binding Title, Mode=OneWay}"
-                             Watermark="{Binding App.UI.WindowDetail.EmptyWindowName, Source={x:Static l:Lang.Current}}" />
-                    <TextBox Grid.Row="1" Grid.Column="1" Classes="CopyableText"
-                             Margin="12 0 -24 0" VerticalAlignment="Center"
-                             FontSize="12" Foreground="#666666"
-                             Text="{Binding ProcessId, Converter={StaticResource ProcessIdToProcessPathConverter}, Mode=OneWay}" />
-                </Grid>
-                <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="24 12">
-                    <Button Classes="GlobalToolButton"
-                            Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
-                            Background="#10FFFFFF"
-                            Click="ReloadButton_Click">
-                        <ToolTip.Tip>
-                            <TextBlock LineHeight="24">
-                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.WindowDetail.ReloadButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
-                                <LineBreak />
-                                <Run Text="{Binding App.UI.WindowDetail.ReloadButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
-                            </TextBlock>
-                        </ToolTip.Tip>
-                        <Grid ColumnDefinitions="32,Auto">
-                            <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/reload-svgrepo-com.svg" />
-                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.WindowDetail.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
-                        </Grid>
-                    </Button>
-                    <Button Classes="GlobalToolButton"
-                            Margin="8 0 0 0" Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
-                            Background="#10FFFFFF"
-                            Click="ReloadButton_Click">
-                        <ToolTip.Tip>
-                            <TextBlock LineHeight="24">
-                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.WindowDetail.OpenDirectory.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
-                                <LineBreak />
-                                <Run Text="{Binding App.UI.WindowDetail.OpenDirectory.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
-                            </TextBlock>
-                        </ToolTip.Tip>
-                        <Grid ColumnDefinitions="32,Auto">
-                            <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/folder-svgrepo-com.svg" />
-                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.WindowDetail.OpenDirectory.Content, Source={x:Static l:Lang.Current}}" />
-                        </Grid>
-                    </Button>
-                </StackPanel>
-                <TabControl x:Name="WindowDetailTabControl" Grid.Row="2"
-                            Margin="-12 -4 -12 0" />
+
+        <!-- Right Content -->
+        <Grid Grid.Column="1"
+              x:DataType="nativeWindows:NativeWindowModel"
+              DataContext="{Binding #WindowListBox.SelectedItem}"
+              RowDefinitions="Auto,Auto,*">
+            <Grid Grid.Row="0" RowDefinitions="32,16" ColumnDefinitions="48,*"
+                  Margin="32 40 32 8">
+                <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                        Background="Transparent" HorizontalAlignment="Left">
+                    <Grid>
+                        <Image Source="/Assets/UI/browser-ui-svgrepo-com.256.png" Stretch="Uniform" />
+                    </Grid>
+                </Border>
+                <TextBox Grid.Row="0" Grid.Column="1" Classes="CopyableText"
+                         Margin="12 0 0 0" VerticalAlignment="Center"
+                         FontSize="20" FontWeight="Thin"
+                         Text="{Binding Title, Mode=OneWay}"
+                         Watermark="{Binding App.UI.WindowDetail.EmptyWindowName, Source={x:Static l:Lang.Current}}" />
+                <TextBox Grid.Row="1" Grid.Column="1" Classes="CopyableText"
+                         Margin="12 0 -24 0" VerticalAlignment="Center"
+                         FontSize="12" Foreground="#666666"
+                         Text="{Binding ProcessId, Converter={StaticResource ProcessIdToProcessPathConverter}, Mode=OneWay}" />
             </Grid>
-        </Border>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="24 12">
+                <Button Classes="GlobalToolButton"
+                        Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
+                        Background="#10FFFFFF"
+                        Click="ReloadButton_Click">
+                    <ToolTip.Tip>
+                        <TextBlock LineHeight="24">
+                            <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.WindowDetail.ReloadButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                            <LineBreak />
+                            <Run Text="{Binding App.UI.WindowDetail.ReloadButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                        </TextBlock>
+                    </ToolTip.Tip>
+                    <Grid ColumnDefinitions="32,Auto">
+                        <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/reload-svgrepo-com.svg" />
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.WindowDetail.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
+                    </Grid>
+                </Button>
+                <Button Classes="GlobalToolButton"
+                        Margin="8 0 0 0" Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
+                        Background="#10FFFFFF"
+                        Click="ReloadButton_Click">
+                    <ToolTip.Tip>
+                        <TextBlock LineHeight="24">
+                            <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.WindowDetail.OpenDirectory.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                            <LineBreak />
+                            <Run Text="{Binding App.UI.WindowDetail.OpenDirectory.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                        </TextBlock>
+                    </ToolTip.Tip>
+                    <Grid ColumnDefinitions="32,Auto">
+                        <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/folder-svgrepo-com.svg" />
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.WindowDetail.OpenDirectory.Content, Source={x:Static l:Lang.Current}}" />
+                    </Grid>
+                </Button>
+            </StackPanel>
+            <Separator Grid.Row="2" VerticalAlignment="Top" Margin="0" />
+            <TabControl x:Name="WindowDetailTabControl" Grid.Row="2"
+                        Margin="-12 12 -12 0" />
+        </Grid>
     </Grid>
 
 </UserControl>

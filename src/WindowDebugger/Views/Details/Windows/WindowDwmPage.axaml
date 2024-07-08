@@ -2,7 +2,43 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:l="clr-namespace:WindowDebugger.Localizations"
+             xmlns:windows="clr-namespace:WindowDebugger.Services.NativeWindows.Windows"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="WindowDebugger.Views.Details.Windows.WindowDwmPage">
-    Welcome to Avalonia!
+             x:Class="WindowDebugger.Views.Details.Windows.WindowDwmPage"
+             x:Name="WindowDwmPageInstance"
+             x:DataType="windows:WindowsNativeWindowModel">
+
+    <UserControl.Styles>
+        <Style Selector="ToggleSwitch.PureState">
+            <Setter Property="IsEnabled" Value="False" />
+            <Setter Property="Margin" Value="-12 0" />
+            <Style Selector="^ /template/ Border">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+            <Style Selector="^ /template/ Canvas">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="32 4 32 32">
+            <TextBlock FontSize="16" Foreground="#EEEEEE"
+                       Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.FullTitle, Source={x:Static l:Lang.Current}}" />
+            <HyperlinkButton Margin="-8 0"
+                             Content="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DocumentLink, Source={x:Static l:Lang.Current}}"
+                             NavigateUri="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DocumentLink.Value, Source={x:Static l:Lang.Current}}" />
+            <ToggleSwitch Classes="PureState"
+                          IsChecked="{Binding #WindowDwmPageInstance.DwmIsCompositionEnabled, Mode=OneWay}">
+                <ToggleSwitch.OnContent>
+                    <TextBlock Foreground="#57965C" Text="系统 DWM 已启用" />
+                </ToggleSwitch.OnContent>
+                <ToggleSwitch.OffContent>
+                    <TextBlock Foreground="#C94F4F" Text="❌系统 DWM 已禁用" />
+                </ToggleSwitch.OffContent>
+            </ToggleSwitch>
+        </StackPanel>
+    </ScrollViewer>
+
 </UserControl>

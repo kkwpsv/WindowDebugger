@@ -55,7 +55,11 @@
         </Style>
     </UserControl.Styles>
 
-    <Grid ColumnDefinitions="360,*">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="240" MaxWidth="400" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
         <Grid Grid.Column="0" RowDefinitions="Auto,*,Auto">
             <StackPanel Grid.Row="0">
                 <Grid Margin="8 0" ColumnDefinitions="Auto,Auto,*,Auto">

@@ -140,18 +140,18 @@ public partial class MainView : UserControl
             });
             WindowDetailTabControl.Items.Add(new TabItem
             {
-                Header = Lang.Current.App.UI.WindowDetail.Pages.Windows.Operations.Title,
-                Content = new WipPage(),
+                Header = Lang.Current.App.UI.WindowDetail.Pages.Windows.Dwm.Title,
+                Content = new WindowDwmPage(),
             });
             WindowDetailTabControl.Items.Add(new TabItem
             {
-                Header = Lang.Current.App.UI.WindowDetail.Pages.Windows.Dwm.Title,
-                Content = new WipPage(),
+                Header = Lang.Current.App.UI.WindowDetail.Pages.Windows.Operations.Title,
+                Content = new WindowOperationsPage(),
             });
             WindowDetailTabControl.Items.Add(new TabItem
             {
                 Header = Lang.Current.App.UI.WindowDetail.Pages.Windows.Others.Title,
-                Content = new WipPage(),
+                Content = new WindowOthersPage(),
             });
         }
     }

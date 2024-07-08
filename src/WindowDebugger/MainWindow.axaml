@@ -10,22 +10,15 @@
         Width="1280" Height="960" WindowStartupLocation="CenterScreen"
         TransparencyLevelHint="Mica,AcrylicBlur,Blur"
         ExtendClientAreaToDecorationsHint="True" ExtendClientAreaTitleBarHeightHint="40"
-        Icon="/Assets/Icons/icon.ico"
+        Icon="/Assets/Icons/icon.ico" Background="Transparent"
         Title="{Binding Product.LocalizedName, Source={x:Static l:Lang.Current}}">
 
     <Border Margin="{Binding #MainWindowInstance.OffScreenMargin}">
-        <Grid RowDefinitions="40,*">
-            <ExperimentalAcrylicBorder Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False">
-                <ExperimentalAcrylicBorder.Material>
-                    <ExperimentalAcrylicMaterial
-                        BackgroundSource="Digger"
-                        TintColor="{DynamicResource ControlSolidFillColorDefault}"
-                        TintOpacity="0"
-                        MaterialOpacity="0" />
-                </ExperimentalAcrylicBorder.Material>
-            </ExperimentalAcrylicBorder>
-            <views:MainView Grid.Row="0" Grid.RowSpan="2" />
-            <Grid Grid.Row="0">
+        <Grid RowDefinitions="Auto,*">
+            <Border Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False"
+                    Background="{OnPlatform #262626, Windows=Transparent, Linux=#C0000000, macOS=Transparent}" />
+            <views:MainView Grid.Row="0" Grid.RowSpan="2" Margin="{OnPlatform Linux=0 -32 0 0}" />
+            <Grid Grid.Row="0" Height="40" IsVisible="{OnPlatform True, Linux=False}">
                 <TextBlock Margin="12 0 0 0" FontSize="12"
                            VerticalAlignment="Center"
                            IsHitTestVisible="False"

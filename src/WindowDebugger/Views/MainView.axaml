@@ -230,7 +230,7 @@
               DataContext="{Binding #WindowListBox.SelectedItem}"
               RowDefinitions="Auto,Auto,*">
             <Grid Grid.Row="0" RowDefinitions="32,16" ColumnDefinitions="48,*"
-                  Margin="32 40 32 8">
+                  Margin="{OnPlatform 32 40 32 8, Linux=32 48 32 0}">
                 <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
                         Background="Transparent" HorizontalAlignment="Left">
                     <Grid>

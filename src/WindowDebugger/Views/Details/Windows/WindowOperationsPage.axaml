@@ -2,7 +2,217 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             xmlns:l="clr-namespace:WindowDebugger.Localizations"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="800"
              x:Class="WindowDebugger.Views.Details.Windows.WindowOperationsPage">
-    Welcome to Avalonia!
+
+    <UserControl.Styles>
+        <Style Selector="Expander">
+            <Style.Resources>
+                <SolidColorBrush x:Key="ExpanderHeaderBorderBrush">#20000000</SolidColorBrush>
+                <SolidColorBrush x:Key="ExpanderHeaderBorderBrushPointerOver">#20000000</SolidColorBrush>
+                <SolidColorBrush x:Key="ExpanderHeaderBorderBrushPressed">#20000000</SolidColorBrush>
+                <SolidColorBrush x:Key="ExpanderHeaderBackground">#10FFFFFF</SolidColorBrush>
+                <SolidColorBrush x:Key="ExpanderHeaderBackgroundPointerOver">#20FFFFFF</SolidColorBrush>
+                <SolidColorBrush x:Key="ExpanderHeaderBackgroundPressed">#08FFFFFF</SolidColorBrush>
+                <Thickness x:Key="ExpanderHeaderPadding">16</Thickness>
+                <Thickness x:Key="ExpanderContentPadding">72 0 48 0</Thickness>
+            </Style.Resources>
+            <Setter Property="Margin" Value="0 2" />
+            <Setter Property="BorderBrush" Value="{StaticResource ExpanderHeaderBorderBrush}" />
+            <Setter Property="Background" Value="{StaticResource ExpanderHeaderBackground}" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="Svg">
+            <Setter Property="Width" Value="32" />
+            <Setter Property="Height" Value="32" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Margin" Value="0 8" />
+            <Setter Property="Padding" Value="12 0" />
+            <Setter Property="Width" Value="160" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Style Selector="^.Danger">
+                <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#F44336" />
+                    <Setter Property="BorderBrush" Value="#A14942" />
+                    <Setter Property="Foreground" Value="{DynamicResource AccentButtonForeground}" />
+                </Style>
+
+                <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#D32F2F" />
+                    <Setter Property="BorderBrush" Value="#A14942" />
+                    <Setter Property="Foreground" Value="{DynamicResource AccentButtonForegroundPointerOver}" />
+                </Style>
+
+                <Style Selector="^:pressed  /template/ ContentPresenter#PART_ContentPresenter">
+                    <Setter Property="Background" Value="#C62828" />
+                    <Setter Property="BorderBrush" Value="#A14942" />
+                    <Setter Property="Foreground" Value="{DynamicResource AccentButtonForegroundPressed}" />
+                </Style>
+            </Style>
+        </Style>
+        <Style Selector="TextBlock.SectionHeader">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="#CCCCCC" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Margin" Value="16 0 0 0" />
+        </Style>
+        <Style Selector="TextBlock.SectionDescription">
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="#999999" />
+            <Setter Property="FontSize" Value="12" />
+            <Setter Property="Margin" Value="16 0 0 0" />
+        </Style>
+        <Style Selector="TextBlock.Header">
+            <Setter Property="Margin" Value="0 8 16 8" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="#CCCCCC" />
+            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+        </Style>
+        <Style Selector="Separator">
+            <Setter Property="Margin" Value="-72 0 -48 0" />
+            <Setter Property="Background" Value="#30000000" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="32 4 32 32" Grid.IsSharedSizeScope="True">
+
+            <!-- Window Operations -->
+            <Expander IsExpanded="True">
+                <Expander.Header>
+                    <Grid RowDefinitions="24,16" ColumnDefinitions="40,*">
+                        <Svg Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                             Path="/Assets/UI/monitor-tv-svgrepo-com.svg" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Classes="SectionHeader"
+                                   Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowOperation.Title, Source={x:Static l:Lang.Current}}" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Classes="SectionDescription"
+                                   Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowOperation.Description, Source={x:Static l:Lang.Current}}" />
+                    </Grid>
+                </Expander.Header>
+                <Expander.Content>
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Classes="Header"
+                                       Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowOperation.SetForeground.Description, Source={x:Static l:Lang.Current}}" />
+                            <Button Grid.Column="1" Click="SetForegroundButton_Click"
+                                    Content="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowOperation.SetForeground.Action, Source={x:Static l:Lang.Current}}" />
+                        </Grid>
+                        <Separator />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Classes="Header"
+                                       Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowOperation.Close.Description, Source={x:Static l:Lang.Current}}" />
+                            <Button Grid.Column="1" Click="CloseWindowButton_Click"
+                                    Content="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowOperation.Close.Action, Source={x:Static l:Lang.Current}}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander.Content>
+            </Expander>
+
+            <!-- Window Interactions -->
+            <Expander IsExpanded="True">
+                <Expander.Header>
+                    <Grid RowDefinitions="24,16" ColumnDefinitions="40,*">
+                        <Svg Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                             Path="/Assets/UI/laptop-electronics-svgrepo-com.svg" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Classes="SectionHeader"
+                                   Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowInteractions.Title, Source={x:Static l:Lang.Current}}" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Classes="SectionDescription"
+                                   Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowInteractions.Description, Source={x:Static l:Lang.Current}}" />
+                    </Grid>
+                </Expander.Header>
+                <Expander.Content>
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Classes="Header"
+                                       Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowInteractions.RedrawWindow.Description, Source={x:Static l:Lang.Current}}" />
+                            <Button Grid.Column="1" Click="RedrawWindowButton_Click"
+                                    Content="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowInteractions.RedrawWindow.Action, Source={x:Static l:Lang.Current}}" />
+                        </Grid>
+                        <Separator />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Classes="Header"
+                                       Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowInteractions.FlashWindow.Description, Source={x:Static l:Lang.Current}}" />
+                            <Button Grid.Column="1" Click="FlashWindowButton_Click"
+                                    Content="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowInteractions.FlashWindow.Action, Source={x:Static l:Lang.Current}}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander.Content>
+            </Expander>
+
+            <!-- Process Operations -->
+            <Expander IsExpanded="True">
+                <Expander.Header>
+                    <Grid RowDefinitions="24,16" ColumnDefinitions="40,*">
+                        <Svg Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                             Path="/Assets/UI/bar-chart-graph-svgrepo-com.svg" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Classes="SectionHeader"
+                                   Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ProcessOperations.Title, Source={x:Static l:Lang.Current}}" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Classes="SectionDescription"
+                                   Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ProcessOperations.Description, Source={x:Static l:Lang.Current}}" />
+                    </Grid>
+                </Expander.Header>
+                <Expander.Content>
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Classes="Header"
+                                       Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ProcessOperations.Kill.Description, Source={x:Static l:Lang.Current}}" />
+                            <Button Grid.Column="1" Click="KillProcessButton_Click"
+                                    Content="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ProcessOperations.Kill.Action, Source={x:Static l:Lang.Current}}" />
+                        </Grid>
+                        <Separator />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Classes="Header"
+                                       Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ProcessOperations.ForceKill.Description, Source={x:Static l:Lang.Current}}" />
+                            <Button Grid.Column="1" Classes="Danger" Click="ForceKillProcessButton_Click"
+                                    Content="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ProcessOperations.ForceKill.Action, Source={x:Static l:Lang.Current}}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander.Content>
+            </Expander>
+
+            <!-- Thread Operations -->
+            <Expander IsExpanded="True">
+                <Expander.Header>
+                    <Grid RowDefinitions="24,16" ColumnDefinitions="40,*">
+                        <Svg Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                             Path="/Assets/UI/bar-chart-graph-svgrepo-com.svg" />
+                        <TextBlock Grid.Row="0" Grid.Column="1" Classes="SectionHeader"
+                                   Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ThreadOperations.Title, Source={x:Static l:Lang.Current}}" />
+                        <TextBlock Grid.Row="1" Grid.Column="1" Classes="SectionDescription"
+                                   Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ThreadOperations.Description, Source={x:Static l:Lang.Current}}" />
+                    </Grid>
+                </Expander.Header>
+                <Expander.Content>
+                    <StackPanel>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Classes="Header"
+                                       Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ThreadOperations.Suspend.Description, Source={x:Static l:Lang.Current}}" />
+                            <Button Grid.Column="1" Click="SuspendThreadButton_Click"
+                                    Content="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ThreadOperations.Suspend.Action, Source={x:Static l:Lang.Current}}" />
+                        </Grid>
+                        <Separator />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Classes="Header"
+                                       Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ThreadOperations.Resume.Description, Source={x:Static l:Lang.Current}}" />
+                            <Button Grid.Column="1" Click="ResumeThreadButton_Click"
+                                    Content="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ThreadOperations.Resume.Action, Source={x:Static l:Lang.Current}}" />
+                        </Grid>
+                        <Separator />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <TextBlock Grid.Column="0" Classes="Header"
+                                       Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ThreadOperations.Kill.Description, Source={x:Static l:Lang.Current}}" />
+                            <Button Grid.Column="1" Classes="Danger" Click="KillThreadButton_Click"
+                                    Content="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ThreadOperations.Kill.Action, Source={x:Static l:Lang.Current}}" />
+                        </Grid>
+                    </StackPanel>
+                </Expander.Content>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+
 </UserControl>

@@ -2,7 +2,73 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:l="clr-namespace:WindowDebugger.Localizations"
+             xmlns:windows="clr-namespace:WindowDebugger.Services.NativeWindows.Windows"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
-             x:Class="WindowDebugger.Views.Details.Windows.WindowOthersPage">
-    Welcome to Avalonia!
+             x:Class="WindowDebugger.Views.Details.Windows.WindowOthersPage"
+             x:DataType="windows:WindowsNativeWindowModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.Header">
+            <Setter Property="Margin" Value="0 0 12 0" />
+            <Setter Property="MaxWidth" Value="200" />
+            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+            <Setter Property="Foreground" Value="#EEEEEE" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="Margin" Value="0 4" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Margin" Value="8 0 0 0" />
+            <Setter Property="Padding" Value="12 0" />
+            <Setter Property="MinWidth" Value="64" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="CornerRadius" Value="8" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="TextBox">
+            <Setter Property="Margin" Value="0 4" />
+            <Setter Property="Padding" Value="8 4" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Style Selector="^[IsReadOnly=True]">
+                <Setter Property="Foreground" Value="#999999" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="#40FFFFFF" />
+                <Style Selector="^:pointerover /template/ Border#PART_BorderElement">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="#40FFFFFF" />
+                </Style>
+                <Style Selector="^:focus /template/ Border#PART_BorderElement">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="#40FFFFFF" />
+                </Style>
+            </Style>
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="32 12 32 32">
+
+            <Grid RowDefinitions="*,*" ColumnDefinitions="Auto,*,Auto">
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Others.IsTouchWindow, Source={x:Static l:Lang.Current}}" />
+                <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" IsReadOnly="True"
+                         Text="{Binding IsTouchWindow, Mode=OneWay}" />
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Others.VirtualDesktopId, Source={x:Static l:Lang.Current}}"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" IsReadOnly="True"
+                         Text="{Binding VirtualDesktopID, Mode=OneWay}" />
+
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+
 </UserControl>

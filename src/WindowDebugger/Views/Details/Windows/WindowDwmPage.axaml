@@ -47,29 +47,8 @@
             <Setter Property="Padding" Value="12 0" />
             <Setter Property="MinWidth" Value="64" />
             <Setter Property="Height" Value="32" />
-            <Setter Property="CornerRadius" Value="8" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-        </Style>
-        <Style Selector="TextBox">
-            <Setter Property="Margin" Value="0 4" />
-            <Setter Property="Padding" Value="8 4" />
-            <Setter Property="Height" Value="32" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="TextWrapping" Value="Wrap" />
-            <Style Selector="^[IsReadOnly=True]">
-                <Setter Property="Foreground" Value="#999999" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="BorderBrush" Value="#40FFFFFF" />
-                <Style Selector="^:pointerover /template/ Border#PART_BorderElement">
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderBrush" Value="#40FFFFFF" />
-                </Style>
-                <Style Selector="^:focus /template/ Border#PART_BorderElement">
-                    <Setter Property="Background" Value="Transparent" />
-                    <Setter Property="BorderBrush" Value="#40FFFFFF" />
-                </Style>
-            </Style>
         </Style>
     </UserControl.Styles>
 
@@ -86,10 +65,10 @@
                     <ToggleSwitch Classes="PureState"
                                   IsChecked="{Binding #WindowDwmPageInstance.DwmIsCompositionEnabled, Mode=OneWay}">
                         <ToggleSwitch.OnContent>
-                            <TextBlock Foreground="#57965C" Text="系统 DWM 已启用，以下设置可用。" />
+                            <TextBlock Foreground="#57965C" Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DwmIsCompositionEnabled.True, Source={x:Static l:Lang.Current}}" />
                         </ToggleSwitch.OnContent>
                         <ToggleSwitch.OffContent>
-                            <TextBlock Foreground="#C94F4F" Text="❌系统 DWM 已禁用，无法使用以下设置。" />
+                            <TextBlock Foreground="#C94F4F" Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DwmIsCompositionEnabled.False, Source={x:Static l:Lang.Current}}" />
                         </ToggleSwitch.OffContent>
                     </ToggleSwitch>
                 </StackPanel>

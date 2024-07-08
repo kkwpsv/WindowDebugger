@@ -22,6 +22,32 @@
 
         <FluentTheme />
 
+        <Style Selector="TextBox">
+            <Setter Property="BorderBrush" Value="#20FFFFFF" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+        <Style Selector="TextBox.Code">
+            <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
+        </Style>
+
+        <Style Selector="ComboBox">
+            <Setter Property="BorderBrush" Value="#20FFFFFF" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+        <Style Selector="ComboBox.Code">
+            <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
+        </Style>
+
+        <Style Selector="Button">
+            <Setter Property="Background" Value="#10FFFFFF" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+
+        <Style Selector="ToggleButton">
+            <Setter Property="Background" Value="#10FFFFFF" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+
         <Style Selector="DropDownButton">
             <Setter Property="Foreground" Value="#80FFFFFF" />
             <Setter Property="Background" Value="#20FFFFFF" />
@@ -39,14 +65,30 @@
             </Style>
         </Style>
 
+        <Style Selector="CheckBox.Code">
+            <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
+        </Style>
+
         <Style Selector="TextBox">
-            <Setter Property="BorderBrush" Value="#20FFFFFF" />
+            <Setter Property="Margin" Value="0 4" />
+            <Setter Property="Padding" Value="8 4" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Style Selector="^[IsReadOnly=True]">
+                <Setter Property="Foreground" Value="#999999" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="#20FFFFFF" />
+                <Style Selector="^:pointerover /template/ Border#PART_BorderElement">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="#20FFFFFF" />
+                </Style>
+                <Style Selector="^:focus /template/ Border#PART_BorderElement">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="#20FFFFFF" />
+                </Style>
+            </Style>
         </Style>
-
-        <Style Selector="Separator">
-            <Setter Property="Background" Value="#20FFFFFF" />
-        </Style>
-
         <Style Selector="TextBox.CopyableText">
             <Setter Property="CornerRadius" Value="0" />
             <Setter Property="BorderThickness" Value="0" />
@@ -65,14 +107,8 @@
             </Style>
         </Style>
 
-        <Style Selector="TextBox.Code">
-            <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
-        </Style>
-        <Style Selector="ComboBox.Code">
-            <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
-        </Style>
-        <Style Selector="CheckBox.Code">
-            <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
+        <Style Selector="Separator">
+            <Setter Property="Background" Value="#20FFFFFF" />
         </Style>
 
     </Application.Styles>

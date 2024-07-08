@@ -14,7 +14,7 @@ public partial class App : Application
 
     public override void OnFrameworkInitializationCompleted()
     {
-        // Lang.SetCurrent("en");
+        Lang.SetCurrent("en");
 
         if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
         {

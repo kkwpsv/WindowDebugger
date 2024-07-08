@@ -31,18 +31,14 @@
         <Style Selector="Button.GlobalToolButton">
             <Setter Property="MinWidth" Value="40"/>
             <Setter Property="Height" Value="32"/>
-            <Setter Property="CornerRadius" Value="8" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="Background" Value="#10FFFFFF" />
         </Style>
         <Style Selector="ToggleButton.GlobalToolButton">
             <Setter Property="MinWidth" Value="40"/>
             <Setter Property="Height" Value="32"/>
-            <Setter Property="CornerRadius" Value="8" />
             <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="VerticalContentAlignment" Value="Center" />
-            <Setter Property="Background" Value="#10FFFFFF" />
         </Style>
         <Style Selector="TabItem">
             <Setter Property="FontSize" Value="16" />
@@ -62,7 +58,7 @@
         </Grid.ColumnDefinitions>
 
         <!-- Background -->
-        <Border Grid.Column="1" Background="#10FFFFFF" IsHitTestVisible="False"
+        <Border Grid.Column="1" Background="#08FFFFFF" IsHitTestVisible="False"
                 DataContext="{Binding #WindowListBox.SelectedItem}">
         </Border>
 
@@ -121,7 +117,7 @@
                         <Svg Classes="ButtonIcon" Path="/Assets/UI/shield-antivirus-svgrepo-com.svg" />
                     </Button>
                 </Grid>
-                <TextBox Margin="8" CornerRadius="12"
+                <TextBox Margin="8"
                          Watermark="{Binding App.UI.SearchWatermark, Source={x:Static l:Lang.Current}}"
                          Text="{Binding SearchText, Mode=TwoWay}" />
                 <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
@@ -220,8 +216,8 @@
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                         HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
                     <StackPanel Orientation="Horizontal">
-                        <Svg Classes="ButtonIcon" Path="/Assets/UI/settings-gear-svgrepo-com.svg" />
-                        <TextBlock Margin="8 0 0 0" VerticalAlignment="Center"
+                        <Svg Margin="8 0" Classes="ButtonIcon" Path="/Assets/UI/settings-gear-svgrepo-com.svg" />
+                        <TextBlock VerticalAlignment="Center"
                                    Text="{Binding App.UI.SettingsButton, Source={x:Static l:Lang.Current}}" />
                     </StackPanel>
                 </Button>

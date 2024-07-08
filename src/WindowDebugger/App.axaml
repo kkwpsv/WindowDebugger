@@ -48,6 +48,11 @@
             <Setter Property="CornerRadius" Value="6" />
         </Style>
 
+        <Style Selector="HyperlinkButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+
         <Style Selector="DropDownButton">
             <Setter Property="Foreground" Value="#80FFFFFF" />
             <Setter Property="Background" Value="#20FFFFFF" />

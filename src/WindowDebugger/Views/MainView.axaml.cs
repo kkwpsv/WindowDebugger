@@ -56,6 +56,10 @@ public partial class MainView : UserControl
         await ReloadAllAsync();
     }
 
+    private void CaptureButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
+    {
+    }
+
     private void ReloadButton_Click(object? sender, RoutedEventArgs e)
     {
         var oldSelection = WindowListBox.SelectedItem as WindowsNativeWindowModel;
@@ -106,8 +110,10 @@ public partial class MainView : UserControl
         }
     }
 
-    private void CaptureButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
+    private void SettingsButton_Click(object? sender, RoutedEventArgs e)
     {
+        var w = (MainWindow)TopLevel.GetTopLevel(this)!;
+        _ = w.ShowTransientViewAsync(new SettingsView());
     }
 
     private void InitializePlatformPages()

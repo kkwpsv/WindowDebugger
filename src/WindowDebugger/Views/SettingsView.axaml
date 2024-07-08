@@ -1,0 +1,48 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:l="clr-namespace:WindowDebugger.Localizations"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="WindowDebugger.Views.SettingsView">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.Title">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="Margin" Value="0 32 0 16" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer Margin="0 40 0 0">
+        <StackPanel Margin="32" MaxWidth="1000" HorizontalAlignment="Stretch">
+
+            <TextBlock Classes="Title" Text="关于" />
+            <TextBlock Margin="0 0 0 8" Foreground="#CCCCCC" LineHeight="24">
+                <Run Text="{Binding Product.LocalizedName, Source={x:Static l:Lang.Current}}" />
+                <Run x:Name="VersionRun" d:Text="1.0.0" />
+                <LineBreak />
+                <Run Text="© 2019-2024 kkwpsv. Some rights reserved." />
+            </TextBlock>
+            <HyperlinkButton Margin="-12 0" NavigateUri="https://gitlab.sdlsj.net/lsj/windowdebugger/-/releases">
+                <StackPanel Orientation="Horizontal">
+                    <Svg Width="16" Height="16" Margin="8 0" Path="/Assets/UI/connections-scheme-svgrepo-com.svg" />
+                    <TextBlock Text="Original release" />
+                </StackPanel>
+            </HyperlinkButton>
+            <HyperlinkButton Margin="-12 0" NavigateUri="https://github.com/kkwpsv/WindowDebugger">
+                <StackPanel Orientation="Horizontal">
+                    <Svg Width="16" Height="16" Margin="8 0" Path="/Assets/UI/connections-scheme-svgrepo-com.svg" />
+                    <TextBlock Text="Source code and issues on GitHub" />
+                </StackPanel>
+            </HyperlinkButton>
+            <HyperlinkButton Margin="-12 0" NavigateUri="https://github.com/kkwpsv/WindowDebugger/blob/master/LICENSE">
+                <StackPanel Orientation="Horizontal">
+                    <Svg Width="16" Height="16" Margin="8 0" Path="/Assets/UI/connections-scheme-svgrepo-com.svg" />
+                    <TextBlock Text="DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE" />
+                </StackPanel>
+            </HyperlinkButton>
+
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

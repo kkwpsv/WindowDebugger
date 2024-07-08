@@ -214,7 +214,8 @@
                 <Button Background="Transparent" CornerRadius="0"
                         Margin="-0.5" Height="48"
                         HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                        HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
+                        HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                        Click="SettingsButton_Click">
                     <StackPanel Orientation="Horizontal">
                         <Svg Margin="8 0" Classes="ButtonIcon" Path="/Assets/UI/settings-gear-svgrepo-com.svg" />
                         <TextBlock VerticalAlignment="Center"

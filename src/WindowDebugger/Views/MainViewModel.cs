@@ -1,7 +1,6 @@
 using Avalonia.Collections;
 using ReactiveUI;
 using WindowDebugger.Services.NativeWindows;
-using WindowDebugger.Services.NativeWindows.Windows;
 using WindowDebugger.Utils;
 
 namespace WindowDebugger.Views;
@@ -54,9 +53,8 @@ public record MainViewModel : ReactiveRecord
 
     public void ReloadWindows()
     {
-        var nativeWindows = _nativeWindowCollectionManager.FindWindows(new WindowSearchingFilter
+        var nativeWindows = _nativeWindowCollectionManager.FindWindows(new WindowSearchingFilter(SearchText)
         {
-            SearchText = SearchText,
             IncludingInvisibleWindow = IncludingInvisibleWindow,
             IncludingEmptyTitleWindow = IncludingEmptyTitleWindow,
             IncludingChildWindow = IncludingChildWindow,

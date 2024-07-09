@@ -16,7 +16,7 @@
     <Border Margin="{Binding #MainWindowInstance.OffScreenMargin}">
         <Grid RowDefinitions="Auto,*">
             <Border Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False"
-                    Background="{OnPlatform #262626, Windows=Transparent, Linux=#C0000000, macOS=Transparent}" />
+                    Background="{OnPlatform #262626, Windows=Transparent, Linux=#262626, macOS=Transparent}" />
             <Grid x:Name="ContentPanel" Grid.Row="0" Grid.RowSpan="2" Margin="{OnPlatform Linux=0 -32 0 0}">
                 <Border x:Name="TransientBorder" />
                 <views:MainView x:Name="MainView" />

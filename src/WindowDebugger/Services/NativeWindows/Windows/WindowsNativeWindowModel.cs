@@ -187,11 +187,6 @@ public record WindowsNativeWindowModel : NativeWindowModel
         ErrorString = ErrorMessageExtensions.GetSystemErrorMessageFromCode((uint)Marshal.GetLastWin32Error());
     }
 
-    public override nint GetParent()
-    {
-        return ParentWindowHandle;
-    }
-
     public bool SetForeground()
     {
         var result = SetForegroundWindow(WindowHandle);

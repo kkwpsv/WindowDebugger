@@ -1,6 +1,4 @@
 ﻿using System.Collections.Immutable;
-using Lsj.Util.Win32.Extensions;
-using WindowDebugger.Services.NativeWindows.Windows;
 
 namespace WindowDebugger.Services.NativeWindows;
 
@@ -10,7 +8,10 @@ public partial class NativeWindowCollectionManager
     {
         if (OperatingSystem.IsLinux())
         {
-            return [];
+            var list = FindWindowsOnLinux(filter)
+                .OfType<NativeWindowModel>()
+                .ToList();
+            return [..list];
         }
 
         if (OperatingSystem.IsWindows())

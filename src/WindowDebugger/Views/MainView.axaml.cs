@@ -6,6 +6,7 @@ using WindowDebugger.Localizations;
 using WindowDebugger.Native;
 using WindowDebugger.Services.NativeWindows.Windows;
 using WindowDebugger.Views.Details;
+using WindowDebugger.Views.Details.Linux;
 using WindowDebugger.Views.Details.Windows;
 
 namespace WindowDebugger.Views;
@@ -123,12 +124,12 @@ public partial class MainView : UserControl
             WindowDetailTabControl.Items.Add(new TabItem
             {
                 Header = Lang.Current.App.UI.WindowDetail.Pages.Linux.Info.Title,
-                Content = new WipPage(),
+                Content = new WindowInfosPage(),
             });
             WindowDetailTabControl.Items.Add(new TabItem
             {
                 Header = Lang.Current.App.UI.WindowDetail.Pages.Linux.Properties.Title,
-                Content = new WipPage(),
+                Content = new WindowPropertiesPage(),
             });
             WindowDetailTabControl.Items.Add(new TabItem
             {

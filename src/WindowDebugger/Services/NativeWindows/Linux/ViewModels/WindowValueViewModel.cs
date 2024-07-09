@@ -1,7 +1,7 @@
 using ReactiveUI;
-using SeWzc.WinInfo.Models;
+using WindowDebugger.Services.NativeWindows.Linux.Models;
 
-namespace SeWzc.WinInfo.ViewModels;
+namespace WindowDebugger.Services.NativeWindows.Linux.ViewModels;
 
 public class WindowValueViewModel(WindowProperty model) : ViewModelBase
 {

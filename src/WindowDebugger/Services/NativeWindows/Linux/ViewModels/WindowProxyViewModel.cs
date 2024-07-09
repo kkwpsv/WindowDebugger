@@ -1,8 +1,6 @@
-using System.Collections.Generic;
-using System.Linq;
-using SeWzc.WinInfo.Models;
+using WindowDebugger.Services.NativeWindows.Linux.Models;
 
-namespace SeWzc.WinInfo.ViewModels;
+namespace WindowDebugger.Services.NativeWindows.Linux.ViewModels;
 
 public class WindowProxyViewModel : ViewModelBase
 {

@@ -1,5 +1,5 @@
 using ReactiveUI;
 
-namespace SeWzc.WinInfo.ViewModels;
+namespace WindowDebugger.Services.NativeWindows.Linux.ViewModels;
 
 public abstract class ViewModelBase : ReactiveObject;

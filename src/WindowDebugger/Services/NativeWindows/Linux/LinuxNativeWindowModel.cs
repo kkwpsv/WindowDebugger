@@ -1,5 +1,5 @@
-﻿using SeWzc.WinInfo.Models;
-using SeWzc.X11Sharp;
+﻿using SeWzc.X11Sharp;
+using WindowDebugger.Services.NativeWindows.Linux.Models;
 
 namespace WindowDebugger.Services.NativeWindows.Linux;
 
@@ -14,6 +14,8 @@ public record LinuxNativeWindowModel : NativeWindowModel
         {
             ProcessId = (int)pid;
         }
+
+        _windowAttributes = window.GetAttributes() ?? throw new ArgumentException("Failed to get window attributes.");
     }
 
     internal X11DisplayWindow Window { get; }
@@ -23,6 +25,32 @@ public record LinuxNativeWindowModel : NativeWindowModel
     public override int ProcessId { get; }
 
     public int Handle { get; }
+
+    #region attributes
+
+    private readonly WindowAttributes _windowAttributes;
+
+    public int Left => _windowAttributes.X;
+
+    public int Top => _windowAttributes.Y;
+
+    public int Width => _windowAttributes.Width;
+
+    public int Height => _windowAttributes.Height;
+
+    public int Depth => _windowAttributes.Depth;
+
+    public int BorderWidth => _windowAttributes.BorderWidth;
+
+    public WindowClasses WindowClasses => _windowAttributes.WindowClass;
+
+    public MapState MapState => _windowAttributes.MapState;
+
+    public bool OverrideRedirect => _windowAttributes.OverrideRedirect;
+
+    #endregion
+
+    public IEnumerable<IGrouping<string, WindowProperty>> WindowPropertyGroups => GetWindowValuesGrouped();
 
     public IReadOnlyList<LinuxNativeWindowModel> GetChildren()
     {
@@ -38,5 +66,18 @@ public record LinuxNativeWindowModel : NativeWindowModel
             let propertyData = Window.GetProperty(property)
             select new WindowProperty(Window, property);
         return windowProperties.ToList();
+    }
+
+    public IEnumerable<IGrouping<string, WindowProperty>> GetWindowValuesGrouped()
+    {
+        return GetWindowValues()
+            .ToLookup(x =>
+            {
+                var name = x.Name;
+                if (!name.StartsWith('_'))
+                    return "普通属性";
+                var index = name.IndexOf('_', 1);
+                return "扩展属性：" +  (index > 0 ? name[1..index] : name[1..]);
+            });
     }
 }

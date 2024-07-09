@@ -22,6 +22,7 @@
     <PackageReference Include="dotnetCampus.SourceLocalizations" Version="0.1.0-alpha04" />
     <PackageReference Include="Lsj.Util.Win32" Version="6.2.3" />
     <PackageReference Include="Lsj.Util.Win32.NativeUI" Version="6.1.0" />
+    <PackageReference Include="SeWzc.X11Sharp" Version="0.1.0-alpha17" />
     <PackageReference Include="Svg.Skia" Version="2.0.0-rc1" />
   </ItemGroup>
 

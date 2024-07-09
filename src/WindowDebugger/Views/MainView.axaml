@@ -94,7 +94,7 @@
                         </ToolTip.Tip>
                         <Svg Classes="ButtonIcon" Path="/Assets/UI/visibility-view-svgrepo-com.svg" />
                     </ToggleButton>
-                    <ToggleButton Grid.Column="3" Margin="0 0 4 0" Classes="GlobalToolButton"
+                    <ToggleButton Grid.Column="3" Classes="GlobalToolButton"
                                   IsCheckedChanged="TopMostToggleButton_IsCheckedChanged">
                         <ToolTip.Tip>
                             <TextBlock LineHeight="24">
@@ -105,7 +105,7 @@
                         </ToolTip.Tip>
                         <Svg Classes="ButtonIcon" Path="/Assets/UI/layers-svgrepo-com.svg" />
                     </ToggleButton>
-                    <Button Grid.Column="4" Classes="GlobalToolButton" Click="UacButton_Click"
+                    <Button Grid.Column="4" Classes="GlobalToolButton" Margin="4 0 0 0" Click="UacButton_Click"
                             IsVisible="{OnPlatform False, Windows=True}">
                         <ToolTip.Tip>
                             <TextBlock LineHeight="24">

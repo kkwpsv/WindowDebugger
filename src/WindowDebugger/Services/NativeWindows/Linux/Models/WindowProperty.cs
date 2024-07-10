@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using Avalonia;
 using Avalonia.Media.Imaging;
@@ -8,11 +5,13 @@ using Avalonia.Platform;
 using SeWzc.X11Sharp;
 using SeWzc.X11Sharp.Structs;
 
-namespace SeWzc.WinInfo.Models;
+namespace WindowDebugger.Services.NativeWindows.Linux.Models;
 
 public class WindowProperty(X11DisplayWindow window, X11DisplayAtom property)
 {
     public string Name { get; } = property.GetAtomName() ?? "(null)";
+
+    public IReadOnlyWindowPropertyValue Value => GetValue();
 
     public IReadOnlyWindowPropertyValue GetValue()
     {

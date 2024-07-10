@@ -1,6 +1,6 @@
 ﻿using SeWzc.X11Sharp;
 
-namespace SeWzc.WinInfo.Models;
+namespace WindowDebugger.Services.NativeWindows.Linux.Models;
 
 public class LinuxNativeWindowCollectionManager
 {

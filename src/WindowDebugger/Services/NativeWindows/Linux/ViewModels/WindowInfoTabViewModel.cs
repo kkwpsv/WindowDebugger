@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using ReactiveUI;
 
-namespace SeWzc.WinInfo.ViewModels;
+namespace WindowDebugger.Services.NativeWindows.Linux.ViewModels;
 
 public class WindowInfoTabViewModel : ViewModelBase
 {

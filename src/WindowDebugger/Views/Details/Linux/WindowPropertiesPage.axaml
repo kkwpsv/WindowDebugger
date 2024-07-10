@@ -29,95 +29,108 @@
         </Style>
     </UserControl.Styles>
 
-    <ItemsControl ItemsSource="{Binding WindowPropertyGroups}"
-            Grid.IsSharedSizeScope="True">
-        <ItemsControl.ItemTemplate>
-            <DataTemplate>
-                <StackPanel>
-                    <TextBlock Text="{Binding Key}" />
-                    <ItemsControl ItemsSource="{Binding .}">
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition MinWidth="50" Width="Auto"
-                                                SharedSizeGroup="ValueNameWidth" />
-                                        <ColumnDefinition MinWidth="50" Width="Auto"
-                                                SharedSizeGroup="ValueTypeWidth" />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <TextBlock Grid.Column="0" Text="{Binding Name}" Margin="2 2 10 2" />
-                                    <TextBlock Grid.Column="1" Text="{Binding Value.ValueType}" Margin="2 2 10 2" />
-                                    <ContentControl Grid.Column="2" Content="{Binding Value}">
-                                        <ContentControl.DataTemplates>
-                                            <DataTemplate DataType="models:WindowPropertyIconValue">
-                                                <ItemsControl ItemsSource="{Binding Icons}">
-                                                    <ItemsControl.ItemsPanel>
-                                                        <ItemsPanelTemplate>
-                                                            <WrapPanel Orientation="Horizontal" />
-                                                        </ItemsPanelTemplate>
-                                                    </ItemsControl.ItemsPanel>
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <Image Source="{Binding .}" Stretch="Uniform"
-                                                                    Width="96" Height="96" Margin="2" />
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ItemsControl>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="models:WindowPropertyStringValue">
-                                                <ItemsControl ItemsSource="{Binding Values}">
-                                                    <ItemsControl.ItemsPanel>
-                                                        <ItemsPanelTemplate>
-                                                            <WrapPanel Orientation="Horizontal" />
-                                                        </ItemsPanelTemplate>
-                                                    </ItemsControl.ItemsPanel>
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock Text="{Binding .}"
-                                                                    HorizontalAlignment="Left" />
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ItemsControl>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="models:WindowPropertyAtomValue">
-                                                <ItemsControl ItemsSource="{Binding Atoms}">
-                                                    <ItemsControl.ItemsPanel>
-                                                        <ItemsPanelTemplate>
-                                                            <WrapPanel Orientation="Horizontal" />
-                                                        </ItemsPanelTemplate>
-                                                    </ItemsControl.ItemsPanel>
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock Text="{Binding .}"
-                                                                    HorizontalAlignment="Left" />
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ItemsControl>
-                                            </DataTemplate>
-                                            <DataTemplate DataType="models:WindowPropertyCardinalValue">
-                                                <ItemsControl ItemsSource="{Binding Value}">
-                                                    <ItemsControl.ItemsPanel>
-                                                        <ItemsPanelTemplate>
-                                                            <WrapPanel Orientation="Horizontal" />
-                                                        </ItemsPanelTemplate>
-                                                    </ItemsControl.ItemsPanel>
-                                                    <ItemsControl.ItemTemplate>
-                                                        <DataTemplate>
-                                                            <TextBlock Text="{Binding ., StringFormat='0x{0:X8}'}"
-                                                                    HorizontalAlignment="Left" />
-                                                        </DataTemplate>
-                                                    </ItemsControl.ItemTemplate>
-                                                </ItemsControl>
-                                            </DataTemplate>
-                                        </ContentControl.DataTemplates>
-                                    </ContentControl>
-                                </Grid>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
-                </StackPanel>
-            </DataTemplate>
-        </ItemsControl.ItemTemplate>
-    </ItemsControl>
+    <ScrollViewer>
+        <ItemsControl ItemsSource="{Binding WindowPropertyGroups}"
+                    Grid.IsSharedSizeScope="True">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Margin="32 -12 32 32" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock FontSize="16" FontWeight="Thin"
+                                   Margin="0 24 0 0"
+                                   Text="{Binding Key}" />
+                        <Separator Margin="-4 4" />
+                        <ItemsControl ItemsSource="{Binding .}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition MinWidth="50" Width="Auto"
+                                                    SharedSizeGroup="ValueNameWidth" />
+                                            <ColumnDefinition MinWidth="50" Width="Auto"
+                                                    SharedSizeGroup="ValueTypeWidth" />
+                                            <ColumnDefinition Width="8" />
+                                            <ColumnDefinition />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Grid.Column="0" FontFamily="{StaticResource MonoFontFamily}" Text="{Binding Name}" Margin="2 2 10 2" />
+                                        <TextBlock Grid.Column="1" Foreground="{DynamicResource SystemControlHighlightAccentBrush}" FontFamily="{StaticResource MonoFontFamily}" Text="{Binding Value.ValueType}" Margin="2 2 10 2" />
+                                        <Border Grid.Column="2" HorizontalAlignment="Left" Width="4" Margin="0 4" CornerRadius="2" Background="{DynamicResource SystemControlHighlightAccentBrush}" />
+                                        <ContentControl Grid.Column="3" Content="{Binding Value}">
+                                            <ContentControl.DataTemplates>
+                                                <DataTemplate DataType="models:WindowPropertyIconValue">
+                                                    <ItemsControl ItemsSource="{Binding Icons}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <WrapPanel Orientation="Horizontal" />
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <Image Source="{Binding .}" Stretch="Uniform"
+                                                                        Width="96" Height="96" Margin="2" />
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="models:WindowPropertyStringValue">
+                                                    <ItemsControl ItemsSource="{Binding Values}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <WrapPanel Orientation="Horizontal" />
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBox Text="{Binding .}" IsReadOnly="True" Margin="2"
+                                                                        HorizontalAlignment="Left" />
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="models:WindowPropertyAtomValue">
+                                                    <ItemsControl ItemsSource="{Binding Atoms}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <WrapPanel Orientation="Horizontal" />
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBox Text="{Binding .}" IsReadOnly="True" Margin="2"
+                                                                        HorizontalAlignment="Left" />
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </DataTemplate>
+                                                <DataTemplate DataType="models:WindowPropertyCardinalValue">
+                                                    <ItemsControl ItemsSource="{Binding Value}">
+                                                        <ItemsControl.ItemsPanel>
+                                                            <ItemsPanelTemplate>
+                                                                <WrapPanel Orientation="Horizontal" />
+                                                            </ItemsPanelTemplate>
+                                                        </ItemsControl.ItemsPanel>
+                                                        <ItemsControl.ItemTemplate>
+                                                            <DataTemplate>
+                                                                <TextBox Text="{Binding ., StringFormat='0x{0:X8}'}" IsReadOnly="True" Margin="2"
+                                                                        HorizontalAlignment="Left" />
+                                                            </DataTemplate>
+                                                        </ItemsControl.ItemTemplate>
+                                                    </ItemsControl>
+                                                </DataTemplate>
+                                            </ContentControl.DataTemplates>
+                                        </ContentControl>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </ScrollViewer>
+
 </UserControl>

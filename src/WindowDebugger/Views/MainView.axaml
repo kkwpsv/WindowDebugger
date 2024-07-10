@@ -12,6 +12,7 @@
 
     <UserControl.Resources>
         <vc:ProcessIdToProcessPathConverter x:Key="ProcessIdToProcessPathConverter" />
+        <vc:NativeTreeNodeToNativeWindowConverter x:Key="NativeTreeNodeToNativeWindowConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -184,31 +185,50 @@
                 </ScrollViewer>
                 <Separator Height="1" Margin="0 8 0 0" />
             </StackPanel>
-            <ListBox x:Name="WindowListBox" Grid.Row="1" Background="Transparent"
-                     ItemsSource="{Binding NativeWindows}"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     ScrollViewer.VerticalScrollBarVisibility="Auto">
-                <ListBox.ItemsPanel>
+            <TreeView x:Name="WindowListBox" Grid.Row="1" Background="Transparent"
+                      ItemsSource="{Binding NativeTree}"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto">
+                <TreeView.ItemsPanel>
                     <ItemsPanelTemplate>
                         <VirtualizingStackPanel Margin="0 4" />
                     </ItemsPanelTemplate>
-                </ListBox.ItemsPanel>
-                <ListBox.ItemTemplate>
-                    <DataTemplate x:DataType="nativeWindows:NativeWindowModel">
-                        <Grid ColumnDefinitions="Auto,*">
-                            <TextBlock Grid.Column="0"
-                                       FontSize="11" Foreground="#999999"
-                                       VerticalAlignment="Center" Margin="0 0 8 0"
-                                       FontFamily="{StaticResource MonoFontFamily}"
-                                       Text="{Binding Id, StringFormat=X8}" />
-                            <TextBlock Grid.Column="1"
-                                       FontSize="13" Foreground="#CCCCCC" VerticalAlignment="Center"
-                                       Text="{Binding Title}"
-                                       TextTrimming="CharacterEllipsis" />
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                </TreeView.ItemsPanel>
+                <TreeView.ItemTemplate>
+                    <TreeDataTemplate ItemsSource="{Binding Children}">
+                        <ContentControl Content="{Binding}">
+                            <ContentControl.DataTemplates>
+                                <DataTemplate x:DataType="nativeWindows:NativeProcessNode">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <TextBlock Grid.Column="0"
+                                                   FontSize="11" Foreground="#999999"
+                                                   VerticalAlignment="Center" Margin="0 0 8 0"
+                                                   FontFamily="{StaticResource MonoFontFamily}"
+                                                   Text="{Binding ProcessId, StringFormat=X8}" />
+                                        <TextBlock Grid.Column="1"
+                                                   FontSize="13" Foreground="#CCCCCC" VerticalAlignment="Center"
+                                                   Text="{Binding ProcessName}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </Grid>
+                                </DataTemplate>
+                                <DataTemplate x:DataType="nativeWindows:NativeWindowNode">
+                                    <Grid ColumnDefinitions="Auto,*">
+                                        <TextBlock Grid.Column="0"
+                                                   FontSize="11" Foreground="#999999"
+                                                   VerticalAlignment="Center" Margin="0 0 8 0"
+                                                   FontFamily="{StaticResource MonoFontFamily}"
+                                                   Text="{Binding Window.Id, StringFormat=X8}" />
+                                        <TextBlock Grid.Column="1"
+                                                   FontSize="13" Foreground="#CCCCCC" VerticalAlignment="Center"
+                                                   Text="{Binding Window.Title}"
+                                                   TextTrimming="CharacterEllipsis" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ContentControl.DataTemplates>
+                        </ContentControl>
+                    </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
             <StackPanel Grid.Row="2">
                 <Separator Height="1" Margin="0" />
                 <Button Background="Transparent" CornerRadius="0"
@@ -228,7 +248,7 @@
         <!-- Right Content -->
         <Grid Grid.Column="1"
               x:DataType="nativeWindows:NativeWindowModel"
-              DataContext="{Binding #WindowListBox.SelectedItem}"
+              DataContext="{Binding #WindowListBox.SelectedItem, Converter={StaticResource NativeTreeNodeToNativeWindowConverter}}"
               RowDefinitions="Auto,Auto,*">
             <Grid Grid.Row="0" RowDefinitions="32,16" ColumnDefinitions="48,*"
                   Margin="{OnPlatform 32 40 32 8, Linux=32 48 32 0}">

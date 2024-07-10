@@ -4,6 +4,7 @@ using Avalonia.Controls.Primitives;
 using Avalonia.Interactivity;
 using WindowDebugger.Localizations;
 using WindowDebugger.Native;
+using WindowDebugger.Services.NativeWindows;
 using WindowDebugger.Services.NativeWindows.Windows;
 using WindowDebugger.Views.Details;
 using WindowDebugger.Views.Details.Linux;
@@ -85,18 +86,18 @@ public partial class MainView : UserControl
         vm.ReloadWindows();
 
         var selfId = Environment.ProcessId;
-        var newSelection = vm.NativeWindows.FirstOrDefault(x => x.Id == oldSelection?.Id);
-        var defaultSelection = newSelection ?? vm.NativeWindows.FirstOrDefault(x => x.ProcessId == selfId);
+        var newSelection = vm.NativeTree.EnumerableAllWindows().FirstOrDefault(x => x.Window.Id == oldSelection?.Id);
+        var defaultSelection = newSelection ?? vm.NativeTree.EnumerableAllWindows().FirstOrDefault(x => x.Window.ProcessId == selfId);
         if (defaultSelection is not null)
         {
             if (newSelection is null)
             {
                 // 初次选择，或者此前已取消选择。
-                var index = vm.NativeWindows.IndexOf(defaultSelection);
+                var index = vm.NativeTree.IndexOf(defaultSelection);
                 await Task.Delay(0);
-                WindowListBox.ScrollIntoView(vm.NativeWindows[^1]);
+                WindowListBox.ScrollIntoView(vm.NativeTree[^1]);
                 await Task.Delay(0);
-                WindowListBox.ScrollIntoView(vm.NativeWindows[Math.Max(0, index - 1)]);
+                WindowListBox.ScrollIntoView(vm.NativeTree[Math.Max(0, index - 1)]);
                 await Task.Delay(0);
                 WindowListBox.SelectedItem = defaultSelection;
             }
@@ -104,8 +105,8 @@ public partial class MainView : UserControl
             {
                 // 曾经已选择，刷新后重新选择。
                 await Task.Delay(0);
-                var index = vm.NativeWindows.IndexOf(defaultSelection);
-                WindowListBox.ScrollIntoView(vm.NativeWindows[Math.Max(0, index)]);
+                var index = vm.NativeTree.IndexOf(defaultSelection);
+                WindowListBox.ScrollIntoView(vm.NativeTree[Math.Max(0, index)]);
                 WindowListBox.SelectedItem = defaultSelection;
             }
         }

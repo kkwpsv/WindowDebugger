@@ -1,6 +1,8 @@
 using Avalonia.Collections;
 using ReactiveUI;
 using WindowDebugger.Services.NativeWindows;
+using WindowDebugger.Services.NativeWindows.Linux;
+using WindowDebugger.Services.NativeWindows.Windows;
 using WindowDebugger.Utils;
 
 namespace WindowDebugger.Views;
@@ -19,7 +21,7 @@ public record MainViewModel : ReactiveRecord
         _nativeWindowCollectionManager = new();
     }
 
-    public AvaloniaList<NativeWindowModel> NativeWindows { get; } = [];
+    public AvaloniaList<NativeTreeNode> NativeTree { get; } = [];
 
     public string? SearchText
     {
@@ -61,7 +63,13 @@ public record MainViewModel : ReactiveRecord
             IncludingMessageOnlyWindow = IncludingMessageOnlyWindow,
         });
 
-        NativeWindows.Clear();
-        NativeWindows.AddRange(nativeWindows);
+        NativeTree.Clear();
+        NativeTree.AddRange(nativeWindows
+            .Select<NativeWindowModel, NativeWindowNode>(x => x switch
+            {
+                WindowsNativeWindowModel wm => new WindowsNativeWindowNode(wm) { ChildWindows = [] },
+                LinuxNativeWindowModel lm => new LinuxNativeWindowNode(lm) { ChildWindows = [] },
+                _ => throw new PlatformNotSupportedException(),
+            }));
     }
 }

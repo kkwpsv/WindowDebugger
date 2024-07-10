@@ -75,24 +75,24 @@ public record MainViewModel : ReactiveRecord
     {
         if (OperatingSystem.IsLinux())
         {
-            return nativeWindows.OfType<LinuxNativeWindowModel>().Select(x => new LinuxNativeWindowNode(x) { ChildWindows = [] });
-        }
-        else if (OperatingSystem.IsWindows())
-        {
-            var processWindowDictionary = new Dictionary<int, List<WindowsNativeWindowModel>>();
-            foreach (var window in nativeWindows.OfType<WindowsNativeWindowModel>())
-            {
-                if (!processWindowDictionary.TryGetValue(window.ProcessId, out var processWindows))
+            var processWindowDictionary = GroupByProcess<LinuxNativeWindowModel>(nativeWindows);
+            return processWindowDictionary
+                .Select(x => new NativeProcessNode(x.Key)
                 {
-                    processWindows = [];
-                    processWindowDictionary[window.ProcessId] = processWindows;
-                }
-                processWindows.Add(window);
-            }
-            foreach (var (pid, windows) in processWindowDictionary)
-            {
+                    ProcessName = TryGetProcessName(x.Key),
+                    Windows =
+                    [
+                        ..x.Value.Select<LinuxNativeWindowModel, NativeWindowNode>(w => new LinuxNativeWindowNode(w)
+                        {
+                            ChildWindows = [],
+                        }),
+                    ],
+                });
+        }
 
-            }
+        if (OperatingSystem.IsWindows())
+        {
+            var processWindowDictionary = GroupByProcess<WindowsNativeWindowModel>(nativeWindows);
             return processWindowDictionary
                 .Select(x => new NativeProcessNode(x.Key)
                 {
@@ -103,13 +103,27 @@ public record MainViewModel : ReactiveRecord
                         {
                             ChildWindows = [],
                         }),
-                    ]
+                    ],
                 });
         }
-        else
+
+        throw new PlatformNotSupportedException();
+    }
+
+    private static Dictionary<int, List<T>> GroupByProcess<T>(ImmutableArray<NativeWindowModel> nativeWindows)
+        where T : NativeWindowModel
+    {
+        var processWindowDictionary = new Dictionary<int, List<T>>();
+        foreach (var window in nativeWindows.OfType<T>())
         {
-            throw new PlatformNotSupportedException();
+            if (!processWindowDictionary.TryGetValue(window.ProcessId, out var processWindows))
+            {
+                processWindows = [];
+                processWindowDictionary[window.ProcessId] = processWindows;
+            }
+            processWindows.Add(window);
         }
+        return processWindowDictionary;
     }
 
     private static string? TryGetProcessName(int pid)

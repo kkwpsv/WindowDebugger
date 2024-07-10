@@ -217,41 +217,40 @@
                         <VirtualizingStackPanel Margin="4" />
                     </ItemsPanelTemplate>
                 </TreeView.ItemsPanel>
+                <TreeView.DataTemplates>
+                    <DataTemplate x:DataType="nativeWindows:NativeProcessNode">
+                        <Grid ColumnDefinitions="32,*,Auto">
+                            <Svg Grid.Column="0" Margin="6 0 0 0" Width="16" Height="16"
+                                 HorizontalAlignment="Left" VerticalAlignment="Center"
+                                 Path="/Assets/UI/file-document-svgrepo-com.svg" />
+                            <TextBlock Grid.Column="2"
+                                       FontSize="11" Foreground="#40FFFFFF"
+                                       VerticalAlignment="Center"
+                                       FontFamily="{StaticResource MonoFontFamily}"
+                                       Text="{Binding ProcessId}" />
+                            <TextBlock Grid.Column="1"
+                                       FontSize="13" Foreground="#40FFFFFF" VerticalAlignment="Center"
+                                       Text="{Binding ProcessName}"
+                                       TextTrimming="CharacterEllipsis" />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate x:DataType="nativeWindows:NativeWindowNode">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <TextBlock Grid.Column="0"
+                                       FontSize="11" Foreground="#999999"
+                                       VerticalAlignment="Center" Margin="0 0 8 0"
+                                       FontFamily="{StaticResource MonoFontFamily}"
+                                       Text="{Binding Window.Id, StringFormat=X8}" />
+                            <TextBlock Grid.Column="1"
+                                       FontSize="13" Foreground="#CCCCCC" VerticalAlignment="Center"
+                                       Text="{Binding Window.Title}"
+                                       TextTrimming="CharacterEllipsis" />
+                        </Grid>
+                    </DataTemplate>
+                </TreeView.DataTemplates>
                 <TreeView.ItemTemplate>
                     <TreeDataTemplate ItemsSource="{Binding Children}">
-                        <ContentControl Content="{Binding}">
-                            <ContentControl.DataTemplates>
-                                <DataTemplate x:DataType="nativeWindows:NativeProcessNode">
-                                    <Grid ColumnDefinitions="32,*,Auto">
-                                        <Svg Grid.Column="0" Margin="6 0 0 0" Width="16" Height="16"
-                                             HorizontalAlignment="Left" VerticalAlignment="Center"
-                                             Path="/Assets/UI/file-document-svgrepo-com.svg" />
-                                        <TextBlock Grid.Column="2"
-                                                   FontSize="11" Foreground="#40FFFFFF"
-                                                   VerticalAlignment="Center"
-                                                   FontFamily="{StaticResource MonoFontFamily}"
-                                                   Text="{Binding ProcessId}" />
-                                        <TextBlock Grid.Column="1"
-                                                   FontSize="13" Foreground="#40FFFFFF" VerticalAlignment="Center"
-                                                   Text="{Binding ProcessName}"
-                                                   TextTrimming="CharacterEllipsis" />
-                                    </Grid>
-                                </DataTemplate>
-                                <DataTemplate x:DataType="nativeWindows:NativeWindowNode">
-                                    <Grid ColumnDefinitions="Auto,*">
-                                        <TextBlock Grid.Column="0"
-                                                   FontSize="11" Foreground="#999999"
-                                                   VerticalAlignment="Center" Margin="0 0 8 0"
-                                                   FontFamily="{StaticResource MonoFontFamily}"
-                                                   Text="{Binding Window.Id, StringFormat=X8}" />
-                                        <TextBlock Grid.Column="1"
-                                                   FontSize="13" Foreground="#CCCCCC" VerticalAlignment="Center"
-                                                   Text="{Binding Window.Title}"
-                                                   TextTrimming="CharacterEllipsis" />
-                                    </Grid>
-                                </DataTemplate>
-                            </ContentControl.DataTemplates>
-                        </ContentControl>
+                        <ContentControl Content="{Binding}" />
                     </TreeDataTemplate>
                 </TreeView.ItemTemplate>
             </TreeView>

@@ -18,7 +18,7 @@ public record NativeProcessNode(int ProcessId) : NativeTreeNode
     public required ImmutableArray<NativeWindowNode> Windows { get; init; }
 }
 
-public record NativeWindowNode(NativeWindowModel Window) : NativeTreeNode
+public abstract record NativeWindowNode(NativeWindowModel Window) : NativeTreeNode
 {
     public override IReadOnlyList<NativeTreeNode> Children => ChildWindows;
 

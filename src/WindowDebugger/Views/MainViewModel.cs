@@ -1,3 +1,5 @@
+using System.Collections.Immutable;
+using System.Diagnostics;
 using Avalonia.Collections;
 using ReactiveUI;
 using WindowDebugger.Services.NativeWindows;
@@ -63,13 +65,62 @@ public record MainViewModel : ReactiveRecord
             IncludingMessageOnlyWindow = IncludingMessageOnlyWindow,
         });
 
+        var tree = BuildTree(nativeWindows);
+
         NativeTree.Clear();
-        NativeTree.AddRange(nativeWindows
-            .Select<NativeWindowModel, NativeWindowNode>(x => x switch
+        NativeTree.AddRange(tree);
+    }
+
+    private IEnumerable<NativeTreeNode> BuildTree(ImmutableArray<NativeWindowModel> nativeWindows)
+    {
+        if (OperatingSystem.IsLinux())
+        {
+            return nativeWindows.OfType<LinuxNativeWindowModel>().Select(x => new LinuxNativeWindowNode(x) { ChildWindows = [] });
+        }
+        else if (OperatingSystem.IsWindows())
+        {
+            var processWindowDictionary = new Dictionary<int, List<WindowsNativeWindowModel>>();
+            foreach (var window in nativeWindows.OfType<WindowsNativeWindowModel>())
             {
-                WindowsNativeWindowModel wm => new WindowsNativeWindowNode(wm) { ChildWindows = [] },
-                LinuxNativeWindowModel lm => new LinuxNativeWindowNode(lm) { ChildWindows = [] },
-                _ => throw new PlatformNotSupportedException(),
-            }));
+                if (!processWindowDictionary.TryGetValue(window.ProcessId, out var processWindows))
+                {
+                    processWindows = [];
+                    processWindowDictionary[window.ProcessId] = processWindows;
+                }
+                processWindows.Add(window);
+            }
+            foreach (var (pid, windows) in processWindowDictionary)
+            {
+
+            }
+            return processWindowDictionary
+                .Select(x => new NativeProcessNode(x.Key)
+                {
+                    ProcessName = TryGetProcessName(x.Key),
+                    Windows =
+                    [
+                        ..x.Value.Select<WindowsNativeWindowModel, NativeWindowNode>(w => new WindowsNativeWindowNode(w)
+                        {
+                            ChildWindows = [],
+                        }),
+                    ]
+                });
+        }
+        else
+        {
+            throw new PlatformNotSupportedException();
+        }
+    }
+
+    private static string? TryGetProcessName(int pid)
+    {
+        try
+        {
+            return Process.GetProcessById(pid).ProcessName;
+        }
+        catch
+        {
+            return null;
+        }
     }
 }

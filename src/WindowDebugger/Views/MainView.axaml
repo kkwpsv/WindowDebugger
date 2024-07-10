@@ -42,11 +42,11 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
         <Style Selector="TreeViewItem">
-            <Style Selector="^ /template/ Border#PART_SelectedPipe">
-                <Setter Property="Margin" Value="4 10 0 10" />
-            </Style>
             <Style Selector="^ /template/ Grid#PART_Header">
                 <Setter Property="Margin" Value="-20 0 0 0" />
+            </Style>
+            <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
+                <Setter Property="Margin" Value="4 0 0 0" />
             </Style>
             <Style Selector="^[Level=0]">
                 <Setter Property="IsExpanded" Value="True" />
@@ -55,6 +55,9 @@
                 </Style>
                 <Style Selector="^ /template/ Grid#PART_Header">
                     <Setter Property="Margin" Value="0" />
+                </Style>
+                <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
+                    <Setter Property="IsVisible" Value="False" />
                 </Style>
                 <Style Selector="^ /template/ Panel#PART_ExpandCollapseChevronContainer">
                     <Setter Property="IsVisible" Value="False" />
@@ -225,7 +228,7 @@
                                              Path="/Assets/UI/file-document-svgrepo-com.svg" />
                                         <TextBlock Grid.Column="2"
                                                    FontSize="11" Foreground="#40FFFFFF"
-                                                   VerticalAlignment="Center" Margin="0 0 8 0"
+                                                   VerticalAlignment="Center"
                                                    FontFamily="{StaticResource MonoFontFamily}"
                                                    Text="{Binding ProcessId}" />
                                         <TextBlock Grid.Column="1"

@@ -8,6 +8,7 @@
 
             <ResourceDictionary.MergedDictionaries>
                 <ResourceInclude Source="Themes/ListBoxItem.axaml" />
+                <ResourceInclude Source="Themes/TreeViewItem.axaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <x:Double x:Key="ComboBoxThemeMinWidth">0</x:Double>

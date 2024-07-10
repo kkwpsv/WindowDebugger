@@ -1,4 +1,4 @@
-<ResourceDictionary xmlns="https://github.com/avaloniaui"
+﻿<ResourceDictionary xmlns="https://github.com/avaloniaui"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
     <Design.PreviewWith>
@@ -23,81 +23,6 @@
                                   Content="{TemplateBinding Content}" />
             </ControlTemplate>
         </Setter>
-    </ControlTheme>
-
-    <ControlTheme x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
-        <Setter Property="Margin" Value="8 2" />
-        <Setter Property="CornerRadius" Value="6" />
-        <Setter Property="Background" Value="Transparent" />
-        <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        <Setter Property="VerticalContentAlignment" Value="Stretch" />
-        <Setter Property="Padding" Value="{DynamicResource ListBoxItemPadding}" />
-        <Setter Property="Template">
-            <ControlTemplate TargetType="ListBoxItem">
-                <Grid>
-                    <ContentPresenter Name="PART_ContentPresenter"
-                                      Background="{TemplateBinding Background}"
-                                      BorderBrush="{TemplateBinding BorderBrush}"
-                                      BorderThickness="{TemplateBinding BorderThickness}"
-                                      CornerRadius="{TemplateBinding CornerRadius}"
-                                      ContentTemplate="{TemplateBinding ContentTemplate}"
-                                      Content="{TemplateBinding Content}"
-                                      Padding="{TemplateBinding Padding}"
-                                      VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
-                                      HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}" />
-                    <Border Name="PART_SelectedPipe"
-                            Width="4" Margin="0 10" MaxHeight="32" CornerRadius="4"
-                            HorizontalAlignment="Left"
-                            Background="Transparent" />
-                </Grid>
-            </ControlTemplate>
-        </Setter>
-
-        <Style Selector="^:disabled /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Foreground" Value="{DynamicResource SystemControlDisabledBaseMediumLowBrush}" />
-        </Style>
-
-        <!--  PointerOver State  -->
-        <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource ButtonBackgroundPointerOver}" />
-            <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
-        </Style>
-
-        <!--  Pressed State  -->
-        <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
-            <Setter Property="Background" Value="{DynamicResource ButtonBackgroundPressed}" />
-            <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
-        </Style>
-
-        <!--  Selected State  -->
-        <Style Selector="^:selected">
-
-            <Style Selector="^ /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}" />
-                <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
-            </Style>
-            <Style Selector="^ /template/ Border#PART_SelectedPipe">
-                <Setter Property="Background" Value="{DynamicResource SystemControlHighlightAccentBrush}" />
-            </Style>
-
-            <!--  Selected Unfocused State  -->
-            <Style Selector="^:not(:focus) /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Background" Value="{DynamicResource SystemControlHighlightListLowBrush}" />
-                <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
-            </Style>
-
-            <!--  Selected PointerOver State  -->
-            <Style Selector="^:pointerover /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Background" Value="{DynamicResource ButtonBackgroundPointerOver}" />
-                <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
-            </Style>
-
-            <!--  Selected Pressed State  -->
-            <Style Selector="^:pressed /template/ ContentPresenter#PART_ContentPresenter">
-                <Setter Property="Background" Value="{DynamicResource ButtonBackgroundPressed}" />
-                <Setter Property="Foreground" Value="{DynamicResource SystemControlHighlightAltBaseHighBrush}" />
-            </Style>
-        </Style>
     </ControlTheme>
 
 </ResourceDictionary>

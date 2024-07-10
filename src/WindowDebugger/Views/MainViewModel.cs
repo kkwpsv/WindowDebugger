@@ -80,13 +80,7 @@ public record MainViewModel : ReactiveRecord
                 .Select(x => new NativeProcessNode(x.Key)
                 {
                     ProcessName = TryGetProcessName(x.Key),
-                    Windows =
-                    [
-                        ..x.Value.Select<LinuxNativeWindowModel, NativeWindowNode>(w => new LinuxNativeWindowNode(w)
-                        {
-                            ChildWindows = [],
-                        }),
-                    ],
+                    Windows = [..x.Value.Select(ConvertModelToNode)],
                 });
         }
 
@@ -108,6 +102,14 @@ public record MainViewModel : ReactiveRecord
         }
 
         throw new PlatformNotSupportedException();
+    }
+
+    private static NativeWindowNode ConvertModelToNode(LinuxNativeWindowModel model)
+    {
+        return new LinuxNativeWindowNode(model)
+        {
+            ChildWindows = [..model.GetChildren().Select(ConvertModelToNode)],
+        };
     }
 
     private static Dictionary<int, List<T>> GroupByProcess<T>(ImmutableArray<NativeWindowModel> nativeWindows)

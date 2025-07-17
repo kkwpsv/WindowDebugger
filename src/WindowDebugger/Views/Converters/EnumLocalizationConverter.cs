@@ -1,6 +1,5 @@
 using System.Globalization;
 using Avalonia.Data.Converters;
-using dotnetCampus.Localizations;
 using Lsj.Util.Win32.Enums;
 using WindowDebugger.Localizations;
 
@@ -13,7 +12,7 @@ public abstract class EnumLocalizationConverter<T> : IValueConverter
     {
         if (value is T enumValue)
         {
-            return Lang.Current.Get0($"Dynamic.EnumValues.{typeof(T).Name}.{enumValue}").ToString();
+            return Lang.Current[$"Dynamic.EnumValues.{typeof(T).Name}.{enumValue}"];
         }
 
         return null;

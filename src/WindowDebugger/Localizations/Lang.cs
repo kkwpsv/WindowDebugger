@@ -2,5 +2,5 @@
 
 namespace WindowDebugger.Localizations;
 
-[LocalizedConfiguration(Default = "en", Current = "zh-hans")]
+[LocalizedConfiguration(Default = "en")]
 public partial class Lang;

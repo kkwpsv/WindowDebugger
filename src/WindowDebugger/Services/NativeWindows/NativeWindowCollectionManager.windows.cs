@@ -1,7 +1,7 @@
 using System.Runtime.Versioning;
 using Lsj.Util.Win32;
 using Lsj.Util.Win32.BaseTypes;
-using Lsj.Util.Win32.Extensions;
+using Lsj.Util.Win32.Extensions.NativeUI;
 using Lsj.Util.Win32.NativeUI;
 using WindowDebugger.Services.NativeWindows.Windows;
 

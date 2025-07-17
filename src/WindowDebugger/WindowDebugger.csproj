@@ -12,23 +12,18 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.1.0-rc2" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.1.0-rc2" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.1.0-rc2" Condition="'$(Configuration)' == 'Debug'" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.1.0-rc2" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.1.0-rc2" />
-    <PackageReference Include="Avalonia.Svg" Version="11.1.0-rc1" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.1.0-rc2" />
-    <PackageReference Include="dotnetCampus.Logger" Version="1.1.0-alpha04" />
-    <PackageReference Include="dotnetCampus.SourceLocalizations" Version="0.1.0-alpha04" />
-    <PackageReference Include="Lsj.Util.Win32" Version="6.2.3" />
-    <PackageReference Include="Lsj.Util.Win32.NativeUI" Version="6.1.0" />
+    <PackageReference Include="Avalonia" Version="11.3.2" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.2" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.2" Condition="'$(Configuration)' == 'Debug'" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.2" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.2" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.2" />
+    <PackageReference Include="dotnetCampus.Logger" Version="1.3.0-alpha02" />
+    <PackageReference Include="dotnetCampus.SourceLocalizations" Version="0.1.0-alpha20" />
+    <PackageReference Include="Lsj.Util.Win32" Version="8.0.0" />
+    <PackageReference Include="Lsj.Util.Win32.NativeUI" Version="8.0.0" />
     <PackageReference Include="SeWzc.X11Sharp" Version="0.1.0-alpha17" />
-    <PackageReference Include="Svg.Skia" Version="2.0.0-rc1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <LocalizationFile Include="Localizations\**\*.toml" />
+    <PackageReference Include="Svg.Controls.Skia.Avalonia" Version="11.3.0.2-beta.1" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,29 +32,6 @@
     <AvaloniaResource Include="Assets\UI\**\*.svg" />
     <AvaloniaResource Include="Assets\UI\**\*.png" />
     <AvaloniaResource Include="Assets\Fonts\**\*.ttf" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Assets\Fonts\" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Compile Update="Views\Details\Windows\WindowClassStylesPage.axaml.cs">
-      <DependentUpon>WindowClassStylesPage.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Details\Windows\WindowsInfoPage.axaml.cs">
-      <DependentUpon>WindowsInfoPage.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Details\Windows\WindowsStylesPage.axaml.cs">
-      <DependentUpon>WindowsStylesPage.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Update="Views\Details\Windows\WindowStyleExesPage.axaml.cs">
-      <DependentUpon>WindowStyleExesPage.axaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,12 @@
 ﻿using Lsj.Util.Text;
 using Lsj.Util.Win32;
 using Lsj.Util.Win32.BaseTypes;
-using Lsj.Util.Win32.Extensions;
 using Lsj.Util.Win32.NativeUI;
 using Lsj.Util.WPF;
 using System;
 using System.Collections.ObjectModel;
 using System.Globalization;
+using Lsj.Util.Win32.Extensions.NativeUI;
 
 namespace WindowDebugger.ViewModels
 {

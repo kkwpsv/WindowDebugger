@@ -16,7 +16,7 @@
     <ScrollViewer Margin="0 40 0 0">
         <StackPanel Margin="32" MaxWidth="1000" HorizontalAlignment="Stretch">
 
-            <TextBlock Classes="Title" Text="关于" />
+            <TextBlock Classes="Title" Text="{Binding App.UI.AboutButton, Source={x:Static l:Lang.Current}}" />
             <TextBlock Margin="0 0 0 8" Foreground="#CCCCCC" LineHeight="24">
                 <Run Text="{Binding Product.LocalizedName, Source={x:Static l:Lang.Current}}" />
                 <Run x:Name="VersionRun" d:Text="1.0.0" />

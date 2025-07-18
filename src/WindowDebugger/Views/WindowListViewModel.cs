@@ -142,7 +142,7 @@ public class WindowListViewModel : ReactiveObject
         {
             NativeWindowSorting.AscendingById => Lang.Current.App.UI.Filter.SortByIdSlim,
             NativeWindowSorting.AscendingByTitle => Lang.Current.App.UI.Filter.SortByTitleSlim,
-            _ => Lang.Current.App.UI.Filter.SortByRaw,
+            _ => Lang.Current.App.UI.Filter.SortByRawSlim,
         };
     }
 #pragma warning restore CS8774 // 退出时，成员必须具有非 null 值。

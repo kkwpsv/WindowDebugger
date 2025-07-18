@@ -13,6 +13,8 @@
     <UserControl.Resources>
         <vc:ProcessIdToProcessPathConverter x:Key="ProcessIdToProcessPathConverter" />
         <vc:NativeTreeNodeToNativeWindowConverter x:Key="NativeTreeNodeToNativeWindowConverter" />
+        <vc:WindowGroupingToBooleanConverter x:Key="WindowGroupingToBooleanConverter" />
+        <vc:WindowSortingToBooleanConverter x:Key="WindowSortingToBooleanConverter" />
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -169,10 +171,14 @@
                                     <StackPanel>
                                         <TextBlock Classes="FlyoutTitle" Text="{Binding App.UI.Filter.GroupTitle, Source={x:Static l:Lang.Current}}" />
                                         <Separator Margin="-12 12" />
-                                        <RadioButton Content="{Binding App.UI.Filter.GroupByProcessTopLevelChild, Source={x:Static l:Lang.Current}}" IsChecked="True" />
-                                        <RadioButton Content="{Binding App.UI.Filter.GroupByTopLevelChild, Source={x:Static l:Lang.Current}}" />
-                                        <RadioButton Content="{Binding App.UI.Filter.GroupByProcessWindow, Source={x:Static l:Lang.Current}}" />
-                                        <RadioButton Content="{Binding App.UI.Filter.NoGroup, Source={x:Static l:Lang.Current}}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.GroupByProcessThenWindowTree, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowGrouping, Converter={StaticResource WindowGroupingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowGrouping.ProcessThenWindowTree}, Mode=TwoWay}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.GroupByWindowTree, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowGrouping, Converter={StaticResource WindowGroupingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowGrouping.WindowTree}, Mode=TwoWay}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.GroupByProcessThenWindow, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowGrouping, Converter={StaticResource WindowGroupingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowGrouping.ProcessThenWindow}, Mode=TwoWay}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.GroupByPlainList, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowGrouping, Converter={StaticResource WindowGroupingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowGrouping.PlainList}, Mode=TwoWay}" />
                                     </StackPanel>
                                 </Flyout>
                             </DropDownButton.Flyout>
@@ -197,9 +203,12 @@
                                     <StackPanel>
                                         <TextBlock Classes="FlyoutTitle" Text="{Binding App.UI.Filter.SortTitle, Source={x:Static l:Lang.Current}}" />
                                         <Separator Margin="-12 12" />
-                                        <RadioButton Content="{Binding App.UI.Filter.NoSort, Source={x:Static l:Lang.Current}}" IsChecked="True" />
-                                        <RadioButton Content="{Binding App.UI.Filter.SortByHwnd, Source={x:Static l:Lang.Current}}" />
-                                        <RadioButton Content="{Binding App.UI.Filter.SortByTitle, Source={x:Static l:Lang.Current}}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.SortByRaw, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowSorting, Converter={StaticResource WindowSortingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowSorting.Raw}, Mode=TwoWay}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.SortById, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowSorting, Converter={StaticResource WindowSortingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowSorting.AscendingById}, Mode=TwoWay}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.SortByTitle, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowSorting, Converter={StaticResource WindowSortingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowSorting.AscendingByTitle}, Mode=TwoWay}" />
                                     </StackPanel>
                                 </Flyout>
                             </DropDownButton.Flyout>

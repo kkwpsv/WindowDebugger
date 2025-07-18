@@ -5,6 +5,7 @@ using WindowDebugger.Services.NativeWindows;
 using WindowDebugger.Services.NativeWindows.Linux;
 using WindowDebugger.Services.NativeWindows.Windows;
 using WindowDebugger.Utils;
+using WindowDebugger.Views.Converters;
 
 namespace WindowDebugger.Views;
 
@@ -17,6 +18,8 @@ public record WindowListViewModel : ReactiveRecord
     private bool _includingEmptyTitleWindow;
     private bool _includingChildWindow;
     private bool _includingMessageOnlyWindow;
+    private WindowGrouping _windowGrouping = Services.NativeWindows.WindowGrouping.PlainList;
+    private WindowSorting _windowSorting = Services.NativeWindows.WindowSorting.AscendingById;
 
     public WindowListViewModel(MainViewModel owner)
     {
@@ -54,14 +57,44 @@ public record WindowListViewModel : ReactiveRecord
         set => this.RaiseAndSetWithAction(ref _includingMessageOnlyWindow, value, _owner.ReloadWindows);
     }
 
+    public WindowGrouping? WindowGrouping
+    {
+        get => _windowGrouping;
+        set
+        {
+            if (this.SetCheckedField(ref _windowGrouping, value, out var changedValue))
+            {
+                _owner.ReloadWindows();
+            }
+        }
+    }
+
+    public WindowSorting? WindowSorting
+    {
+        get => _windowSorting;
+        set
+        {
+            if (this.SetCheckedField(ref _windowSorting, value, out var changedValue))
+            {
+                _owner.ReloadWindows();
+            }
+        }
+    }
+
     public IEnumerable<NativeTreeNode> ReloadWindows()
     {
-        var nativeWindows = _nativeWindowCollectionManager.FindWindows(new WindowSearchingFilter(SearchText)
+        var filter = GetSearchingFilter();
+        var nativeWindows = _nativeWindowCollectionManager.FindWindows(filter);
+        return BuildTree(nativeWindows);
+    }
+
+    public WindowSearchingFilter GetSearchingFilter()
+    {
+        return new WindowSearchingFilter(SearchText)
         {
             Including = GetWindowIncluding(),
-        });
-
-        return BuildTree(nativeWindows);
+            Grouping = _windowGrouping,
+        };
     }
 
     public WindowIncluding GetWindowIncluding()

@@ -64,7 +64,7 @@ public partial class MainView : UserControl
 
     private void ReloadButton_Click(object? sender, RoutedEventArgs e)
     {
-        var oldSelection = WindowListBox.SelectedItem as WindowsNativeWindowModel;
+        var oldSelection = WindowListBox.SelectedItem;
         WindowListBox.SelectedItem = null;
         WindowListBox.SelectedItem = oldSelection;
     }

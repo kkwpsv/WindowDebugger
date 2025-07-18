@@ -213,13 +213,13 @@ public class WindowListViewModel : ReactiveObject
                             ProcessName = TryGetProcessName(x.Key),
                             Windows =
                             [
-                                ..x.Value.Select(w => new WindowsNativeWindowNode(w)
+                                ..x.Value.OrderBy(_windowSorting).Select(w => new WindowsNativeWindowNode(w)
                                 {
                                     ChildWindows = [],
                                 }),
                             ],
                         })
-                    : nativeWindows.OfType<WindowsNativeWindowModel>().Select(w => new WindowsNativeWindowNode(w)
+                    : nativeWindows.OfType<WindowsNativeWindowModel>().OrderBy(_windowSorting).Select(w => new WindowsNativeWindowNode(w)
                     {
                         ChildWindows = [],
                     });
@@ -229,11 +229,11 @@ public class WindowListViewModel : ReactiveObject
         throw new PlatformNotSupportedException();
     }
 
-    private static NativeWindowNode ConvertModelToNode(LinuxNativeWindowModel model)
+    private NativeWindowNode ConvertModelToNode(LinuxNativeWindowModel model)
     {
         return new LinuxNativeWindowNode(model)
         {
-            ChildWindows = [..model.GetChildren().Select(ConvertModelToNode)],
+            ChildWindows = [..model.GetChildren().OrderBy(_windowSorting).Select(ConvertModelToNode)],
         };
     }
 
@@ -263,5 +263,23 @@ public class WindowListViewModel : ReactiveObject
         {
             return null;
         }
+    }
+}
+
+file static class Extensions
+{
+    public static IEnumerable<T> OrderBy<T>(this IEnumerable<T> source, NativeWindowSorting sorting)
+        where T : NativeWindowModel
+    {
+        if (sorting is WindowSorting.Raw)
+        {
+            return source;
+        }
+        return sorting switch
+        {
+            NativeWindowSorting.AscendingById => source.OrderBy(w => w.Id),
+            NativeWindowSorting.AscendingByTitle => source.OrderBy(w => w.Title, StringComparer.OrdinalIgnoreCase),
+            _ => throw new ArgumentOutOfRangeException(nameof(sorting), sorting, null),
+        };
     }
 }

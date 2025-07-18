@@ -143,7 +143,7 @@
                 </Grid>
                 <TextBox Margin="8"
                          Watermark="{Binding App.UI.SearchWatermark, Source={x:Static l:Lang.Current}}"
-                         Text="{Binding SearchText, Mode=TwoWay}" />
+                         Text="{Binding WindowList.SearchText, Mode=TwoWay}" />
                 <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
                     <StackPanel Margin="8 0" Orientation="Horizontal">
                         <DropDownButton Content="{Binding App.UI.Filter.DefaultFilter, Source={x:Static l:Lang.Current}}">
@@ -152,10 +152,10 @@
                                     <StackPanel>
                                         <TextBlock Classes="FlyoutTitle" Text="{Binding App.UI.Filter.FilterTitle, Source={x:Static l:Lang.Current}}" />
                                         <Separator Margin="-12 12" />
-                                        <CheckBox Content="{Binding App.UI.Filter.IncludingInvisibleWindow, Source={x:Static l:Lang.Current}}" IsChecked="{Binding IncludingInvisibleWindow}" />
-                                        <CheckBox Content="{Binding App.UI.Filter.IncludingEmptyTitleWindow, Source={x:Static l:Lang.Current}}" IsChecked="{Binding IncludingEmptyTitleWindow}" />
-                                        <CheckBox Content="{Binding App.UI.Filter.IncludingChildWindow, Source={x:Static l:Lang.Current}}" IsChecked="{Binding IncludingChildWindow}" />
-                                        <CheckBox Content="{Binding App.UI.Filter.IncludingMessageOnlyWindow, Source={x:Static l:Lang.Current}}" IsChecked="{Binding IncludingMessageOnlyWindow}" />
+                                        <CheckBox Content="{Binding App.UI.Filter.IncludingInvisibleWindow, Source={x:Static l:Lang.Current}}" IsChecked="{Binding WindowList.IncludingInvisibleWindow}" />
+                                        <CheckBox Content="{Binding App.UI.Filter.IncludingEmptyTitleWindow, Source={x:Static l:Lang.Current}}" IsChecked="{Binding WindowList.IncludingEmptyTitleWindow}" />
+                                        <CheckBox Content="{Binding App.UI.Filter.IncludingChildWindow, Source={x:Static l:Lang.Current}}" IsChecked="{Binding WindowList.IncludingChildWindow}" />
+                                        <CheckBox Content="{Binding App.UI.Filter.IncludingMessageOnlyWindow, Source={x:Static l:Lang.Current}}" IsChecked="{Binding WindowList.IncludingMessageOnlyWindow}" />
                                         <Separator Margin="-12 12" />
                                         <TextBlock Classes="FlyoutDescription" TextWrapping="WrapWithOverflow" MaxWidth="240"
                                                    Text="{Binding App.UI.Filter.FilterDescription, Source={x:Static l:Lang.Current}}" />

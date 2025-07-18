@@ -70,7 +70,7 @@ public partial class WindowsInfoPage : UserControl
 
     private void OnDataContextChanged(object? sender, EventArgs e)
     {
-        if (_oldWindow is {} oldWindow)
+        if (_oldWindow is { } oldWindow)
         {
             oldWindow.PropertyChanged -= OnWindowPropertyChanged;
         }
@@ -78,6 +78,7 @@ public partial class WindowsInfoPage : UserControl
         {
             newWindow.PropertyChanged += OnWindowPropertyChanged;
             _oldWindow = newWindow;
+            newWindow.RefreshScreenShot();
         }
         else
         {

@@ -1,10 +1,14 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Avalonia;
 using Avalonia.Media.Imaging;
+using Avalonia.Platform;
 using Lsj.Util.Win32;
 using Lsj.Util.Win32.BaseTypes;
 using Lsj.Util.Win32.Enums;
 using Lsj.Util.Win32.Extensions;
+using Lsj.Util.Win32.Extensions.NativeUI;
 using Lsj.Util.Win32.NativeUI;
 using Lsj.Util.Win32.Structs;
 using ReactiveUI;
@@ -25,7 +29,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
 {
     private readonly Win32Window _window;
     private string? _errorString;
-    private Bitmap? _screenshot;
+    private WriteableBitmap? _screenshot;
 
     public WindowsNativeWindowModel(HWND hwnd) : base(hwnd)
     {
@@ -164,7 +168,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
     }
 
 
-    public Bitmap? Screenshot
+    public WriteableBitmap? Screenshot
     {
         get => _screenshot;
         set => this.RaiseAndSetIfChanged(ref _screenshot, value);
@@ -300,20 +304,19 @@ public record WindowsNativeWindowModel : NativeWindowModel
 
     public void RefreshScreenShot()
     {
-        // try
-        // {
-        //     var screenShot = GetWindowScreenshot(WindowHandle);
-        //     if (screenShot != NULL)
-        //     {
-        //         var imageSource = Imaging.CreateBitmapSourceFromHBitmap(screenShot, nint.Zero, Int32Rect.Empty, BitmapSizeOptions.FromEmptyOptions());
-        //         SetField(ref _screenshot, imageSource, propertyName: nameof(Screenshot));
-        //         DeleteObject(screenShot);
-        //     }
-        // }
-        // catch
-        // {
-        //
-        // }
+        try
+        {
+            var screenShot = WindowExtensions.GetWindowScreenshot(WindowHandle);
+            if (screenShot != NULL)
+            {
+                var image = screenShot.HBitmapToAvaloniaImage();
+                Screenshot = image;
+                Gdi32.DeleteObject(screenShot);
+            }
+        }
+        catch
+        {
+        }
     }
 
     public override string ToString() => $"0x{WindowHandle:X8}{(!string.IsNullOrEmpty(Text) ? $"({Text})" : "")}";
@@ -351,6 +354,81 @@ public record WindowsNativeWindowModel : NativeWindowModel
         catch
         {
             return default;
+        }
+    }
+}
+
+file static class ThumbnailExtensions
+{
+    public static WriteableBitmap HBitmapToAvaloniaImage(this HBITMAP hBitmap)
+    {
+        // 获取 BITMAP 信息
+        var bmp = ToBitmap(hBitmap);
+
+        // 设置 BITMAPINFO
+        var bmi = new BITMAPINFO();
+        bmi.bmiHeader.biSize = (uint)Marshal.SizeOf(typeof(BITMAPINFOHEADER));
+        bmi.bmiHeader.biWidth = bmp.bmWidth;
+        bmi.bmiHeader.biHeight = -bmp.bmHeight; // top-down
+        bmi.bmiHeader.biPlanes = 1;
+        bmi.bmiHeader.biBitCount = 32;
+        bmi.bmiHeader.biCompression = Compression.BI_RGB;
+
+        int width = bmp.bmWidth;
+        int height = bmp.bmHeight;
+        int stride = width * 4;
+        byte[] pixels = new byte[stride * height];
+
+        // 获取屏幕 DC
+        var hdc = User32.GetDC(Constants.NULL);
+        try
+        {
+            unsafe
+            {
+                fixed (byte* pPixels = pixels)
+                {
+                    Gdi32.GetDIBits(hdc, hBitmap, 0u, (uint)height, (IntPtr)pPixels, in bmi, (uint)DIBColorTableIdentifiers.DIB_RGB_COLORS);
+                }
+            }
+        }
+        finally
+        {
+            User32.ReleaseDC(Constants.NULL, hdc);
+        }
+
+        // 创建 WriteableBitmap 并写入像素
+        var wbmp = new WriteableBitmap(new PixelSize(width, height), new Vector(96, 96), PixelFormat.Bgra8888);
+        using (var fb = wbmp.Lock())
+        {
+            Marshal.Copy(pixels, 0, fb.Address, pixels.Length);
+        }
+
+        // 释放 HBITMAP
+        Gdi32.DeleteObject(hBitmap);
+
+        return wbmp;
+    }
+
+    private static BITMAP ToBitmap(this HBITMAP hBitmap)
+    {
+        var bmpSize = Marshal.SizeOf(typeof(BITMAP));
+        var bitmapPtr = Marshal.AllocHGlobal(bmpSize);
+        try
+        {
+            var result = Gdi32.GetObject(hBitmap, bmpSize, bitmapPtr);
+            if (result is not 0)
+            {
+                var bmp = Marshal.PtrToStructure<BITMAP>(bitmapPtr);
+                return bmp;
+            }
+            else
+            {
+                throw new Win32Exception(result);
+            }
+        }
+        finally
+        {
+            Marshal.FreeHGlobal(bitmapPtr);
         }
     }
 }

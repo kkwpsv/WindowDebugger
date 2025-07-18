@@ -2,9 +2,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:converters="clr-namespace:WindowDebugger.Views.Converters"
-             xmlns:l="clr-namespace:WindowDebugger.Localizations"
-             xmlns:enums="clr-namespace:Lsj.Util.Win32.Enums;assembly=Lsj.Util.Win32"
+             xmlns:converters="using:WindowDebugger.Views.Converters"
+             xmlns:l="using:WindowDebugger.Localizations"
+             xmlns:enums="using:Lsj.Util.Win32.Enums"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="WindowDebugger.Views.Details.Windows.WindowStyleExesPage"
              x:Name="WindowStyleExesPageInstance">

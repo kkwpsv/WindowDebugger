@@ -277,7 +277,8 @@ file static class Extensions
         };
     }
 
-    public static IEnumerable<WindowsNativeWindowNode> NestBy(this IEnumerable<WindowsNativeWindowModel> source, WindowGrouping grouping, WindowSorting sorting)
+    public static IEnumerable<WindowsNativeWindowNode> NestBy(this IEnumerable<WindowsNativeWindowModel> source,
+        NativeWindowGrouping grouping, NativeWindowSorting sorting)
     {
         var isNested = grouping is NativeWindowGrouping.WindowTree or NativeWindowGrouping.ProcessThenWindowTree;
         if (!isNested)
@@ -288,8 +289,10 @@ file static class Extensions
             });
         }
 
+        var sourceList = (source as IReadOnlyList<WindowsNativeWindowModel>) ?? source.ToList();
+
         var hwndMap = new Dictionary<nint, List<WindowsNativeWindowModel>>();
-        foreach (var model in source)
+        foreach (var model in sourceList)
         {
             if (hwndMap.TryGetValue(model.ParentWindowHandle, out var existedList))
             {
@@ -302,11 +305,27 @@ file static class Extensions
             }
         }
 
-        var list = new List<WindowsNativeWindowNode>();
-        // TODO 尚未完成，以下为临时代码：
-        return source.OrderBy(sorting).Select(w => new WindowsNativeWindowNode(w)
+        var allHandles = sourceList.Select(w => w.Id).ToHashSet();
+        var roots = sourceList.Where(w => !allHandles.Contains(w.ParentWindowHandle));
+
+        return roots.OrderBy(sorting).Select(w => new WindowsNativeWindowNode(w)
         {
-            ChildWindows = [],
+            ChildWindows = [..BuildTree(w.Id)],
         });
+
+        IEnumerable<WindowsNativeWindowNode> BuildTree(nint parent)
+        {
+            if (!hwndMap.TryGetValue(parent, out var children))
+            {
+                yield break;
+            }
+            foreach (var child in children.OrderBy(sorting))
+            {
+                yield return new WindowsNativeWindowNode(child)
+                {
+                    ChildWindows = [..BuildTree(child.Id)],
+                };
+            }
+        }
     }
 }

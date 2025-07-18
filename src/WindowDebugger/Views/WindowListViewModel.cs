@@ -1,6 +1,8 @@
 ﻿using System.Collections.Immutable;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using ReactiveUI;
+using WindowDebugger.Localizations;
 using WindowDebugger.Services.NativeWindows;
 using WindowDebugger.Services.NativeWindows.Linux;
 using WindowDebugger.Services.NativeWindows.Windows;
@@ -20,50 +22,54 @@ public class WindowListViewModel : ReactiveObject
     private bool _includingEmptyTitleWindow;
     private bool _includingChildWindow;
     private bool _includingMessageOnlyWindow;
-    private bool _IsGroupedByProcess;
+    private bool _isGroupedByProcess;
     private NativeWindowGrouping _windowGrouping = NativeWindowGrouping.PlainList;
-    private NativeWindowSorting _windowSorting = NativeWindowSorting.AscendingById;
+    private NativeWindowSorting _windowSorting = NativeWindowSorting.Raw;
+    private string _localizedWindowIncluding;
+    private string _localizedWindowGrouping;
+    private string _localizedSorting;
 
     public WindowListViewModel(MainViewModel owner)
     {
         _owner = owner;
         _nativeWindowCollectionManager = new();
+        ReloadSearchingFilter();
     }
 
     public string? SearchText
     {
         get => _searchText;
-        set => this.RaiseAndSetWithAction(ref _searchText, value, _owner.ReloadWindows);
+        set => this.RaiseAndSetWithAction(ref _searchText, value, ReloadAll);
     }
 
     public bool IncludingInvisibleWindow
     {
         get => _includingInvisibleWindow;
-        set => this.RaiseAndSetWithAction(ref _includingInvisibleWindow, value, _owner.ReloadWindows);
+        set => this.RaiseAndSetWithAction(ref _includingInvisibleWindow, value, ReloadAll);
     }
 
     public bool IncludingEmptyTitleWindow
     {
         get => _includingEmptyTitleWindow;
-        set => this.RaiseAndSetWithAction(ref _includingEmptyTitleWindow, value, _owner.ReloadWindows);
+        set => this.RaiseAndSetWithAction(ref _includingEmptyTitleWindow, value, ReloadAll);
     }
 
     public bool IncludingChildWindow
     {
         get => _includingChildWindow;
-        set => this.RaiseAndSetWithAction(ref _includingChildWindow, value, _owner.ReloadWindows);
+        set => this.RaiseAndSetWithAction(ref _includingChildWindow, value, ReloadAll);
     }
 
     public bool IncludingMessageOnlyWindow
     {
         get => _includingMessageOnlyWindow;
-        set => this.RaiseAndSetWithAction(ref _includingMessageOnlyWindow, value, _owner.ReloadWindows);
+        set => this.RaiseAndSetWithAction(ref _includingMessageOnlyWindow, value, ReloadAll);
     }
 
     public bool IsGroupedByProcess
     {
-        get => _IsGroupedByProcess;
-        private set => this.RaiseAndSetIfChanged(ref _IsGroupedByProcess, value);
+        get => _isGroupedByProcess;
+        private set => this.RaiseAndSetIfChanged(ref _isGroupedByProcess, value);
     }
 
     public NativeWindowGrouping? WindowGrouping
@@ -74,7 +80,7 @@ public class WindowListViewModel : ReactiveObject
             if (this.SetCheckedField(ref _windowGrouping, value, out var changedValue))
             {
                 IsGroupedByProcess = changedValue is NativeWindowGrouping.ProcessThenWindow or NativeWindowGrouping.ProcessThenWindowTree;
-                _owner.ReloadWindows();
+                ReloadAll();
             }
         }
     }
@@ -86,10 +92,60 @@ public class WindowListViewModel : ReactiveObject
         {
             if (this.SetCheckedField(ref _windowSorting, value, out var changedValue))
             {
-                _owner.ReloadWindows();
+                ReloadAll();
             }
         }
     }
+
+    public string LocalizedWindowIncluding
+    {
+        get => _localizedWindowIncluding;
+        private set => this.RaiseAndSetIfChanged(ref _localizedWindowIncluding, value);
+    }
+
+    public string LocalizedWindowGrouping
+    {
+        get => _localizedWindowGrouping;
+        private set => this.RaiseAndSetIfChanged(ref _localizedWindowGrouping, value);
+    }
+
+    public string LocalizedSorting
+    {
+        get => _localizedSorting;
+        private set => this.RaiseAndSetIfChanged(ref _localizedSorting, value);
+    }
+
+    private void ReloadAll()
+    {
+        ReloadSearchingFilter();
+        _owner.ReloadWindows();
+    }
+
+#pragma warning disable CS8774 // 退出时，成员必须具有非 null 值。
+    [MemberNotNull(nameof(_localizedWindowIncluding), nameof(_localizedWindowGrouping), nameof(_localizedSorting))]
+    private void ReloadSearchingFilter()
+    {
+        LocalizedWindowIncluding = (IncludingInvisibleWindow, IncludingEmptyTitleWindow, IncludingChildWindow, IncludingMessageOnlyWindow) switch
+        {
+            (false, false, false, false) => Lang.Current.App.UI.Filter.IncludingNoneSlim,
+            (true, true, true, true) => Lang.Current.App.UI.Filter.IncludingAllSlim,
+            _ => Lang.Current.App.UI.Filter.IncludingPartialSlim,
+        };
+        LocalizedWindowGrouping = WindowGrouping switch
+        {
+            NativeWindowGrouping.ProcessThenWindow => Lang.Current.App.UI.Filter.GroupByProcessThenWindowSlim,
+            NativeWindowGrouping.ProcessThenWindowTree => Lang.Current.App.UI.Filter.GroupByProcessThenWindowTreeSlim,
+            NativeWindowGrouping.WindowTree => Lang.Current.App.UI.Filter.GroupByWindowTreeSlim,
+            _ => Lang.Current.App.UI.Filter.GroupByPlainListSlim,
+        };
+        LocalizedSorting = WindowSorting switch
+        {
+            NativeWindowSorting.AscendingById => Lang.Current.App.UI.Filter.SortByIdSlim,
+            NativeWindowSorting.AscendingByTitle => Lang.Current.App.UI.Filter.SortByTitleSlim,
+            _ => Lang.Current.App.UI.Filter.SortByRaw,
+        };
+    }
+#pragma warning restore CS8774 // 退出时，成员必须具有非 null 值。
 
     public IEnumerable<NativeTreeNode> ReloadWindows()
     {

@@ -155,7 +155,7 @@
                          Text="{Binding WindowList.SearchText, Mode=TwoWay}" />
                 <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
                     <StackPanel Margin="8 0" Orientation="Horizontal">
-                        <DropDownButton Content="{Binding App.UI.Filter.DefaultFilter, Source={x:Static l:Lang.Current}}">
+                        <DropDownButton Content="{Binding WindowList.LocalizedWindowIncluding, Mode=OneWay}">
                             <DropDownButton.Flyout>
                                 <Flyout>
                                     <StackPanel>
@@ -172,7 +172,7 @@
                                 </Flyout>
                             </DropDownButton.Flyout>
                         </DropDownButton>
-                        <DropDownButton Margin="8 0 0 0" Content="{Binding App.UI.Filter.DefaultGroup, Source={x:Static l:Lang.Current}}">
+                        <DropDownButton Margin="8 0 0 0" Content="{Binding WindowList.LocalizedWindowGrouping, Mode=OneWay}">
                             <DropDownButton.Flyout>
                                 <Flyout>
                                     <StackPanel>
@@ -180,17 +180,17 @@
                                         <Separator Margin="-12 12" />
                                         <RadioButton Content="{Binding App.UI.Filter.GroupByProcessThenWindowTree, Source={x:Static l:Lang.Current}}"
                                                      IsChecked="{Binding WindowList.WindowGrouping, Converter={StaticResource WindowGroupingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowGrouping.ProcessThenWindowTree}, Mode=TwoWay}" />
-                                        <RadioButton Content="{Binding App.UI.Filter.GroupByWindowTree, Source={x:Static l:Lang.Current}}"
-                                                     IsChecked="{Binding WindowList.WindowGrouping, Converter={StaticResource WindowGroupingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowGrouping.WindowTree}, Mode=TwoWay}" />
                                         <RadioButton Content="{Binding App.UI.Filter.GroupByProcessThenWindow, Source={x:Static l:Lang.Current}}"
                                                      IsChecked="{Binding WindowList.WindowGrouping, Converter={StaticResource WindowGroupingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowGrouping.ProcessThenWindow}, Mode=TwoWay}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.GroupByWindowTree, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowGrouping, Converter={StaticResource WindowGroupingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowGrouping.WindowTree}, Mode=TwoWay}" />
                                         <RadioButton Content="{Binding App.UI.Filter.GroupByPlainList, Source={x:Static l:Lang.Current}}"
                                                      IsChecked="{Binding WindowList.WindowGrouping, Converter={StaticResource WindowGroupingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowGrouping.PlainList}, Mode=TwoWay}" />
                                     </StackPanel>
                                 </Flyout>
                             </DropDownButton.Flyout>
                         </DropDownButton>
-                        <DropDownButton Margin="8 0 0 0" Content="{Binding App.UI.Filter.DefaultSearch, Source={x:Static l:Lang.Current}}">
+                        <DropDownButton Margin="8 0 0 0" Content="{Binding App.UI.Filter.SearchIncluding, Source={x:Static l:Lang.Current}}">
                             <DropDownButton.Flyout>
                                 <Flyout>
                                     <StackPanel>
@@ -204,7 +204,7 @@
                             </DropDownButton.Flyout>
                         </DropDownButton>
                         <Separator Width="1" Height="12" Margin="8 0 0 0" />
-                        <DropDownButton Margin="8 0 0 0" Content="{Binding App.UI.Filter.DefaultSort, Source={x:Static l:Lang.Current}}">
+                        <DropDownButton Margin="8 0 0 0" Content="{Binding WindowList.LocalizedSorting, Mode=OneWay}">
                             <DropDownButton.Flyout>
                                 <Flyout>
                                     <StackPanel>

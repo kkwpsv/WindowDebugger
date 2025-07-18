@@ -213,16 +213,10 @@ public class WindowListViewModel : ReactiveObject
                             ProcessName = TryGetProcessName(x.Key),
                             Windows =
                             [
-                                ..x.Value.OrderBy(_windowSorting).Select(w => new WindowsNativeWindowNode(w)
-                                {
-                                    ChildWindows = [],
-                                }),
+                                ..x.Value.NestBy(_windowGrouping, _windowSorting),
                             ],
                         })
-                    : nativeWindows.OfType<WindowsNativeWindowModel>().OrderBy(_windowSorting).Select(w => new WindowsNativeWindowNode(w)
-                    {
-                        ChildWindows = [],
-                    });
+                    : nativeWindows.OfType<WindowsNativeWindowModel>().NestBy(_windowGrouping, _windowSorting);
             return tree;
         }
 
@@ -281,5 +275,38 @@ file static class Extensions
             NativeWindowSorting.AscendingByTitle => source.OrderBy(w => w.Title, StringComparer.OrdinalIgnoreCase),
             _ => throw new ArgumentOutOfRangeException(nameof(sorting), sorting, null),
         };
+    }
+
+    public static IEnumerable<WindowsNativeWindowNode> NestBy(this IEnumerable<WindowsNativeWindowModel> source, WindowGrouping grouping, WindowSorting sorting)
+    {
+        var isNested = grouping is NativeWindowGrouping.WindowTree or NativeWindowGrouping.ProcessThenWindowTree;
+        if (!isNested)
+        {
+            return source.OrderBy(sorting).Select(w => new WindowsNativeWindowNode(w)
+            {
+                ChildWindows = [],
+            });
+        }
+
+        var hwndMap = new Dictionary<nint, List<WindowsNativeWindowModel>>();
+        foreach (var model in source)
+        {
+            if (hwndMap.TryGetValue(model.ParentWindowHandle, out var existedList))
+            {
+                existedList.Add(model);
+            }
+            else
+            {
+                existedList = [model];
+                hwndMap[model.ParentWindowHandle] = existedList;
+            }
+        }
+
+        var list = new List<WindowsNativeWindowNode>();
+        // TODO 尚未完成，以下为临时代码：
+        return source.OrderBy(sorting).Select(w => new WindowsNativeWindowNode(w)
+        {
+            ChildWindows = [],
+        });
     }
 }

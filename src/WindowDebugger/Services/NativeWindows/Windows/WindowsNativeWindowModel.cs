@@ -306,10 +306,11 @@ public record WindowsNativeWindowModel : NativeWindowModel
     {
         try
         {
-            var screenShot = WindowExtensions.GetWindowScreenshot(WindowHandle);
+            var screenShot = WindowExtensions.GetWindowScreenshotWithCaptureBlt(WindowHandle);
             if (screenShot != NULL)
             {
                 var image = screenShot.HBitmapToAvaloniaImage();
+                image.Save(@"D:\WIP\Desktop\screenshot.png");
                 Screenshot = image;
                 Gdi32.DeleteObject(screenShot);
             }
@@ -360,75 +361,39 @@ public record WindowsNativeWindowModel : NativeWindowModel
 
 file static class ThumbnailExtensions
 {
-    public static WriteableBitmap HBitmapToAvaloniaImage(this HBITMAP hBitmap)
+    public static unsafe WriteableBitmap HBitmapToAvaloniaImage(this HBITMAP hBitmap)
     {
-        // 获取 BITMAP 信息
-        var bmp = ToBitmap(hBitmap);
+        // 获取 BITMAP 信息（为了拿宽高）。
+        var bitmapSize = SizeOf<BITMAP>();
+        var bitmapPtr = stackalloc BITMAP[1];
+        var result = Gdi32.GetObject(hBitmap, bitmapSize, bitmapPtr);
+        if (result is 0)
+        {
+            throw new Win32Exception(Marshal.GetLastWin32Error());
+        }
 
-        // 设置 BITMAPINFO
-        var bmi = new BITMAPINFO();
-        bmi.bmiHeader.biSize = (uint)Marshal.SizeOf(typeof(BITMAPINFOHEADER));
-        bmi.bmiHeader.biWidth = bmp.bmWidth;
-        bmi.bmiHeader.biHeight = -bmp.bmHeight; // top-down
-        bmi.bmiHeader.biPlanes = 1;
-        bmi.bmiHeader.biBitCount = 32;
-        bmi.bmiHeader.biCompression = Compression.BI_RGB;
+        // 指定位深和格式。
+        var info = new BITMAPINFO();
+        info.bmiHeader.biSize = (uint)Marshal.SizeOf(typeof(BITMAPINFOHEADER));
+        info.bmiHeader.biWidth = bitmapPtr->bmWidth;
+        info.bmiHeader.biHeight = -bitmapPtr->bmHeight; // top-down
+        info.bmiHeader.biPlanes = 1;
+        info.bmiHeader.biBitCount = 32;
+        info.bmiHeader.biCompression = Compression.BI_RGB;
 
-        int width = bmp.bmWidth;
-        int height = bmp.bmHeight;
-        int stride = width * 4;
-        byte[] pixels = new byte[stride * height];
-
-        // 获取屏幕 DC
+        // 拷贝像素。
+        var bitmap = new WriteableBitmap(new PixelSize(bitmapPtr->bmWidth, bitmapPtr->bmHeight), new Vector(96, 96), PixelFormat.Bgra8888);
+        using var frameBuffer = bitmap.Lock();
         var hdc = User32.GetDC(Constants.NULL);
         try
         {
-            unsafe
-            {
-                fixed (byte* pPixels = pixels)
-                {
-                    Gdi32.GetDIBits(hdc, hBitmap, 0u, (uint)height, (IntPtr)pPixels, in bmi, (uint)DIBColorTableIdentifiers.DIB_RGB_COLORS);
-                }
-            }
+            Gdi32.GetDIBits(hdc, hBitmap, 0u, (int)bitmapPtr->bmHeight, frameBuffer.Address, in info, (uint)DIBColorTableIdentifiers.DIB_RGB_COLORS);
         }
         finally
         {
             User32.ReleaseDC(Constants.NULL, hdc);
         }
 
-        // 创建 WriteableBitmap 并写入像素
-        var wbmp = new WriteableBitmap(new PixelSize(width, height), new Vector(96, 96), PixelFormat.Bgra8888);
-        using (var fb = wbmp.Lock())
-        {
-            Marshal.Copy(pixels, 0, fb.Address, pixels.Length);
-        }
-
-        // 释放 HBITMAP
-        Gdi32.DeleteObject(hBitmap);
-
-        return wbmp;
-    }
-
-    private static BITMAP ToBitmap(this HBITMAP hBitmap)
-    {
-        var bmpSize = Marshal.SizeOf(typeof(BITMAP));
-        var bitmapPtr = Marshal.AllocHGlobal(bmpSize);
-        try
-        {
-            var result = Gdi32.GetObject(hBitmap, bmpSize, bitmapPtr);
-            if (result is not 0)
-            {
-                var bmp = Marshal.PtrToStructure<BITMAP>(bitmapPtr);
-                return bmp;
-            }
-            else
-            {
-                throw new Win32Exception(result);
-            }
-        }
-        finally
-        {
-            Marshal.FreeHGlobal(bitmapPtr);
-        }
+        return bitmap;
     }
 }

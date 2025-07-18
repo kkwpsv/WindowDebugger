@@ -6,7 +6,6 @@
              xmlns:nativeWindows="using:WindowDebugger.Services.NativeWindows"
              xmlns:views="using:WindowDebugger.Views"
              xmlns:vc="using:WindowDebugger.Views.Converters"
-             xmlns:converters="using:Avalonia.Controls.Converters"
              mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
              x:Class="WindowDebugger.Views.MainView" UseLayoutRounding="True"
              x:DataType="views:MainViewModel">
@@ -16,7 +15,20 @@
         <vc:NativeTreeNodeToNativeWindowConverter x:Key="NativeTreeNodeToNativeWindowConverter" />
         <vc:WindowGroupingToBooleanConverter x:Key="WindowGroupingToBooleanConverter" />
         <vc:WindowSortingToBooleanConverter x:Key="WindowSortingToBooleanConverter" />
-        <converters:MarginMultiplierConverter Indent="-16" Left="True" x:Key="TreeViewItemSelectedPipeMarginConverter" />
+        <vc:BooleanToItemsPanelTemplateConverter x:Key="IsGroupedToItemsPanelTemplateConverter">
+            <vc:BooleanToItemsPanelTemplateConverter.True>
+                <ItemsPanelTemplate>
+                    <!-- 树的虚拟化会跳来跳去，等解决了再开。 -->
+                    <StackPanel Margin="4" />
+                </ItemsPanelTemplate>
+            </vc:BooleanToItemsPanelTemplateConverter.True>
+            <vc:BooleanToItemsPanelTemplateConverter.False>
+                <ItemsPanelTemplate>
+                    <!-- 列表的虚拟化行为还算正常，那么就节省一些性能吧。 -->
+                    <VirtualizingStackPanel Margin="4" />
+                </ItemsPanelTemplate>
+            </vc:BooleanToItemsPanelTemplateConverter.False>
+        </vc:BooleanToItemsPanelTemplateConverter>
     </UserControl.Resources>
 
     <UserControl.Styles>
@@ -230,12 +242,8 @@
                       Classes.PlainList="{Binding !WindowList.IsGroupedByProcess, Mode=OneWay}"
                       ItemsSource="{Binding NativeTree}"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                      ScrollViewer.VerticalScrollBarVisibility="Auto">
-                <TreeView.ItemsPanel>
-                    <ItemsPanelTemplate>
-                        <VirtualizingStackPanel Margin="4" />
-                    </ItemsPanelTemplate>
-                </TreeView.ItemsPanel>
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ItemsPanel="{Binding WindowList.IsGroupedByProcess, Mode=OneWay, Converter={StaticResource IsGroupedToItemsPanelTemplateConverter}}">
                 <TreeView.DataTemplates>
                     <DataTemplate x:DataType="nativeWindows:NativeProcessNode">
                         <Grid ColumnDefinitions="32,*,Auto">

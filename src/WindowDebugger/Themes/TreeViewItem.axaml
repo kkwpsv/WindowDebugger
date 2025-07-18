@@ -108,7 +108,6 @@
                             BorderThickness="{TemplateBinding BorderThickness}"
                             CornerRadius="{TemplateBinding CornerRadius}"
                             MinHeight="{TemplateBinding MinHeight}"
-                            Padding="{TemplateBinding Level, Mode=OneWay, Converter={StaticResource TreeViewItemLeftMarginConverter}}"
                             TemplatedControl.IsTemplateFocusTarget="True">
                         <Grid Name="PART_Header"
                               ColumnDefinitions="Auto,*">
@@ -128,7 +127,7 @@
                                               ContentTemplate="{TemplateBinding HeaderTemplate}"
                                               HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
                                               VerticalAlignment="{TemplateBinding VerticalAlignment}"
-                                              Margin="{TemplateBinding Padding}" />
+                                              Margin="{TemplateBinding Level, Mode=OneWay, Converter={StaticResource TreeViewItemLeftMarginConverter}}" />
                             <Border Grid.Column="0" Grid.ColumnSpan="2" Margin="0 10">
                                 <Rectangle Name="PART_SelectedPipe"
                                            RadiusX="2" RadiusY="2" Width="4" MaxHeight="32"

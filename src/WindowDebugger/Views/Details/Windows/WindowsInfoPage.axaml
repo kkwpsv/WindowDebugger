@@ -51,7 +51,7 @@
 
                 <Border Grid.Column="1"
                         CornerRadius="12" Background="#10FFFFFF">
-                    <Image Source="{Binding  Screenshot, Mode=OneWay}" />
+                    <Image Source="{Binding  Screenshot^, Mode=OneWay}" />
                 </Border>
 
                 <Grid Grid.Column="0" RowDefinitions="*,*,*,*,*,*,*" Margin="0 0 16 0">

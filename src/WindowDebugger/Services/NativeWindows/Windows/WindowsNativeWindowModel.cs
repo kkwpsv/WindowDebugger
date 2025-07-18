@@ -29,7 +29,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
 {
     private readonly Win32Window _window;
     private string? _errorString;
-    private WriteableBitmap? _screenshot;
+    private Task<WriteableBitmap?> _screenshot;
 
     public WindowsNativeWindowModel(HWND hwnd) : base(hwnd)
     {
@@ -168,7 +168,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
     }
 
 
-    public WriteableBitmap? Screenshot
+    public Task<WriteableBitmap?> Screenshot
     {
         get => _screenshot;
         set => this.RaiseAndSetIfChanged(ref _screenshot, value);
@@ -304,6 +304,11 @@ public record WindowsNativeWindowModel : NativeWindowModel
 
     public void RefreshScreenShot()
     {
+        Screenshot = ScreenShotAsync();
+    }
+
+    private async Task<WriteableBitmap?> ScreenShotAsync()
+    {
         try
         {
             var screenShot = WindowExtensions.GetWindowScreenshotWithCaptureBlt(WindowHandle);
@@ -311,13 +316,14 @@ public record WindowsNativeWindowModel : NativeWindowModel
             {
                 var image = screenShot.HBitmapToAvaloniaImage();
                 image.Save(@"D:\WIP\Desktop\screenshot.png");
-                Screenshot = image;
                 Gdi32.DeleteObject(screenShot);
+                return image;
             }
         }
         catch
         {
         }
+        return null;
     }
 
     public override string ToString() => $"0x{WindowHandle:X8}{(!string.IsNullOrEmpty(Text) ? $"({Text})" : "")}";

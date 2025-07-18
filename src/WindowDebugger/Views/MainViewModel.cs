@@ -4,7 +4,7 @@ using WindowDebugger.Services.NativeWindows;
 
 namespace WindowDebugger.Views;
 
-public record MainViewModel : ReactiveRecord
+public class MainViewModel : ReactiveObject
 {
     public WindowListViewModel WindowList { get; }
 

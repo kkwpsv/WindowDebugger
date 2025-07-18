@@ -6,10 +6,12 @@ using WindowDebugger.Services.NativeWindows.Linux;
 using WindowDebugger.Services.NativeWindows.Windows;
 using WindowDebugger.Utils;
 using WindowDebugger.Views.Converters;
+using NativeWindowGrouping = WindowDebugger.Services.NativeWindows.WindowGrouping;
+using NativeWindowSorting = WindowDebugger.Services.NativeWindows.WindowSorting;
 
 namespace WindowDebugger.Views;
 
-public record WindowListViewModel : ReactiveRecord
+public class WindowListViewModel : ReactiveObject
 {
     private readonly MainViewModel _owner;
     private readonly NativeWindowCollectionManager _nativeWindowCollectionManager;
@@ -18,8 +20,9 @@ public record WindowListViewModel : ReactiveRecord
     private bool _includingEmptyTitleWindow;
     private bool _includingChildWindow;
     private bool _includingMessageOnlyWindow;
-    private WindowGrouping _windowGrouping = Services.NativeWindows.WindowGrouping.PlainList;
-    private WindowSorting _windowSorting = Services.NativeWindows.WindowSorting.AscendingById;
+    private bool _IsGroupedByProcess;
+    private NativeWindowGrouping _windowGrouping = NativeWindowGrouping.PlainList;
+    private NativeWindowSorting _windowSorting = NativeWindowSorting.AscendingById;
 
     public WindowListViewModel(MainViewModel owner)
     {
@@ -57,19 +60,26 @@ public record WindowListViewModel : ReactiveRecord
         set => this.RaiseAndSetWithAction(ref _includingMessageOnlyWindow, value, _owner.ReloadWindows);
     }
 
-    public WindowGrouping? WindowGrouping
+    public bool IsGroupedByProcess
+    {
+        get => _IsGroupedByProcess;
+        private set => this.RaiseAndSetIfChanged(ref _IsGroupedByProcess, value);
+    }
+
+    public NativeWindowGrouping? WindowGrouping
     {
         get => _windowGrouping;
         set
         {
             if (this.SetCheckedField(ref _windowGrouping, value, out var changedValue))
             {
+                IsGroupedByProcess = changedValue is NativeWindowGrouping.ProcessThenWindow or NativeWindowGrouping.ProcessThenWindowTree;
                 _owner.ReloadWindows();
             }
         }
     }
 
-    public WindowSorting? WindowSorting
+    public NativeWindowSorting? WindowSorting
     {
         get => _windowSorting;
         set
@@ -139,19 +149,25 @@ public record WindowListViewModel : ReactiveRecord
 
         if (OperatingSystem.IsWindows())
         {
-            var processWindowDictionary = GroupByProcess<WindowsNativeWindowModel>(nativeWindows);
-            return processWindowDictionary
-                .Select(x => new NativeProcessNode(x.Key)
-                {
-                    ProcessName = TryGetProcessName(x.Key),
-                    Windows =
-                    [
-                        ..x.Value.Select<WindowsNativeWindowModel, NativeWindowNode>(w => new WindowsNativeWindowNode(w)
+            IEnumerable<NativeTreeNode> tree =
+                _windowGrouping is NativeWindowGrouping.ProcessThenWindow or NativeWindowGrouping.ProcessThenWindowTree
+                    ? GroupByProcess<WindowsNativeWindowModel>(nativeWindows)
+                        .Select(x => new NativeProcessNode(x.Key)
                         {
-                            ChildWindows = [],
-                        }),
-                    ],
-                });
+                            ProcessName = TryGetProcessName(x.Key),
+                            Windows =
+                            [
+                                ..x.Value.Select(w => new WindowsNativeWindowNode(w)
+                                {
+                                    ChildWindows = [],
+                                }),
+                            ],
+                        })
+                    : nativeWindows.OfType<WindowsNativeWindowModel>().Select(w => new WindowsNativeWindowNode(w)
+                    {
+                        ChildWindows = [],
+                    });
+            return tree;
         }
 
         throw new PlatformNotSupportedException();

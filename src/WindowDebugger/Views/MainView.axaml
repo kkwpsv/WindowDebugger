@@ -44,25 +44,32 @@
             <Setter Property="VerticalContentAlignment" Value="Center" />
         </Style>
         <Style Selector="TreeViewItem">
+            <Setter Property="IsExpanded" Value="True" />
             <Style Selector="^ /template/ Grid#PART_Header">
-                <Setter Property="Margin" Value="-20 0 0 0" />
+                <Setter Property="Margin" Value="16 0 0 0" />
             </Style>
             <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
-                <Setter Property="Margin" Value="4 0 0 0" />
+                <Setter Property="Margin" Value="-32 0 0 0" />
+            </Style>
+            <Style Selector="^ /template/ Panel#PART_ExpandCollapseChevronContainer">
+                <Setter Property="IsVisible" Value="False" />
             </Style>
             <Style Selector="^[Level=0]">
-                <Setter Property="IsExpanded" Value="True" />
-                <Style Selector="^ /template/ Border#PART_LayoutRoot">
-                    <Setter Property="IsEnabled" Value="False" />
-                </Style>
                 <Style Selector="^ /template/ Grid#PART_Header">
                     <Setter Property="Margin" Value="0" />
                 </Style>
                 <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
-                    <Setter Property="IsVisible" Value="False" />
+                    <Setter Property="Margin" Value="0" />
                 </Style>
-                <Style Selector="^ /template/ Panel#PART_ExpandCollapseChevronContainer">
-                    <Setter Property="IsVisible" Value="False" />
+            </Style>
+        </Style>
+        <Style Selector="TreeView.PlainList TreeViewItem">
+            <Style Selector="^[Level=0]">
+                <Style Selector="^ /template/ Grid#PART_Header">
+                    <Setter Property="Margin" Value="8 0 0 0" />
+                </Style>
+                <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
+                    <Setter Property="Margin" Value="-8 0 0 0" />
                 </Style>
             </Style>
         </Style>
@@ -218,6 +225,8 @@
                 <Separator Height="1" Margin="0 8 0 0" />
             </StackPanel>
             <TreeView x:Name="WindowListBox" Grid.Row="1" Background="Transparent"
+                      Classes.IsGrouped="{Binding WindowList.IsGroupedByProcess, Mode=OneWay}"
+                      Classes.PlainList="{Binding !WindowList.IsGroupedByProcess, Mode=OneWay}"
                       ItemsSource="{Binding NativeTree}"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Auto">

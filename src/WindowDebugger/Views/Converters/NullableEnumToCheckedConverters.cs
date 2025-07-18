@@ -61,7 +61,7 @@ public static class NullableEnumReactiveRecordExtensions
     /// 如果字段的值发生了有效更改，则为 <see langword="true"/>；否则为 <see langword="false"/>。<br/>
     /// 有效更改指的是在配合了转换器正常工作的前提下，值确实更改了（而不是专门为了同步转换器）。
     /// </returns>
-    public static bool SetCheckedField<T>(this ReactiveRecord obj, ref T backingField, in T? value, out T changedValue, [CallerMemberName] string? propertyName = null)
+    public static bool SetCheckedField<T>(this ReactiveObject obj, ref T backingField, in T? value, out T changedValue, [CallerMemberName] string? propertyName = null)
         where T : struct, Enum
     {
         if (value is { } v)

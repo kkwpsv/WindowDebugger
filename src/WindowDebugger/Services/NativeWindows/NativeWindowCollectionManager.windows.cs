@@ -21,7 +21,7 @@ public partial class NativeWindowCollectionManager
     [SupportedOSPlatform("windows")]
     private (bool includeSelf, bool includeDescendants, bool continueEnum) WindowFilter(HWND handle, WindowSearchingFilter filter)
     {
-        return (DescendantsFilter(handle, filter).includeSelf, filter.IncludingChildWindow, true);
+        return (DescendantsFilter(handle, filter).includeSelf, filter.Including.HasFlag(WindowIncluding.ChildWindow), true);
     }
 
     [SupportedOSPlatform("windows")]
@@ -29,7 +29,7 @@ public partial class NativeWindowCollectionManager
     {
         var win = new Win32Window(handle);
 
-        if (!filter.IncludingMessageOnlyWindow)
+        if (!filter.Including.HasFlag(WindowIncluding.MessageOnlyWindow))
         {
             if (win.ParentWindowHandle == User32.HWND_MESSAGE)
             {
@@ -37,7 +37,7 @@ public partial class NativeWindowCollectionManager
             }
         }
 
-        if (!filter.IncludingInvisibleWindow)
+        if (!filter.Including.HasFlag(WindowIncluding.InvisibleWindow))
         {
             if (!win.IsVisible)
             {
@@ -46,7 +46,7 @@ public partial class NativeWindowCollectionManager
         }
 
         var text = win.Text;
-        if (!filter.IncludingEmptyTitleWindow)
+        if (!filter.Including.HasFlag(WindowIncluding.EmptyTitleWindow))
         {
             if (string.IsNullOrEmpty(text))
             {

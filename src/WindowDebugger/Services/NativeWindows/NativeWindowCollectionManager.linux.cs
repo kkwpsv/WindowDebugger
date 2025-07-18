@@ -14,8 +14,17 @@ partial class NativeWindowCollectionManager
     {
         var display = _display ??= X11Display.Open();
 
-        return [..new LinuxNativeWindowModel(display.DefaultRootWindow)
-            .GetChildren()
-            .Select(x=>new LinuxNativeWindowModel(x.Window))];
+        return
+        [
+            ..new LinuxNativeWindowModel(display.DefaultRootWindow)
+                .GetChildren()
+                .Select(x => new LinuxNativeWindowModel(x.Window))
+                .Where(x => FilterWindow(x, filter)),
+        ];
+    }
+
+    private bool FilterWindow(LinuxNativeWindowModel model, WindowSearchingFilter filter)
+    {
+        return true;
     }
 }

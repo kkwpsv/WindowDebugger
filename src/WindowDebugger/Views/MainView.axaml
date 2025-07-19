@@ -1,0 +1,363 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:l="using:WindowDebugger.Localizations"
+             xmlns:nativeWindows="using:WindowDebugger.Services.NativeWindows"
+             xmlns:views="using:WindowDebugger.Views"
+             xmlns:vc="using:WindowDebugger.Views.Converters"
+             mc:Ignorable="d" d:DesignWidth="1024" d:DesignHeight="768"
+             x:Class="WindowDebugger.Views.MainView" UseLayoutRounding="True"
+             x:DataType="views:MainViewModel">
+
+    <UserControl.Resources>
+        <vc:ProcessIdToProcessPathConverter x:Key="ProcessIdToProcessPathConverter" />
+        <vc:NativeTreeNodeToNativeWindowConverter x:Key="NativeTreeNodeToNativeWindowConverter" />
+        <vc:WindowGroupingToBooleanConverter x:Key="WindowGroupingToBooleanConverter" />
+        <vc:WindowSortingToBooleanConverter x:Key="WindowSortingToBooleanConverter" />
+        <vc:BooleanToItemsPanelTemplateConverter x:Key="IsGroupedToItemsPanelTemplateConverter">
+            <vc:BooleanToItemsPanelTemplateConverter.True>
+                <ItemsPanelTemplate>
+                    <!-- 树的虚拟化会跳来跳去，等解决了再开。 -->
+                    <StackPanel Margin="4" />
+                </ItemsPanelTemplate>
+            </vc:BooleanToItemsPanelTemplateConverter.True>
+            <vc:BooleanToItemsPanelTemplateConverter.False>
+                <ItemsPanelTemplate>
+                    <!-- 列表的虚拟化行为还算正常，那么就节省一些性能吧。 -->
+                    <VirtualizingStackPanel Margin="4" />
+                </ItemsPanelTemplate>
+            </vc:BooleanToItemsPanelTemplateConverter.False>
+        </vc:BooleanToItemsPanelTemplateConverter>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="Svg.ButtonIcon">
+            <Setter Property="Width" Value="16" />
+            <Setter Property="Height" Value="16" />
+            <Setter Property="Stretch" Value="Uniform" />
+        </Style>
+        <Style Selector="TextBlock.FlyoutTitle">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Bold" />
+        </Style>
+        <Style Selector="TextBlock.FlyoutDescription">
+            <Setter Property="Foreground" Value="#666666" />
+            <Setter Property="FontSize" Value="12" />
+        </Style>
+        <Style Selector="Button.GlobalToolButton">
+            <Setter Property="MinWidth" Value="40"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="ToggleButton.GlobalToolButton">
+            <Setter Property="MinWidth" Value="40"/>
+            <Setter Property="Height" Value="32"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="TreeViewItem">
+            <Setter Property="IsExpanded" Value="True" />
+            <Style Selector="^ /template/ Grid#PART_Header">
+                <Setter Property="Margin" Value="16 0 0 0" />
+            </Style>
+            <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
+                <Setter Property="Margin" Value="-16 0 0 0" />
+            </Style>
+            <Style Selector="^ /template/ Panel#PART_ExpandCollapseChevronContainer">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+            <Style Selector="^[Level=0]">
+                <Style Selector="^ /template/ Grid#PART_Header">
+                    <Setter Property="Margin" Value="0" />
+                </Style>
+                <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
+                    <Setter Property="Margin" Value="0" />
+                </Style>
+            </Style>
+        </Style>
+        <Style Selector="TreeView.PlainList TreeViewItem">
+            <Style Selector="^[Level=0]">
+                <Style Selector="^ /template/ Grid#PART_Header">
+                    <Setter Property="Margin" Value="8 0 0 0" />
+                </Style>
+                <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
+                    <Setter Property="Margin" Value="-8 0 0 0" />
+                </Style>
+            </Style>
+        </Style>
+        <Style Selector="TabItem">
+            <Setter Property="FontSize" Value="16" />
+            <Setter Property="Padding" Value="12 0" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Height" Value="32" />
+        </Style>
+        <Style Selector="TabControl /template/ ItemsPresenter#PART_ItemsPresenter WrapPanel">
+            <Setter Property="Margin" Value="32 0" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" MinWidth="240" MaxWidth="400" />
+            <ColumnDefinition Width="3*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Background -->
+        <Border Grid.Column="1" Background="#08FFFFFF" IsHitTestVisible="False"
+                DataContext="{Binding #WindowListBox.SelectedItem}">
+        </Border>
+
+        <!-- Left Side Bar -->
+        <Grid Grid.Column="0" Margin="0 40 0 0" RowDefinitions="Auto,*,Auto">
+            <StackPanel Grid.Row="0">
+                <Grid Margin="8 0" ColumnDefinitions="Auto,Auto,*,Auto,Auto">
+                    <Button Grid.Column="0" Classes="GlobalToolButton"
+                            Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
+                            Background="#10FFFFFF"
+                            Click="ReloadAllButton_Click">
+                        <ToolTip.Tip>
+                            <TextBlock LineHeight="24">
+                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.ReloadButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                                <LineBreak />
+                                <Run Text="{Binding App.UI.ReloadButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                            </TextBlock>
+                        </ToolTip.Tip>
+                        <Grid ColumnDefinitions="32,Auto">
+                            <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/reload-svgrepo-com.svg" />
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
+                        </Grid>
+                    </Button>
+                    <ToggleButton Grid.Column="1" Classes="GlobalToolButton"
+                                  Margin="4 0 0 0" HorizontalContentAlignment="Stretch"
+                                  IsCheckedChanged="CaptureButton_IsCheckedChanged">
+                        <ToolTip.Tip>
+                            <TextBlock LineHeight="24">
+                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.CaptureButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                                <LineBreak />
+                                <Run Text="{Binding App.UI.CaptureButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                            </TextBlock>
+                        </ToolTip.Tip>
+                        <Svg Classes="ButtonIcon" Path="/Assets/UI/visibility-view-svgrepo-com.svg" />
+                    </ToggleButton>
+                    <ToggleButton Grid.Column="3" Classes="GlobalToolButton"
+                                  IsCheckedChanged="TopMostToggleButton_IsCheckedChanged">
+                        <ToolTip.Tip>
+                            <TextBlock LineHeight="24">
+                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.TopmostButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                                <LineBreak />
+                                <Run Text="{Binding App.UI.TopmostButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                            </TextBlock>
+                        </ToolTip.Tip>
+                        <Svg Classes="ButtonIcon" Path="/Assets/UI/layers-svgrepo-com.svg" />
+                    </ToggleButton>
+                    <Button Grid.Column="4" Classes="GlobalToolButton" Margin="4 0 0 0" Click="UacButton_Click"
+                            IsVisible="{OnPlatform False, Windows=True}">
+                        <ToolTip.Tip>
+                            <TextBlock LineHeight="24">
+                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.UacButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                                <LineBreak />
+                                <Run Text="{Binding App.UI.UacButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                            </TextBlock>
+                        </ToolTip.Tip>
+                        <Svg Classes="ButtonIcon" Path="/Assets/UI/shield-antivirus-svgrepo-com.svg" />
+                    </Button>
+                </Grid>
+                <TextBox Margin="8"
+                         Watermark="{Binding App.UI.SearchWatermark, Source={x:Static l:Lang.Current}}"
+                         Text="{Binding WindowList.SearchText, Mode=TwoWay}" />
+                <ScrollViewer HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled">
+                    <StackPanel Margin="8 0" Orientation="Horizontal">
+                        <DropDownButton Content="{Binding WindowList.LocalizedWindowIncluding, Mode=OneWay}">
+                            <DropDownButton.Flyout>
+                                <Flyout>
+                                    <StackPanel>
+                                        <TextBlock Classes="FlyoutTitle" Text="{Binding App.UI.Filter.FilterTitle, Source={x:Static l:Lang.Current}}" />
+                                        <Separator Margin="-12 12" />
+                                        <CheckBox Content="{Binding App.UI.Filter.IncludingInvisibleWindow, Source={x:Static l:Lang.Current}}" IsChecked="{Binding WindowList.IncludingInvisibleWindow}" />
+                                        <CheckBox Content="{Binding App.UI.Filter.IncludingEmptyTitleWindow, Source={x:Static l:Lang.Current}}" IsChecked="{Binding WindowList.IncludingEmptyTitleWindow}" />
+                                        <CheckBox Content="{Binding App.UI.Filter.IncludingChildWindow, Source={x:Static l:Lang.Current}}" IsChecked="{Binding WindowList.IncludingChildWindow}" />
+                                        <CheckBox Content="{Binding App.UI.Filter.IncludingMessageOnlyWindow, Source={x:Static l:Lang.Current}}" IsChecked="{Binding WindowList.IncludingMessageOnlyWindow}" />
+                                        <Separator Margin="-12 12" />
+                                        <TextBlock Classes="FlyoutDescription" TextWrapping="WrapWithOverflow" MaxWidth="240"
+                                                   Text="{Binding App.UI.Filter.FilterDescription, Source={x:Static l:Lang.Current}}" />
+                                    </StackPanel>
+                                </Flyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                        <DropDownButton Margin="8 0 0 0" Content="{Binding WindowList.LocalizedWindowGrouping, Mode=OneWay}">
+                            <DropDownButton.Flyout>
+                                <Flyout>
+                                    <StackPanel>
+                                        <TextBlock Classes="FlyoutTitle" Text="{Binding App.UI.Filter.GroupTitle, Source={x:Static l:Lang.Current}}" />
+                                        <Separator Margin="-12 12" />
+                                        <RadioButton Content="{Binding App.UI.Filter.GroupByProcessThenWindowTree, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowGrouping, Converter={StaticResource WindowGroupingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowGrouping.ProcessThenWindowTree}, Mode=TwoWay}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.GroupByProcessThenWindow, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowGrouping, Converter={StaticResource WindowGroupingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowGrouping.ProcessThenWindow}, Mode=TwoWay}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.GroupByWindowTree, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowGrouping, Converter={StaticResource WindowGroupingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowGrouping.WindowTree}, Mode=TwoWay}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.GroupByPlainList, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowGrouping, Converter={StaticResource WindowGroupingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowGrouping.PlainList}, Mode=TwoWay}" />
+                                    </StackPanel>
+                                </Flyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                        <DropDownButton Margin="8 0 0 0" Content="{Binding App.UI.Filter.SearchIncluding, Source={x:Static l:Lang.Current}}">
+                            <DropDownButton.Flyout>
+                                <Flyout>
+                                    <StackPanel>
+                                        <TextBlock Classes="FlyoutTitle" Text="{Binding App.UI.Filter.SearchTitle, Source={x:Static l:Lang.Current}}" />
+                                        <Separator Margin="-12 12" />
+                                        <CheckBox Content="{Binding App.UI.Filter.SearchIncludingHwnd, Source={x:Static l:Lang.Current}}" IsChecked="True" />
+                                        <CheckBox Content="{Binding App.UI.Filter.SearchIncludingTitle, Source={x:Static l:Lang.Current}}" IsChecked="True" />
+                                        <CheckBox Content="{Binding App.UI.Filter.SearchIncludingProcessName, Source={x:Static l:Lang.Current}}" IsChecked="True"/>
+                                    </StackPanel>
+                                </Flyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                        <Separator Width="1" Height="12" Margin="8 0 0 0" />
+                        <DropDownButton Margin="8 0 0 0" Content="{Binding WindowList.LocalizedSorting, Mode=OneWay}">
+                            <DropDownButton.Flyout>
+                                <Flyout>
+                                    <StackPanel>
+                                        <TextBlock Classes="FlyoutTitle" Text="{Binding App.UI.Filter.SortTitle, Source={x:Static l:Lang.Current}}" />
+                                        <Separator Margin="-12 12" />
+                                        <RadioButton Content="{Binding App.UI.Filter.SortByRaw, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowSorting, Converter={StaticResource WindowSortingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowSorting.Raw}, Mode=TwoWay}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.SortById, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowSorting, Converter={StaticResource WindowSortingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowSorting.AscendingById}, Mode=TwoWay}" />
+                                        <RadioButton Content="{Binding App.UI.Filter.SortByTitle, Source={x:Static l:Lang.Current}}"
+                                                     IsChecked="{Binding WindowList.WindowSorting, Converter={StaticResource WindowSortingToBooleanConverter}, ConverterParameter={x:Static nativeWindows:WindowSorting.AscendingByTitle}, Mode=TwoWay}" />
+                                    </StackPanel>
+                                </Flyout>
+                            </DropDownButton.Flyout>
+                        </DropDownButton>
+                    </StackPanel>
+                </ScrollViewer>
+                <Separator Height="1" Margin="0 8 0 0" />
+            </StackPanel>
+            <TreeView x:Name="WindowListBox" Grid.Row="1" Background="Transparent"
+                      Classes.PlainList="{Binding !WindowList.IsGroupedByProcess, Mode=OneWay}"
+                      ItemsSource="{Binding NativeTree}"
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                      ScrollViewer.VerticalScrollBarVisibility="Auto"
+                      ItemsPanel="{Binding WindowList.IsGroupedByProcess, Mode=OneWay, Converter={StaticResource IsGroupedToItemsPanelTemplateConverter}}">
+                <TreeView.DataTemplates>
+                    <DataTemplate x:DataType="nativeWindows:NativeProcessNode">
+                        <Grid ColumnDefinitions="32,*,Auto">
+                            <Svg Grid.Column="0" Margin="6 0 0 0" Width="16" Height="16"
+                                 HorizontalAlignment="Left" VerticalAlignment="Center"
+                                 Path="/Assets/UI/file-document-svgrepo-com.svg" />
+                            <TextBlock Grid.Column="2"
+                                       FontSize="11" Foreground="#40FFFFFF"
+                                       VerticalAlignment="Center"
+                                       FontFamily="{StaticResource MonoFontFamily}"
+                                       Text="{Binding ProcessId}" />
+                            <TextBlock Grid.Column="1"
+                                       FontSize="13" Foreground="#40FFFFFF" VerticalAlignment="Center"
+                                       Text="{Binding ProcessName}"
+                                       TextTrimming="CharacterEllipsis" />
+                        </Grid>
+                    </DataTemplate>
+                    <DataTemplate x:DataType="nativeWindows:NativeWindowNode">
+                        <Grid ColumnDefinitions="Auto,*">
+                            <TextBlock Grid.Column="0"
+                                       FontSize="11" Foreground="#999999"
+                                       VerticalAlignment="Center" Margin="0 0 8 0"
+                                       FontFamily="{StaticResource MonoFontFamily}"
+                                       Text="{Binding Window.Id, StringFormat=X8}" />
+                            <TextBlock Grid.Column="1"
+                                       FontSize="13" Foreground="#CCCCCC" VerticalAlignment="Center"
+                                       Text="{Binding Window.Title}"
+                                       TextTrimming="CharacterEllipsis" />
+                        </Grid>
+                    </DataTemplate>
+                </TreeView.DataTemplates>
+                <TreeView.ItemTemplate>
+                    <TreeDataTemplate ItemsSource="{Binding Children}">
+                        <ContentControl Content="{Binding}" />
+                    </TreeDataTemplate>
+                </TreeView.ItemTemplate>
+            </TreeView>
+            <StackPanel Grid.Row="2">
+                <Separator Height="1" Margin="0" />
+                <Button Background="Transparent" CornerRadius="0"
+                        Margin="-0.5" Height="48"
+                        HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                        HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
+                        Click="SettingsButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Svg Margin="4 0 8 0" Classes="ButtonIcon" Path="/Assets/UI/settings-gear-svgrepo-com.svg" />
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="{Binding App.UI.SettingsButton, Source={x:Static l:Lang.Current}}" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <!-- Right Content -->
+        <Grid Grid.Column="1"
+              x:DataType="nativeWindows:NativeWindowModel"
+              DataContext="{Binding #WindowListBox.SelectedItem, Converter={StaticResource NativeTreeNodeToNativeWindowConverter}}"
+              RowDefinitions="Auto,Auto,*">
+            <Grid Grid.Row="0" RowDefinitions="32,16" ColumnDefinitions="48,*"
+                  Margin="{OnPlatform 32 40 32 8, Linux=32 48 32 0}">
+                <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
+                        Background="Transparent" HorizontalAlignment="Left">
+                    <Grid>
+                        <Image Source="/Assets/UI/browser-ui-svgrepo-com.256.png" Stretch="Uniform" />
+                    </Grid>
+                </Border>
+                <TextBox Grid.Row="0" Grid.Column="1" Classes="CopyableText"
+                         Margin="12 0 0 0" VerticalAlignment="Center"
+                         FontSize="20" FontWeight="Thin"
+                         Text="{Binding Title, Mode=OneWay}"
+                         Watermark="{Binding App.UI.WindowDetail.EmptyWindowName, Source={x:Static l:Lang.Current}}" />
+                <TextBox x:Name="ProcessPathTextBox" Grid.Row="1" Grid.Column="1" Classes="CopyableText"
+                         Margin="12 0 -24 0" VerticalAlignment="Center"
+                         FontSize="12" Foreground="#666666"
+                         Text="{Binding ProcessId, Converter={StaticResource ProcessIdToProcessPathConverter}, Mode=OneWay}" />
+            </Grid>
+            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="24 12">
+                <Button Classes="GlobalToolButton"
+                        Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
+                        Background="#10FFFFFF"
+                        Click="ReloadButton_Click">
+                    <ToolTip.Tip>
+                        <TextBlock LineHeight="24">
+                            <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.WindowDetail.ReloadButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                            <LineBreak />
+                            <Run Text="{Binding App.UI.WindowDetail.ReloadButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                        </TextBlock>
+                    </ToolTip.Tip>
+                    <Grid ColumnDefinitions="32,Auto">
+                        <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/reload-svgrepo-com.svg" />
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.WindowDetail.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
+                    </Grid>
+                </Button>
+                <Button Classes="GlobalToolButton"
+                        Margin="8 0 0 0" Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
+                        Background="#10FFFFFF"
+                        Click="RevealExecutableFileButton_Click">
+                    <ToolTip.Tip>
+                        <TextBlock LineHeight="24">
+                            <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.WindowDetail.OpenDirectory.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                            <LineBreak />
+                            <Run Text="{Binding App.UI.WindowDetail.OpenDirectory.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                        </TextBlock>
+                    </ToolTip.Tip>
+                    <Grid ColumnDefinitions="32,Auto">
+                        <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/folder-svgrepo-com.svg" />
+                        <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.WindowDetail.OpenDirectory.Content, Source={x:Static l:Lang.Current}}" />
+                    </Grid>
+                </Button>
+            </StackPanel>
+            <Separator Grid.Row="2" VerticalAlignment="Top" Margin="0" />
+            <TabControl x:Name="WindowDetailTabControl" Grid.Row="2"
+                        Margin="-12 12 -12 0" />
+        </Grid>
+    </Grid>
+
+</UserControl>

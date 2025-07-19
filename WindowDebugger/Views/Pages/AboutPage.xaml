@@ -18,7 +18,7 @@
                 <Run Text="Window Debugger" />
                 <Run x:Name="VersionRun" d:Text="1.0.0" />
                 <LineBreak />
-                <Run Text="© 2019-2022 kkwpsv. Some rights reserved." />
+                <Run Text="© 2019-2025 kkwpsv. Some rights reserved." />
             </TextBlock>
             <win11:Hyperlink Content="Original release" Icon="Link48"
                              Margin="-4 0 0 0" Padding="0 4 16 4"

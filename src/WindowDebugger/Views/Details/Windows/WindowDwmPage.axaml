@@ -1,0 +1,183 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:l="using:WindowDebugger.Localizations"
+             xmlns:windows="using:WindowDebugger.Services.NativeWindows.Windows"
+             xmlns:sys="using:System"
+             xmlns:converters="using:WindowDebugger.Views.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="WindowDebugger.Views.Details.Windows.WindowDwmPage"
+             x:Name="WindowDwmPageInstance"
+             x:DataType="windows:WindowsNativeWindowModel">
+
+    <UserControl.Resources>
+        <converters:DwmCloakedToDisplayStringConverter x:Key="DwmCloakedToNameValueConverter" />
+        <converters:RectToDisplayStringConverter x:Key="RectToDisplayStringConverter" />
+        <DataTemplate x:Key="EnumDataConverter" DataType="sys:Enum">
+            <TextBlock Text="{Binding}" />
+        </DataTemplate>
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="ToggleSwitch.PureState">
+            <Setter Property="IsEnabled" Value="False" />
+            <Setter Property="Margin" Value="-12 0" />
+            <Style Selector="^ /template/ Border">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+            <Style Selector="^ /template/ Canvas">
+                <Setter Property="IsVisible" Value="False" />
+            </Style>
+        </Style>
+        <Style Selector="TextBlock.Header">
+            <Setter Property="Margin" Value="0 0 12 0" />
+            <Setter Property="MaxWidth" Value="200" />
+            <Setter Property="TextWrapping" Value="WrapWithOverflow" />
+            <Setter Property="Foreground" Value="#EEEEEE" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="Margin" Value="0 4" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Margin" Value="8 0 0 0" />
+            <Setter Property="Padding" Value="12 0" />
+            <Setter Property="MinWidth" Value="64" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="32 4 32 32">
+            <Border Padding="16" CornerRadius="8" BorderThickness="1"
+                    BorderBrush="#20FFFFFF" Background="#20000000">
+                <StackPanel>
+                    <TextBlock FontSize="16" Foreground="#EEEEEE"
+                               Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.FullTitle, Source={x:Static l:Lang.Current}}" />
+                    <HyperlinkButton Margin="-8 0"
+                                     Content="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DocumentLink, Source={x:Static l:Lang.Current}}"
+                                     NavigateUri="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DocumentLink.Value, Source={x:Static l:Lang.Current}}" />
+                    <ToggleSwitch Classes="PureState"
+                                  IsChecked="{Binding #WindowDwmPageInstance.DwmIsCompositionEnabled, Mode=OneWay}">
+                        <ToggleSwitch.OnContent>
+                            <TextBlock Foreground="#57965C" Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DwmIsCompositionEnabled.True, Source={x:Static l:Lang.Current}}" />
+                        </ToggleSwitch.OnContent>
+                        <ToggleSwitch.OffContent>
+                            <TextBlock Foreground="#C94F4F" Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DwmIsCompositionEnabled.False, Source={x:Static l:Lang.Current}}" />
+                        </ToggleSwitch.OffContent>
+                    </ToggleSwitch>
+                </StackPanel>
+            </Border>
+
+            <Grid Margin="0 12 0 0"
+                  RowDefinitions="*,*,*,*,*,*,*,*,*,*,*,*,*,*" ColumnDefinitions="Auto,*,Auto"
+                  IsEnabled="{Binding #WindowDwmPageInstance.DwmIsCompositionEnabled, Mode=OneWay}">
+
+                <TextBlock Grid.Row="0" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_NCRENDERING_ENABLED, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_NCRENDERING_ENABLED"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Grid.ColumnSpan="2" IsReadOnly="True"
+                         ToolTip.Tip="DWMWA_NCRENDERING_ENABLED"
+                         Text="{Binding DWMInfo.IsNonClientRenderingEnabled, Mode=OneWay}"/>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_CAPTION_BUTTON_BOUNDS, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_CAPTION_BUTTON_BOUNDS"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" IsReadOnly="True"
+                         ToolTip.Tip="DWMWA_CAPTION_BUTTON_BOUNDS"
+                         Text="{Binding DWMInfo.CaptionButtonBounds, Converter={StaticResource RectToDisplayStringConverter}, Mode=OneWay}"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_EXTENDED_FRAME_BOUNDS, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_EXTENDED_FRAME_BOUNDS"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Grid.ColumnSpan="2" IsReadOnly="True"
+                         ToolTip.Tip="DWMWA_EXTENDED_FRAME_BOUNDS"
+                         Text="{Binding DWMInfo.ExtendFrameBounds, Converter={StaticResource RectToDisplayStringConverter}, Mode=OneWay}"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_CLOAKED, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_CLOAKED"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Grid.ColumnSpan="2" IsReadOnly="True"
+                         ToolTip.Tip="DWMWA_CLOAKED"
+                         Text="{Binding DWMInfo.Cloaked, Converter={StaticResource DwmCloakedToNameValueConverter}, Mode=OneWay}"/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_NCRENDERING_POLICY, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_NCRENDERING_POLICY"/>
+                <ComboBox x:Name="NonClientRenderingPolicyComboBox" Grid.Row="4" Grid.Column="1"
+                          ItemsSource="{Binding #WindowDwmPageInstance.AllDwmNCRenderingPolicy}" />
+                <Button Grid.Row="4" Grid.Column="2" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}" Click="NonClientRenderingPolicyButton_Click"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_TRANSITIONS_FORCEDISABLED, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_TRANSITIONS_FORCEDISABLED"/>
+                <ComboBox x:Name="IsDWMTransitionsEnabledComboBox" Grid.Row="5" Grid.Column="1"
+                          ItemsSource="{Binding #WindowDwmPageInstance.AllBooleans}" />
+                <Button  Grid.Row="5" Grid.Column="2" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}" Click="IsDWMTransitionsEnabledButton_Click"/>
+
+                <TextBlock Grid.Row="6" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_NONCLIENT_RTL_LAYOUT, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_NONCLIENT_RTL_LAYOUT" />
+                <ComboBox x:Name="IsNonClientContentRightToLeftLayoutComboBox" Grid.Row="6" Grid.Column="1"
+                          ItemsSource="{Binding #WindowDwmPageInstance.AllBooleans}" />
+                <Button Grid.Row="6" Grid.Column="2" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}" Click="IsNonClientContentRightToLeftLayoutButton_Click"/>
+
+                <TextBlock Grid.Row="7" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_FORCE_ICONIC_REPRESENTATION, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_FORCE_ICONIC_REPRESENTATION"/>
+                <ComboBox x:Name="IsForceIconicRepresentationComboBox" Grid.Row="7" Grid.Column="1"
+                          ItemsSource="{Binding #WindowDwmPageInstance.AllBooleans}" />
+                <Button Grid.Row="7" Grid.Column="2" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}" Click="IsForceIconicRepresentationButton_Click"/>
+
+                <TextBlock Grid.Row="8" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_FLIP3D_POLICY, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_FLIP3D_POLICY"/>
+                <ComboBox x:Name="Flip3DPolicyComboBox" Grid.Row="8" Grid.Column="1"
+                          ItemsSource="{Binding #WindowDwmPageInstance.AllDwmFlip3DWindowPolicy}" />
+                <Button Grid.Row="8" Grid.Column="2" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}" Click="Flip3DPolicyButton_Click"/>
+
+                <TextBlock Grid.Row="9" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_HAS_ICONIC_BITMAP, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_HAS_ICONIC_BITMAP"/>
+                <ComboBox x:Name="HasIconicBitmapComboBox" Grid.Row="9" Grid.Column="1"
+                          ItemsSource="{Binding #WindowDwmPageInstance.AllBooleans}" />
+                <Button Grid.Row="9" Grid.Column="2" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}" Click="HasIconicBitmapButton_Click"/>
+
+                <TextBlock Grid.Row="10" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_DISALLOW_PEEK, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_DISALLOW_PEEK"/>
+                <ComboBox x:Name="IsDisallowPeekComboBox" Grid.Row="10" Grid.Column="1"
+                          ItemsSource="{Binding #WindowDwmPageInstance.AllBooleans}" />
+                <Button Grid.Row="10" Grid.Column="2" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}" Click="IsDisallowPeekButton_Click"/>
+
+                <TextBlock Grid.Row="11" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_EXCLUDED_FROM_PEEK, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_EXCLUDED_FROM_PEEK"/>
+                <ComboBox x:Name="IsExcludedFromPeekComboBox" Grid.Row="11" Grid.Column="1"
+                          ItemsSource="{Binding #WindowDwmPageInstance.AllBooleans}" />
+                <Button Grid.Row="11" Grid.Column="2" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}" Click="IsExcludedFromPeekButton_Click"/>
+
+                <TextBlock Grid.Row="12" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_CLOAK, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_CLOAK"/>
+                <ComboBox x:Name="IsCloakComboBox" Grid.Row="12" Grid.Column="1"
+                          ItemsSource="{Binding #WindowDwmPageInstance.AllBooleans}" />
+                <Button Grid.Row="12" Grid.Column="2" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}" Click="IsCloakButton_Click"/>
+
+                <TextBlock Grid.Row="13" Grid.Column="0" Classes="Header"
+                           Text="{Binding App.UI.WindowDetail.Pages.Windows.Dwm.DWMWA_FREEZE_REPRESENTATION, Source={x:Static l:Lang.Current}}"
+                           ToolTip.Tip="DWMWA_FREEZE_REPRESENTATION"/>
+                <ComboBox x:Name="IsFreezeRepresentationComboBox" Grid.Row="13" Grid.Column="1"
+                          ItemsSource="{Binding #WindowDwmPageInstance.AllBooleans}" />
+                <Button Grid.Row="13" Grid.Column="2" Content="{Binding App.UI.WindowDetail.ChangeButton, Source={x:Static l:Lang.Current}}" Click="IsFreezeRepresentationButton_Click"/>
+
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+
+</UserControl>

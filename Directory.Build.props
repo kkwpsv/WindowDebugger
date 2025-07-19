@@ -1,0 +1,11 @@
+<Project>
+
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <ArtifactsPath>$(MSBuildThisFileDirectory)artifacts</ArtifactsPath>
+    <RepositoryRoot>$(MSBuildThisFileDirectory)</RepositoryRoot>
+  </PropertyGroup>
+
+</Project>

@@ -9,6 +9,7 @@
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <ApplicationIcon>icon.ico</ApplicationIcon>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <RootNamespace>WindowDebugger</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,9 +18,9 @@
 
   <ItemGroup>
     <PackageReference Include="Lsj.Util.JSON" Version="6.0.0" />
-    <PackageReference Include="Lsj.Util.Win32" Version="6.2.3" />
-    <PackageReference Include="Lsj.Util.WPF" Version="6.0.0" />
-    <PackageReference Include="Lsj.Util.Win32.NativeUI" Version="6.1.0" />
+    <PackageReference Include="Lsj.Util.Win32" Version="8.0.0" />
+    <PackageReference Include="Lsj.Util.WPF" Version="8.0.0" />
+    <PackageReference Include="Lsj.Util.Win32.NativeUI" Version="8.0.0" />
     <PackageReference Include="System.Net.Http" Version="4.3.4" />
     <PackageReference Include="WPF-UI" Version="1.2.6" />
   </ItemGroup>

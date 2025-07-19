@@ -1,0 +1,122 @@
+<Application xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             x:Class="WindowDebugger.App"
+             RequestedThemeVariant="Dark">
+
+    <Application.Resources>
+        <ResourceDictionary>
+
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceInclude Source="Themes/ListBoxItem.axaml" />
+                <ResourceInclude Source="Themes/TreeViewItem.axaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <x:Double x:Key="ComboBoxThemeMinWidth">0</x:Double>
+            <FontFamily x:Key="MonoFontFamily">/Assets/Fonts/FiraCode-Regular.ttf#Fira Code</FontFamily>
+            <FontFamily x:Key="MonoFontFamilyLight">/Assets/Fonts/FiraCode-Light.ttf#Fira Code Light</FontFamily>
+            <FontFamily x:Key="MonoFontFamilyBold">/Assets/Fonts/FiraCode-Retina.ttf#Fira Code Retina</FontFamily>
+
+        </ResourceDictionary>
+    </Application.Resources>
+
+    <Application.Styles>
+
+        <FluentTheme />
+
+        <Style Selector="TextBox">
+            <Setter Property="BorderBrush" Value="#20FFFFFF" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+        <Style Selector="TextBox.Code">
+            <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
+        </Style>
+
+        <Style Selector="ComboBox">
+            <Setter Property="BorderBrush" Value="#20FFFFFF" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+        <Style Selector="ComboBox.Code">
+            <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
+        </Style>
+
+        <Style Selector="Button">
+            <Setter Property="Background" Value="#10FFFFFF" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+
+        <Style Selector="ToggleButton">
+            <Setter Property="Background" Value="#10FFFFFF" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+
+        <Style Selector="HyperlinkButton">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="CornerRadius" Value="6" />
+        </Style>
+
+        <Style Selector="DropDownButton">
+            <Setter Property="Foreground" Value="#80FFFFFF" />
+            <Setter Property="Background" Value="#20FFFFFF" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Padding" Value="8 0 -4 0" />
+            <Setter Property="Height" Value="24" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="MinHeight" Value="24" />
+            <Setter Property="CornerRadius" Value="12" />
+            <Style Selector="^ /template/ ContentPresenter">
+                <Setter Property="FontSize" Value="10" />
+            </Style>
+            <Style Selector="^ /template/ PathIcon#DropDownGlyph">
+                <Setter Property="RenderTransform" Value="scale(0.75) translate(4px,0px)" />
+            </Style>
+        </Style>
+
+        <Style Selector="CheckBox.Code">
+            <Setter Property="FontFamily" Value="{StaticResource MonoFontFamily}" />
+        </Style>
+
+        <Style Selector="TextBox">
+            <Setter Property="Margin" Value="0 4" />
+            <Setter Property="Padding" Value="8 4" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="TextWrapping" Value="Wrap" />
+            <Style Selector="^[IsReadOnly=True]">
+                <Setter Property="Foreground" Value="#999999" />
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderBrush" Value="#20FFFFFF" />
+                <Style Selector="^:pointerover /template/ Border#PART_BorderElement">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="#20FFFFFF" />
+                </Style>
+                <Style Selector="^:focus /template/ Border#PART_BorderElement">
+                    <Setter Property="Background" Value="Transparent" />
+                    <Setter Property="BorderBrush" Value="#20FFFFFF" />
+                </Style>
+            </Style>
+        </Style>
+        <Style Selector="TextBox.CopyableText">
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="Margin" Value="0" />
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="MinWidth" Value="0" />
+            <Setter Property="MinHeight" Value="0" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="IsReadOnly" Value="True" />
+            <Style Selector="^:pointerover /template/ Border#PART_BorderElement">
+                <Setter Property="Background" Value="Transparent" />
+            </Style>
+            <Style Selector="^:focus /template/ Border#PART_BorderElement">
+                <Setter Property="Background" Value="Transparent" />
+                <Setter Property="BorderThickness" Value="0" />
+            </Style>
+        </Style>
+
+        <Style Selector="Separator">
+            <Setter Property="Background" Value="#20FFFFFF" />
+        </Style>
+
+    </Application.Styles>
+
+</Application>

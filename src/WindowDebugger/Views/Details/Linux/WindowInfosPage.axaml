@@ -1,0 +1,71 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:linux="using:WindowDebugger.Services.NativeWindows.Linux"
+        xmlns:l="using:WindowDebugger.Localizations"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="WindowDebugger.Views.Details.Linux.WindowInfosPage"
+        x:DataType="linux:LinuxNativeWindowModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock">
+            <Setter Property="Margin" Value="0 4 12 4" />
+            <Setter Property="Foreground" Value="#EEEEEE" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+        </Style>
+        <Style Selector="ComboBox">
+            <Setter Property="Margin" Value="0 4" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+        <Style Selector="Button">
+            <Setter Property="Margin" Value="8 0 0 0" />
+            <Setter Property="Padding" Value="12 0" />
+            <Setter Property="MinWidth" Value="64" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+        </Style>
+    </UserControl.Styles>
+
+    <ScrollViewer>
+        <StackPanel Margin="32 4 32 32">
+            <Grid Margin="0 12 0 0"
+                  RowDefinitions="Auto,Auto,Auto,Auto,Auto,Auto" ColumnDefinitions="Auto,*,Auto">
+
+                <TextBlock Grid.Row="0" Grid.Column="0">
+                    <Run Text="{Binding App.UI.WindowDetail.Pages.Linux.Info.Bounds.Title, Source={x:Static l:Lang.Current}}" />
+                    <LineBreak />
+                    <Run Foreground="#666666" FontSize="12" Text="{Binding App.UI.WindowDetail.Pages.Linux.Info.Bounds.Description, Source={x:Static l:Lang.Current}}" />
+                </TextBlock>
+                <UniformGrid Grid.Row="0" Grid.Column="1" x:Name="GridRect" Columns="4">
+                    <TextBlock Text="{Binding App.UI.WindowDetail.Pages.Linux.Info.Bounds.Left, Source={x:Static l:Lang.Current}}" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="RectLeftTextBox" Text="{Binding Left, Mode=OneWay}"/>
+                    <TextBlock Text="{Binding App.UI.WindowDetail.Pages.Linux.Info.Bounds.Top, Source={x:Static l:Lang.Current}}" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="RectTopTextBox" Text="{Binding Top, Mode=OneWay}"/>
+                    <TextBlock Text="{Binding App.UI.WindowDetail.Pages.Linux.Info.Bounds.Width, Source={x:Static l:Lang.Current}}" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="RectWidthTextBox" Text="{Binding Width, Mode=OneWay}"/>
+                    <TextBlock Text="{Binding App.UI.WindowDetail.Pages.Linux.Info.Bounds.Height, Source={x:Static l:Lang.Current}}" HorizontalAlignment="Center"/>
+                    <TextBox x:Name="RectHeightTextBox" Text="{Binding Height, Mode=OneWay}"/>
+                </UniformGrid>
+
+                <TextBlock Grid.Row="1" Grid.Column="0" Text="颜色深度 Depth"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Classes="Code" Text="{Binding Depth, Mode=OneWay}"/>
+
+                <TextBlock Grid.Row="2" Grid.Column="0" Text="边框宽度"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Classes="Code" Text="{Binding BorderWidth, StringFormat='0x{0:X}', Mode=OneWay}"/>
+
+                <TextBlock Grid.Row="3" Grid.Column="0" Text="窗口类型"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Classes="Code" Text="{Binding WindowClasses, Mode=OneWay}"/>
+
+                <TextBlock Grid.Row="4" Grid.Column="0" Text="窗口映射状态"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Classes="Code" Text="{Binding MapState, Mode=OneWay}"/>
+
+                <TextBlock Grid.Row="5" Grid.Column="0" Text="OverrideRedirect"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Classes="Code" Text="{Binding OverrideRedirect, Mode=OneWay}"/>
+
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</UserControl>

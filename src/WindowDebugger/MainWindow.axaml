@@ -1,0 +1,70 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:views="using:WindowDebugger.Views"
+        xmlns:l="using:WindowDebugger.Localizations"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="WindowDebugger.MainWindow"
+        x:Name="MainWindowInstance"
+        Width="1280" Height="960" WindowStartupLocation="CenterScreen"
+        TransparencyLevelHint="Mica,AcrylicBlur,Blur"
+        ExtendClientAreaToDecorationsHint="True" ExtendClientAreaTitleBarHeightHint="40"
+        Icon="/Assets/Icons/icon.ico" Background="Transparent"
+        Title="{Binding Product.LocalizedName, Source={x:Static l:Lang.Current}}">
+
+    <Border Margin="{Binding #MainWindowInstance.OffScreenMargin}">
+        <Grid RowDefinitions="Auto,*">
+            <Border Grid.Row="0" Grid.RowSpan="2" IsHitTestVisible="False"
+                    Background="{OnPlatform #262626, Windows=Transparent, Linux=#262626, macOS=Transparent}" />
+            <Grid x:Name="ContentPanel" Grid.Row="0" Grid.RowSpan="2" Margin="{OnPlatform Linux=0 -32 0 0}">
+                <Border x:Name="TransientBorder" />
+                <views:MainView x:Name="MainView" />
+            </Grid>
+            <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Height="40" IsVisible="{OnPlatform True, Linux=False}">
+                <Grid.Styles>
+                    <Style Selector="Button">
+                        <Setter Property="Transitions">
+                            <Transitions>
+                                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.6" Easing="CircularEaseOut" />
+                            </Transitions>
+                        </Setter>
+                    </Style>
+                    <Style Selector="TextBlock">
+                        <Setter Property="Transitions">
+                            <Transitions>
+                                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.4" Delay="0:0:0.2" Easing="CircularEaseOut" />
+                            </Transitions>
+                        </Setter>
+                    </Style>
+                    <Style Selector="Button">
+                        <Setter Property="RenderTransform" Value="translateX(-80px)" />
+                        <Style Selector="^.HasBack">
+                            <Setter Property="RenderTransform" Value="translateX(0px)" />
+                        </Style>
+                    </Style>
+                    <Style Selector="TextBlock">
+                        <Setter Property="RenderTransform" Value="translateX(-32px)" />
+                        <Style Selector="^.HasBack">
+                            <Setter Property="RenderTransform" Value="translateX(0px)" />
+                        </Style>
+                    </Style>
+                </Grid.Styles>
+                <Button x:Name="BackButton" Grid.Column="0"
+                        Width="40" Height="32"
+                        Margin="4 4 -8 4" Padding="0"
+                        HorizontalContentAlignment="Center" VerticalContentAlignment="Center"
+                        Background="Transparent"
+                        Focusable="False"
+                        FontSize="16" Content="🔙"
+                        Click="BackButton_Click" />
+                <TextBlock x:Name="TitleTextBlock" Grid.Column="1"
+                           Margin="12 0 0 0" FontSize="12"
+                           VerticalAlignment="Center"
+                           IsHitTestVisible="False"
+                           Text="{Binding Product.LocalizedName, Source={x:Static l:Lang.Current}}" />
+            </Grid>
+        </Grid>
+    </Border>
+
+</Window>

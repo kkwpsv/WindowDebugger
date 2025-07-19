@@ -381,7 +381,7 @@ file static class ThumbnailExtensions
         // 指定位深和格式。
         var info = new BITMAPINFO();
 #pragma warning disable CS0618
-        info.bmiHeader.biSize = (uint)Marshal.SizeOf(typeof(BITMAPINFOHEADER));
+        info.bmiHeader.biSize = SizeOf<BITMAPINFOHEADER>();
 #pragma warning restore CS0618
         info.bmiHeader.biWidth = bitmapPtr->bmWidth;
         info.bmiHeader.biHeight = -bitmapPtr->bmHeight; // top-down

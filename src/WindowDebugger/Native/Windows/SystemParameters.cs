@@ -1,13 +1,16 @@
-﻿using System.Runtime.InteropServices;
+﻿using Lsj.Util.Win32;
+using Lsj.Util.Win32.Structs;
+using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
+using static Lsj.Util.Win32.Enums.SystemParametersInfoParameters;
+using static Lsj.Util.Win32.UnsafePInvokeExtensions;
 
 namespace WindowDebugger.Native.Windows;
 
 [SupportedOSPlatform("windows")]
 internal static class SystemParameters
 {
-    private const int SPI_GETNONCLIENTMETRICS = 0x0029;
-
+    // TODO: move to Lsj.Util.Win32
     [StructLayout(LayoutKind.Sequential)]
     internal struct NONCLIENTMETRICS
     {
@@ -30,38 +33,11 @@ internal static class SystemParameters
         public int iPaddedBorderWidth;
     }
 
-    [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
-    internal struct LOGFONT
+    public unsafe static string? GetSystemDefaultFontName()
     {
-        public int lfHeight;
-        public int lfWidth;
-        public int lfEscapement;
-        public int lfOrientation;
-        public int lfWeight;
-        public byte lfItalic;
-        public byte lfUnderline;
-        public byte lfStrikeOut;
-        public byte lfCharSet;
-        public byte lfOutPrecision;
-        public byte lfClipPrecision;
-        public byte lfQuality;
-        public byte lfPitchAndFamily;
-        [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 32)]
-        public string lfFaceName;
-    }
+        var ncm = stackalloc NONCLIENTMETRICS[1];
+        ncm->cbSize = SizeOf<NONCLIENTMETRICS>();
 
-    [DllImport("user32.dll", CharSet = CharSet.Auto)]
-    private static extern bool SystemParametersInfo(int uAction, int uParam, ref NONCLIENTMETRICS lpvParam, int fuWinIni);
-
-    public static string? GetSystemDefaultFontName()
-    {
-        var ncm = new NONCLIENTMETRICS
-        {
-            cbSize = Marshal.SizeOf(typeof(NONCLIENTMETRICS))
-        };
-
-        return SystemParametersInfo(SPI_GETNONCLIENTMETRICS, ncm.cbSize, ref ncm, 0)
-            ? ncm.lfMessageFont.lfFaceName
-            : null;
+        return User32.SystemParametersInfo(SPI_GETNONCLIENTMETRICS, ncm->cbSize, ncm, 0) ? (string)ncm->lfMessageFont.lfFaceName : null;
     }
 }

@@ -315,7 +315,6 @@ public record WindowsNativeWindowModel : NativeWindowModel
             if (screenShot != NULL)
             {
                 var image = screenShot.HBitmapToAvaloniaImage();
-                image.Save(@"D:\WIP\Desktop\screenshot.png");
                 Gdi32.DeleteObject(screenShot);
                 return image;
             }

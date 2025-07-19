@@ -1,17 +1,18 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
-using System.Runtime.InteropServices;
-using Avalonia;
+﻿using Avalonia;
 using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using Lsj.Util.Win32;
 using Lsj.Util.Win32.BaseTypes;
+using Lsj.Util.Win32.Callbacks;
 using Lsj.Util.Win32.Enums;
 using Lsj.Util.Win32.Extensions;
 using Lsj.Util.Win32.Extensions.NativeUI;
 using Lsj.Util.Win32.NativeUI;
 using Lsj.Util.Win32.Structs;
 using ReactiveUI;
+using System.ComponentModel;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 using static Lsj.Util.Win32.BaseTypes.HRESULT;
 using static Lsj.Util.Win32.Constants;
 using static Lsj.Util.Win32.Enums.DPI_AWARENESS;
@@ -29,7 +30,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
 {
     private readonly Win32Window _window;
     private string? _errorString;
-    private Task<WriteableBitmap?> _screenshot;
+    private Task<WriteableBitmap?>? _screenshot;
 
     public WindowsNativeWindowModel(HWND hwnd) : base(hwnd)
     {
@@ -168,13 +169,13 @@ public record WindowsNativeWindowModel : NativeWindowModel
     }
 
 
-    public Task<WriteableBitmap?> Screenshot
+    public Task<WriteableBitmap?>? Screenshot
     {
         get => _screenshot;
         set => this.RaiseAndSetIfChanged(ref _screenshot, value);
     }
 
-    public DWMInfo DWMInfo
+    public DWMInfo? DWMInfo
     {
         get => _window.ParentWindowHandle == GetDesktopWindow() ? _window.DWMInfo : null;
     }
@@ -184,7 +185,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
         get => _window.IsTouchWindow;
     }
 
-    public string VirtualDesktopID => GetWithDefaultValueWhenException(() => _window.DesktopID.ToString(), null);
+    public string? VirtualDesktopID => GetWithDefaultValueWhenException(() => _window.DesktopID.ToString(), null);
 
     private void SetError()
     {
@@ -230,7 +231,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
         var process = OpenProcess(PROCESS_CREATE_THREAD, false, ProcessId);
         if (process != NULL)
         {
-            var threadHandle = CreateRemoteThread(process, NullRef<SECURITY_ATTRIBUTES>(), 0, null, NULL, 0, out NullRef<DWORD>());
+            var threadHandle = CreateRemoteThread(process, NullRef<SECURITY_ATTRIBUTES>(), 0, (LPTHREAD_START_ROUTINE)NULL, NULL, 0, out NullRef<DWORD>());
             if (threadHandle == NULL || !CloseHandle(threadHandle))
             {
                 SetError();
@@ -311,7 +312,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
     {
         try
         {
-            var screenShot = WindowExtensions.GetWindowScreenshotWithCaptureBlt(WindowHandle);
+            var screenShot = await Task.Run(() => WindowExtensions.GetWindowScreenshotWithCaptureBlt(WindowHandle));
             if (screenShot != NULL)
             {
                 var image = screenShot.HBitmapToAvaloniaImage();
@@ -347,11 +348,11 @@ public record WindowsNativeWindowModel : NativeWindowModel
                 //Ignore
                 return;
             }
-            ErrorString = Marshal.GetExceptionForHR(hResult.Value).Message;
+            ErrorString = Marshal.GetExceptionForHR(hResult.Value)?.Message;
         }
     }
 
-    private T GetWithDefaultValueWhenException<T>(Func<T> getAction, T defaultValue)
+    private T? GetWithDefaultValueWhenException<T>(Func<T> getAction, T defaultValue)
     {
         try
         {
@@ -379,7 +380,9 @@ file static class ThumbnailExtensions
 
         // 指定位深和格式。
         var info = new BITMAPINFO();
+#pragma warning disable CS0618
         info.bmiHeader.biSize = (uint)Marshal.SizeOf(typeof(BITMAPINFOHEADER));
+#pragma warning restore CS0618
         info.bmiHeader.biWidth = bitmapPtr->bmWidth;
         info.bmiHeader.biHeight = -bitmapPtr->bmHeight; // top-down
         info.bmiHeader.biPlanes = 1;

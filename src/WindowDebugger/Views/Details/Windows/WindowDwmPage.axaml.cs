@@ -1,9 +1,9 @@
-using System.Collections.Immutable;
 using Avalonia;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Lsj.Util.Win32;
 using Lsj.Util.Win32.Enums;
+using System.Collections.Immutable;
 using WindowDebugger.Services.NativeWindows.Windows;
 
 namespace WindowDebugger.Views.Details.Windows;
@@ -28,11 +28,11 @@ public partial class WindowDwmPage : UserControl
         set => SetAndRaise(DwmIsCompositionEnabledProperty, ref _dwmIsCompositionEnabled, value);
     }
 
-    public ImmutableArray<BooleanValue> AllBooleans { get; } = [..Enum.GetValues<BooleanValue>()];
+    public ImmutableArray<BooleanValue> AllBooleans { get; } = [.. Enum.GetValues<BooleanValue>()];
 
-    public ImmutableArray<DWMNCRENDERINGPOLICY> AllDwmNCRenderingPolicy { get; } = [..Enum.GetValues<DWMNCRENDERINGPOLICY>()];
+    public ImmutableArray<DWMNCRENDERINGPOLICY> AllDwmNCRenderingPolicy { get; } = [.. Enum.GetValues<DWMNCRENDERINGPOLICY>()];
 
-    public ImmutableArray<DWMFLIP3DWINDOWPOLICY> AllDwmFlip3DWindowPolicy { get; } = [..Enum.GetValues<DWMFLIP3DWINDOWPOLICY>()];
+    public ImmutableArray<DWMFLIP3DWINDOWPOLICY> AllDwmFlip3DWindowPolicy { get; } = [.. Enum.GetValues<DWMFLIP3DWINDOWPOLICY>()];
 
     private WindowsNativeWindowModel WindowModel => (WindowsNativeWindowModel)DataContext!;
 
@@ -44,7 +44,7 @@ public partial class WindowDwmPage : UserControl
 
     private void NonClientRenderingPolicyButton_Click(object sender, RoutedEventArgs e)
     {
-        if (NonClientRenderingPolicyComboBox.GetSelectedEnum<DWMNCRENDERINGPOLICY>() is { } value)
+        if (WindowModel.DWMInfo != null && NonClientRenderingPolicyComboBox.GetSelectedEnum<DWMNCRENDERINGPOLICY>() is { } value)
         {
             WindowModel.DWMInfo.NonClientRenderingPolicy = value;
         }
@@ -52,7 +52,7 @@ public partial class WindowDwmPage : UserControl
 
     private void IsDWMTransitionsEnabledButton_Click(object sender, RoutedEventArgs e)
     {
-        if (IsDWMTransitionsEnabledComboBox.GetSelectedBoolean() is { } value)
+        if (WindowModel.DWMInfo != null && IsDWMTransitionsEnabledComboBox.GetSelectedBoolean() is { } value)
         {
             WindowModel.DWMInfo.IsDWMTransitionsEnabled = value;
         }
@@ -60,7 +60,7 @@ public partial class WindowDwmPage : UserControl
 
     private void IsNonClientContentRightToLeftLayoutButton_Click(object sender, RoutedEventArgs e)
     {
-        if (IsNonClientContentRightToLeftLayoutComboBox.GetSelectedBoolean() is { } value)
+        if (WindowModel.DWMInfo != null && IsNonClientContentRightToLeftLayoutComboBox.GetSelectedBoolean() is { } value)
         {
             WindowModel.DWMInfo.IsNonClientContentRightToLeftLayout = value;
         }
@@ -68,7 +68,7 @@ public partial class WindowDwmPage : UserControl
 
     private void IsForceIconicRepresentationButton_Click(object sender, RoutedEventArgs e)
     {
-        if (IsForceIconicRepresentationComboBox.GetSelectedBoolean() is { } value)
+        if (WindowModel.DWMInfo != null && IsForceIconicRepresentationComboBox.GetSelectedBoolean() is { } value)
         {
             WindowModel.DWMInfo.IsForceIconicRepresentation = value;
         }
@@ -76,7 +76,7 @@ public partial class WindowDwmPage : UserControl
 
     private void Flip3DPolicyButton_Click(object sender, RoutedEventArgs e)
     {
-        if (Flip3DPolicyComboBox.GetSelectedEnum<DWMFLIP3DWINDOWPOLICY>() is { } value)
+        if (WindowModel.DWMInfo != null && Flip3DPolicyComboBox.GetSelectedEnum<DWMFLIP3DWINDOWPOLICY>() is { } value)
         {
             WindowModel.DWMInfo.Flip3DPolicy = value;
         }
@@ -84,7 +84,7 @@ public partial class WindowDwmPage : UserControl
 
     private void HasIconicBitmapButton_Click(object sender, RoutedEventArgs e)
     {
-        if (HasIconicBitmapComboBox.GetSelectedBoolean() is { } value)
+        if (WindowModel.DWMInfo != null && HasIconicBitmapComboBox.GetSelectedBoolean() is { } value)
         {
             WindowModel.DWMInfo.HasIconicBitmap = value;
         }
@@ -92,7 +92,7 @@ public partial class WindowDwmPage : UserControl
 
     private void IsDisallowPeekButton_Click(object sender, RoutedEventArgs e)
     {
-        if (IsDisallowPeekComboBox.GetSelectedBoolean() is { } value)
+        if (WindowModel.DWMInfo != null && IsDisallowPeekComboBox.GetSelectedBoolean() is { } value)
         {
             WindowModel.DWMInfo.IsDisallowPeek = value;
         }
@@ -100,7 +100,7 @@ public partial class WindowDwmPage : UserControl
 
     private void IsExcludedFromPeekButton_Click(object sender, RoutedEventArgs e)
     {
-        if (IsExcludedFromPeekComboBox.GetSelectedBoolean() is { } value)
+        if (WindowModel.DWMInfo != null && IsExcludedFromPeekComboBox.GetSelectedBoolean() is { } value)
         {
             WindowModel.DWMInfo.IsExcludedFromPeek = value;
         }
@@ -108,7 +108,7 @@ public partial class WindowDwmPage : UserControl
 
     private void IsCloakButton_Click(object sender, RoutedEventArgs e)
     {
-        if (IsCloakComboBox.GetSelectedBoolean() is { } value)
+        if (WindowModel.DWMInfo != null && IsCloakComboBox.GetSelectedBoolean() is { } value)
         {
             WindowModel.DWMInfo.IsCloak = value;
         }
@@ -116,7 +116,7 @@ public partial class WindowDwmPage : UserControl
 
     private void IsFreezeRepresentationButton_Click(object sender, RoutedEventArgs e)
     {
-        if (IsFreezeRepresentationComboBox.GetSelectedBoolean() is { } value)
+        if (WindowModel.DWMInfo != null && IsFreezeRepresentationComboBox.GetSelectedBoolean() is { } value)
         {
             WindowModel.DWMInfo.IsFreezeRepresentation = value;
         }

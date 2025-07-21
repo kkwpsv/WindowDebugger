@@ -312,12 +312,12 @@
                 </Border>
                 <TextBox Grid.Row="0" Grid.Column="1" Classes="CopyableText"
                          Margin="12 0 0 0" VerticalAlignment="Center"
-                         FontSize="20" FontWeight="Thin"
+                         FontSize="20" FontWeight="Thin" TextWrapping="NoWrap"
                          Text="{Binding Title, Mode=OneWay}"
                          Watermark="{Binding App.UI.WindowDetail.EmptyWindowName, Source={x:Static l:Lang.Current}}" />
                 <TextBox x:Name="ProcessPathTextBox" Grid.Row="1" Grid.Column="1" Classes="CopyableText"
                          Margin="12 0 -24 0" VerticalAlignment="Center"
-                         FontSize="12" Foreground="#666666"
+                         FontSize="12" Foreground="#666666" TextWrapping="NoWrap"
                          Text="{Binding ProcessId, Converter={StaticResource ProcessIdToProcessPathConverter}, Mode=OneWay}" />
             </Grid>
             <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="24 12">

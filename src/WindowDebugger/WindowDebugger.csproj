@@ -9,7 +9,7 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Version>0.1.0</Version>
-    <!-- 当 AOT 启用时，System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupporte 开关将被关闭，设计器将无法工作。 -->
+    <!-- 当 AOT 启用时，System.Runtime.CompilerServices.RuntimeFeature.IsDynamicCodeSupported 开关将被关闭，设计器将无法工作。 -->
     <PublishAot Condition="'$(Configuration)' != 'Debug'">true</PublishAot>
   </PropertyGroup>
 

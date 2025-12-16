@@ -22,30 +22,6 @@ public partial class MainView : UserControl
         Loaded += OnLoaded;
     }
 
-    private void TopMostToggleButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
-    {
-        if (TopLevel.GetTopLevel(this) is Window window)
-        {
-            window.Topmost = ((ToggleButton)sender!).IsChecked is true;
-        }
-    }
-
-    private void UacButton_Click(object? sender, RoutedEventArgs e)
-    {
-        if (Environment.ProcessPath is { } path && File.Exists(path))
-        {
-            Process.Start(new ProcessStartInfo(path)
-            {
-                UseShellExecute = true,
-                Verb = "runas",
-            });
-            if (TopLevel.GetTopLevel(this) is Window window)
-            {
-                window.Close();
-            }
-        }
-    }
-
     private async void OnLoaded(object? sender, RoutedEventArgs e)
     {
         var vm = new MainViewModel();
@@ -58,7 +34,11 @@ public partial class MainView : UserControl
         await ReloadAllAsync();
     }
 
-    private void CaptureButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
+    private void CaptureButton_Click(object? sender, RoutedEventArgs e)
+    {
+    }
+
+    private void TrackButton_CheckedChanged(object? sender, RoutedEventArgs e)
     {
     }
 

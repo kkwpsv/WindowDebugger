@@ -1,5 +1,7 @@
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Rendering.Composition;
@@ -37,6 +39,24 @@ public partial class MainWindow : Window
 
         Width = width;
         Height = height;
+    }
+
+    private void UacButton_Click(object? sender, RoutedEventArgs e)
+    {
+        if (Environment.ProcessPath is { } path && File.Exists(path))
+        {
+            Process.Start(new ProcessStartInfo(path)
+            {
+                UseShellExecute = true,
+                Verb = "runas",
+            });
+            Close();
+        }
+    }
+
+    private void TopMostToggleButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
+    {
+        Topmost = ((ToggleButton)sender!).IsChecked is true;
     }
 
     private void OnGlobalPointerPressed(object? sender, PointerPressedEventArgs e)

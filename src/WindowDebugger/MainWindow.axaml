@@ -20,20 +20,68 @@
             <Grid x:Name="ContentPanel" Grid.Row="0" Grid.RowSpan="2" Margin="{OnPlatform Linux=0 -32 0 0}">
                 <Border x:Name="TransientBorder" />
                 <views:MainView x:Name="MainView" />
+                <StackPanel Orientation="Horizontal" Margin="0 0 140 0"
+                            HorizontalAlignment="Right" VerticalAlignment="Top">
+                    <StackPanel.Styles>
+                        <Style Selector="Button.WindowGlobalButton, ToggleButton.WindowGlobalButton">
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="CornerRadius" Value="0" />
+                            <Setter Property="Width" Value="42" />
+                            <Setter Property="Height" Value="30" />
+                            <Setter Property="Background" Value="Transparent" />
+                        </Style>
+                        <Style Selector="Svg.ButtonIcon">
+                            <Setter Property="Width" Value="16" />
+                            <Setter Property="Height" Value="16" />
+                            <Setter Property="Stretch" Value="Uniform" />
+                        </Style>
+                        <Style Selector="Svg.Pin">
+                            <Setter Property="Path" Value="/Assets/UI/pushpin.svg" />
+                        </Style>
+                        <Style Selector="ToggleButton:checked Svg.Pin">
+                            <Setter Property="Path" Value="/Assets/UI/pushpin-fill.svg" />
+                        </Style>
+                    </StackPanel.Styles>
+                    <Button Classes="WindowGlobalButton" Margin="4 0 0 0" Click="UacButton_Click"
+                            IsVisible="{OnPlatform False, Windows=True}">
+                        <ToolTip.Tip>
+                            <TextBlock LineHeight="24">
+                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.UacButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                                <LineBreak />
+                                <Run Text="{Binding App.UI.UacButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                            </TextBlock>
+                        </ToolTip.Tip>
+                        <Svg Classes="ButtonIcon" Path="/Assets/UI/shield-antivirus-svgrepo-com.svg" />
+                    </Button>
+                    <ToggleButton Classes="WindowGlobalButton" IsCheckedChanged="TopMostToggleButton_IsCheckedChanged">
+                        <ToolTip.Tip>
+                            <TextBlock LineHeight="24">
+                                <Run FontSize="14" FontWeight="Bold"
+                                     Text="{Binding App.UI.TopmostButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                                <LineBreak />
+                                <Run
+                                    Text="{Binding App.UI.TopmostButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                            </TextBlock>
+                        </ToolTip.Tip>
+                        <Svg Classes="ButtonIcon Pin" />
+                    </ToggleButton>
+                </StackPanel>
             </Grid>
             <Grid Grid.Row="0" ColumnDefinitions="Auto,*" Height="40" IsVisible="{OnPlatform True, Linux=False}">
                 <Grid.Styles>
                     <Style Selector="Button">
                         <Setter Property="Transitions">
                             <Transitions>
-                                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.6" Easing="CircularEaseOut" />
+                                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.6"
+                                                               Easing="CircularEaseOut" />
                             </Transitions>
                         </Setter>
                     </Style>
                     <Style Selector="TextBlock">
                         <Setter Property="Transitions">
                             <Transitions>
-                                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.4" Delay="0:0:0.2" Easing="CircularEaseOut" />
+                                <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.4"
+                                                               Delay="0:0:0.2" Easing="CircularEaseOut" />
                             </Transitions>
                         </Setter>
                     </Style>

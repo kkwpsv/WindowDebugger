@@ -51,8 +51,9 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="windows:IEnumNamedValue">
                         <CheckBox Classes="Code" Foreground="#CCCCCC"
-                                  IsCheckedChanged="ToggleButton_IsCheckedChanged"
-                                  Content="{Binding}" />
+                                  IsCheckedChanged="ToggleButton_IsCheckedChanged">
+                            <TextBlock Text="{Binding}" />
+                        </CheckBox>
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

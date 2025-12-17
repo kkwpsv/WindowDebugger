@@ -2,16 +2,11 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-             xmlns:converters="using:WindowDebugger.Views.Converters"
              xmlns:l="using:WindowDebugger.Localizations"
-             xmlns:enums="using:Lsj.Util.Win32.Enums"
+             xmlns:windows="using:WindowDebugger.Views.Details.Windows"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="WindowDebugger.Views.Details.Windows.WindowStyleExesPage"
              x:Name="WindowStyleExesPageInstance">
-
-    <UserControl.Resources>
-        <converters:WindowStyleExToDisplayStringConverter x:Key="WindowStyleExToNameValueConverter"/>
-    </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="Button">
@@ -54,10 +49,10 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.ItemTemplate>
-                    <DataTemplate x:DataType="enums:WindowStylesEx">
+                    <DataTemplate x:DataType="windows:IEnumNamedValue">
                         <CheckBox Classes="Code" Foreground="#CCCCCC"
                                   IsCheckedChanged="ToggleButton_IsCheckedChanged"
-                                  Content="{Binding Converter={StaticResource WindowStyleExToNameValueConverter}}" />
+                                  Content="{Binding}" />
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>

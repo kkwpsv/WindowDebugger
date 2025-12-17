@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Lsj.Util.Win32.Enums;
@@ -20,14 +19,14 @@ public partial class WindowsStylesPage : UserControl
         Loaded += (sender, args) => UpdateView();
     }
 
-    public ImmutableArray<WindowStyles> AllWindowStyles => EnumPageManager<WindowStyles>.AllValues;
+    public IReadOnlyList<EnumNamedValue<WindowStyles>> AllWindowStyles => EnumPageManager<WindowStyles>.AllValues;
 
     private void UpdateView()
     {
         if (DataContext is WindowsNativeWindowModel { Styles: var value })
         {
             ValueTextBox.Text = ((uint)value).ToString("X8");
-            _manager.CheckedValue = value;
+            _manager.UpdateValues(value);
         }
     }
 
@@ -50,7 +49,7 @@ public partial class WindowsStylesPage : UserControl
             return;
         }
 
-        var value = _manager.CheckedValue;
+        var value = _manager.CheckOrUncheckValues((CheckBox)sender!);
         if (DataContext is WindowsNativeWindowModel vm)
         {
             vm.Styles = value;

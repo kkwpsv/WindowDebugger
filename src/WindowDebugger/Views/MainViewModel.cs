@@ -21,7 +21,7 @@ public class MainViewModel : ReactiveObject
 
     public AvaloniaList<NativeTreeNode> NativeTree { get; } = [];
 
-    public AvaloniaList<NativeWindowModel> TrackedWindowsHistory { get; } = [];
+    public AvaloniaList<TrackedForegroundWindowModel> TrackedWindowsHistory { get; } = [];
 
     public NativeTreeNode? SelectedNode
     {
@@ -63,14 +63,27 @@ public class MainViewModel : ReactiveObject
 
     private void Tracker_ForegroundWindowChanged(object? sender, HWND hwnd)
     {
+        var time = DateTime.Now;
+
         Dispatcher.UIThread.InvokeAsync(() =>
         {
             var node = NativeTree.EnumerableAllWindows().FirstOrDefault(windowNode => windowNode.Window.Id == hwnd);
             SelectedNode = node;
             if (node?.Window is { } window)
             {
-                TrackedWindowsHistory.Add(window);
+                TrackedWindowsHistory.Add(new TrackedForegroundWindowModel
+                {
+                    TrackedTime = time,
+                    Window = window,
+                });
             }
         });
     }
+}
+
+public record TrackedForegroundWindowModel
+{
+    public required DateTime TrackedTime { get; init; }
+
+    public required NativeWindowModel Window { get; init; }
 }

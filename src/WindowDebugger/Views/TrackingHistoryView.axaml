@@ -4,18 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:views="using:WindowDebugger.Views"
              xmlns:l="using:WindowDebugger.Localizations"
+             xmlns:vc="using:WindowDebugger.Views.Converters"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="WindowDebugger.Views.TrackingHistoryView"
-             x:DataType="views:MainViewModel">
+             x:DataType="views:MainViewModel"
+             Grid.IsSharedSizeScope="True">
+
+    <UserControl.Resources>
+        <vc:ProcessIdToProcessNameConverter x:Key="ProcessIdToProcessNameConverter" />
+    </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="TextBlock.Title">
             <Setter Property="FontSize" Value="24" />
             <Setter Property="Margin" Value="0 32 0 16" />
         </Style>
+        <Style Selector="TextBlock.TrackedWindow">
+            <Setter Property="Margin" Value="4 0" />
+        </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="Auto,*" Margin="0 40 0 0">
+    <Grid RowDefinitions="Auto,Auto,*" Margin="0 40 0 0">
         <StackPanel Grid.Row="0" Margin="32 32 32 0" MaxWidth="1000">
             <TextBlock Classes="Title"
                        Text="{Binding App.UI.TrackButton.Flyout.Title, Source={x:Static l:Lang.Current}}" />
@@ -31,16 +40,49 @@
                 </StackPanel>
             </Border>
         </StackPanel>
-        <ListBox x:Name="HistoryListBox" Grid.Row="1"
-                 ItemsSource="{Binding TrackedWindowsHistory}"
+        <ListBox x:Name="HistoryListBox" Grid.Row="2"
                  Background="Transparent"
+                 ItemsSource="{Binding TrackedWindowsHistory}"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Auto">
             <ListBox.ItemsPanel>
                 <ItemsPanelTemplate>
-                    <VirtualizingStackPanel Margin="32 0 32 32" MaxWidth="1000" />
+                    <VirtualizingStackPanel Margin="16 0 16 32" MaxWidth="1000" />
                 </ItemsPanelTemplate>
             </ListBox.ItemsPanel>
+            <ListBox.ItemTemplate>
+                <DataTemplate x:DataType="views:TrackedForegroundWindowModel">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="TrackedTime" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="TrackedHwnd" />
+                            <ColumnDefinition Width="2*" SharedSizeGroup="TrackedTitle" />
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="TrackedProcessId" />
+                            <ColumnDefinition Width="*" SharedSizeGroup="TrackedProcessName" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Classes="TrackedWindow"
+                                   FontSize="11" Foreground="#999999"
+                                   FontFamily="{StaticResource MonoFontFamily}"
+                                   Text="{Binding TrackedTime, StringFormat=hh:mm:ss.fff}" />
+                        <TextBlock Grid.Column="1" Classes="TrackedWindow"
+                                   FontSize="11" Foreground="#999999"
+                                   FontFamily="{StaticResource MonoFontFamily}"
+                                   Text="{Binding Window.Id, StringFormat=X8}" />
+                        <TextBlock Grid.Column="2" Classes="TrackedWindow"
+                                   FontSize="13" Foreground="#CCCCCC"
+                                   Text="{Binding Window.Title}" TextWrapping="WrapWithOverflow" />
+                        <TextBlock Grid.Column="3" Classes="TrackedWindow"
+                                   FontSize="13" Foreground="#CCCCCC"
+                                   FontFamily="{StaticResource MonoFontFamily}"
+                                   HorizontalAlignment="Right"
+                                   Text="{Binding Window.ProcessId}" />
+                        <TextBlock Grid.Column="4" Classes="TrackedWindow"
+                                   FontSize="13" Foreground="#80999999"
+                                   Text="{Binding Window.ProcessId, Converter={StaticResource ProcessIdToProcessNameConverter}, Mode=OneWay}"
+                                   TextWrapping="WrapWithOverflow" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
         </ListBox>
     </Grid>
 

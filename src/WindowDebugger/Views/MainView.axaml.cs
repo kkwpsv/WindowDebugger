@@ -44,9 +44,9 @@ public partial class MainView : UserControl
 
     private void ReloadButton_Click(object? sender, RoutedEventArgs e)
     {
-        var oldSelection = WindowListBox.SelectedItem;
-        WindowListBox.SelectedItem = null;
-        WindowListBox.SelectedItem = oldSelection;
+        var oldSelection = WindowTreeView.SelectedItem;
+        WindowTreeView.SelectedItem = null;
+        WindowTreeView.SelectedItem = oldSelection;
     }
 
     private void RevealExecutableFileButton_Click(object? sender, RoutedEventArgs e)
@@ -61,7 +61,7 @@ public partial class MainView : UserControl
     private async Task ReloadAllAsync()
     {
         var vm = (MainViewModel)DataContext!;
-        var oldSelection = WindowListBox.SelectedItem as WindowsNativeWindowModel;
+        var oldSelection = WindowTreeView.SelectedItem as WindowsNativeWindowModel;
 
         vm.ReloadWindows();
 
@@ -75,19 +75,19 @@ public partial class MainView : UserControl
                 // 初次选择，或者此前已取消选择。
                 var index = vm.NativeTree.IndexOf(defaultSelection);
                 await Task.Delay(0);
-                WindowListBox.ScrollIntoView(vm.NativeTree[^1]);
+                WindowTreeView.ScrollIntoView(vm.NativeTree[^1]);
                 await Task.Delay(0);
-                WindowListBox.ScrollIntoView(vm.NativeTree[Math.Max(0, index - 1)]);
+                WindowTreeView.ScrollIntoView(vm.NativeTree[Math.Max(0, index - 1)]);
                 await Task.Delay(0);
-                WindowListBox.SelectedItem = defaultSelection;
+                WindowTreeView.SelectedItem = defaultSelection;
             }
             else
             {
                 // 曾经已选择，刷新后重新选择。
                 await Task.Delay(0);
                 var index = vm.NativeTree.IndexOf(defaultSelection);
-                WindowListBox.ScrollIntoView(vm.NativeTree[Math.Max(0, index)]);
-                WindowListBox.SelectedItem = defaultSelection;
+                WindowTreeView.ScrollIntoView(vm.NativeTree[Math.Max(0, index)]);
+                WindowTreeView.SelectedItem = defaultSelection;
             }
         }
     }

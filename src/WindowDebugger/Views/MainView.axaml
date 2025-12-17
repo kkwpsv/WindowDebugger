@@ -11,6 +11,9 @@
              x:DataType="views:MainViewModel">
 
     <UserControl.Resources>
+        <vc:ZeroToStringConverter x:Key="ProcessIdToWindowStateConverter" Zero="已关闭" NonZero="" />
+        <vc:ZeroToBooleanConverter x:Key="ProcessIdToIsVisibleConverter" Zero="True" NonZero="False" />
+        <vc:ZeroToBooleanConverter x:Key="ProcessIdToIsInvisibleConverter" Zero="False" NonZero="True" />
         <vc:ProcessIdToProcessNameConverter x:Key="ProcessIdToProcessNameConverter" />
         <vc:ProcessIdToProcessPathConverter x:Key="ProcessIdToProcessPathConverter" />
         <vc:NativeTreeNodeToNativeWindowConverter x:Key="NativeTreeNodeToNativeWindowConverter" />
@@ -288,11 +291,16 @@
                                        FontSize="13" Foreground="#CCCCCC" VerticalAlignment="Center"
                                        Text="{Binding Window.Title}"
                                        TextTrimming="CharacterEllipsis" />
-                            <TextBlock Grid.Column="1"
-                                       FontSize="11" Foreground="#80999999" VerticalAlignment="Center"
-                                       IsVisible="{Binding Window.Title, Mode=OneWay, Converter={x:Static StringConverters.IsNullOrEmpty}}"
-                                       Text="{Binding Window.ProcessId, Converter={StaticResource ProcessIdToProcessNameConverter}, Mode=OneWay}"
-                                       TextTrimming="CharacterEllipsis" />
+                            <Grid Grid.Column="1"
+                                  IsVisible="{Binding Window.Title, Mode=OneWay, Converter={x:Static StringConverters.IsNullOrEmpty}}">
+                                <TextBlock FontSize="11" Foreground="#80999999" VerticalAlignment="Center"
+                                           IsVisible="{Binding Window.ProcessId, Mode=OneWay, Converter={StaticResource ProcessIdToIsInvisibleConverter}}"
+                                           Text="{Binding Window.ProcessId, Mode=OneWay, Converter={StaticResource ProcessIdToProcessNameConverter}}"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock FontSize="11" Foreground="#C94F4F" VerticalAlignment="Center"
+                                           IsVisible="{Binding Window.ProcessId, Mode=OneWay, Converter={StaticResource ProcessIdToIsVisibleConverter}}"
+                                           Text="{Binding Window.ProcessId, Mode=OneWay, Converter={StaticResource ProcessIdToWindowStateConverter}}" />
+                            </Grid>
                         </Grid>
                     </DataTemplate>
                 </TreeView.DataTemplates>

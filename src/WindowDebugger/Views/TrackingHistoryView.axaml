@@ -21,10 +21,18 @@
                        Text="{Binding App.UI.TrackButton.Flyout.Title, Source={x:Static l:Lang.Current}}" />
             <Border Padding="16 16 16 8" CornerRadius="8" BorderThickness="1"
                     BorderBrush="#20FFFFFF" Background="#20000000">
-                <ToggleSwitch OnContent="正在追踪" OffContent="未追踪" IsChecked="{Binding IsForegroundWindowTracking}" />
+                <StackPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow"
+                               Text="{Binding App.UI.TrackSwitch.Description, Source={x:Static l:Lang.Current}}" />
+                    <ToggleSwitch Margin="0 8 0 0"
+                                  OnContent="{Binding App.UI.TrackSwitch.On, Source={x:Static l:Lang.Current}}"
+                                  OffContent="{Binding App.UI.TrackSwitch.Off, Source={x:Static l:Lang.Current}}"
+                                  IsChecked="{Binding IsForegroundWindowTracking}" />
+                </StackPanel>
             </Border>
         </StackPanel>
-        <ListBox Grid.Row="1" ItemsSource="{Binding TrackedWindowsHistory}"
+        <ListBox x:Name="HistoryListBox" Grid.Row="1"
+                 ItemsSource="{Binding TrackedWindowsHistory}"
                  Background="Transparent"
                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                  ScrollViewer.VerticalScrollBarVisibility="Auto">

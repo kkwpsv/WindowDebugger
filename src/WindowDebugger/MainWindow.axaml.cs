@@ -94,12 +94,15 @@ public partial class MainWindow : Window
         var task2 = SlideFromAnimatedly(TransientBorder, new Vector2(ContentPanel.Bounds.Width, 0));
 
         await Task.WhenAll(task1, task2);
+        MainView.IsVisible = false;
     }
 
     public async Task CloseTransientViewAsync()
     {
         TitleTextBlock.Classes.Remove("HasBack");
         BackButton.Classes.Remove("HasBack");
+
+        MainView.IsVisible = true;
 
         var task1 = SlideFromAnimatedly(MainView, new Vector2(-ContentPanel.Bounds.Width, 0));
         var task2 = SlideToAnimatedly(TransientBorder, new Vector2(ContentPanel.Bounds.Width, 0));

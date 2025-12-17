@@ -153,7 +153,7 @@
                         </ToolTip.Tip>
                         <Svg Classes="ButtonIcon Capture" />
                     </Button>
-                    <ToggleButton Grid.Column="3" Classes="GlobalToolButton"
+                    <ToggleButton x:Name="TrackButton" Grid.Column="3" Classes="GlobalToolButton"
                             Margin="4 0 0 0" HorizontalContentAlignment="Stretch"
                             IsChecked="{Binding IsForegroundWindowTracking, Mode=TwoWay}">
                         <ToolTip.Tip>

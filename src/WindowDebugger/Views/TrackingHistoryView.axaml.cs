@@ -11,4 +11,3 @@ public partial class TrackingHistoryView : UserControl
         InitializeComponent();
     }
 }
-

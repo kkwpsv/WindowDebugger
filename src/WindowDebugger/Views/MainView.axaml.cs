@@ -40,11 +40,17 @@ public partial class MainView : UserControl
 
     private void ViewTrackingHistoryButton_Click(object? sender, RoutedEventArgs e)
     {
+        if (TrackButton.ContextFlyout is { } flyout)
+        {
+            flyout.Hide();
+        }
+
         var w = (MainWindow)TopLevel.GetTopLevel(this)!;
-        _ = w.ShowTransientViewAsync(new TrackingHistoryView
+        var view = new TrackingHistoryView
         {
             DataContext = DataContext,
-        });
+        };
+        _ = w.ShowTransientViewAsync(view);
     }
 
     private void ReloadButton_Click(object? sender, RoutedEventArgs e)

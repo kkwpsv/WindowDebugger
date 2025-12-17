@@ -1,20 +1,31 @@
+using System.Runtime.Versioning;
 using Avalonia.Collections;
 using Avalonia.Threading;
 using Lsj.Util.Win32.BaseTypes;
 using ReactiveUI;
 using WindowDebugger.Services.NativeWindows;
-using WindowDebugger.Utils;
+using WindowDebugger.Services.NativeWindows.Windows;
 
 namespace WindowDebugger.Views;
 
 public class MainViewModel : ReactiveObject
 {
-    private readonly ForegroundWindowTracker _tracker = new();
+    private readonly IForegroundWindowTracker _tracker;
 
     public MainViewModel()
     {
         WindowList = new WindowListViewModel(this);
-        _tracker.ForegroundWindowChanged += Tracker_ForegroundWindowChanged;
+
+        if (OperatingSystem.IsWindows())
+        {
+            var tracker = new WindowsForegroundWindowTracker();
+            tracker.ForegroundWindowChanged += Tracker_ForegroundWindowChanged;
+            _tracker = tracker;
+        }
+        else
+        {
+            _tracker = new EmptyForegroundWindowTracker();
+        }
     }
 
     public WindowListViewModel WindowList { get; }
@@ -61,23 +72,45 @@ public class MainViewModel : ReactiveObject
         NativeTree.AddRange(tree);
     }
 
+    [SupportedOSPlatform("windows")]
     private void Tracker_ForegroundWindowChanged(object? sender, HWND hwnd)
     {
         var time = DateTime.Now;
-
-        Dispatcher.UIThread.InvokeAsync(() =>
+        var node = NativeTree.EnumerableAllWindows().FirstOrDefault(windowNode => windowNode.Window.Id == hwnd);
+        if (node?.Window is { } window)
         {
-            var node = NativeTree.EnumerableAllWindows().FirstOrDefault(windowNode => windowNode.Window.Id == hwnd);
-            SelectedNode = node;
-            if (node?.Window is { } window)
+            // 现有窗口，直接添加记录。
+            var model = new TrackedForegroundWindowModel
             {
-                TrackedWindowsHistory.Insert(0, new TrackedForegroundWindowModel
-                {
-                    TrackedTime = time,
-                    Window = window,
-                });
-            }
-        });
+                TrackedTime = time,
+                Window = window,
+            };
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                TrackedWindowsHistory.Insert(0, model);
+                SelectedNode = node;
+            });
+        }
+        else
+        {
+            // 崭新窗口，创建一个新的窗口模型。
+            // 等用户点了「刷新」后，这个窗口自然而然就消失了，不影响使用。
+            node = new WindowsNativeWindowNode(new WindowsNativeWindowModel(hwnd))
+            {
+                ChildWindows = [],
+            };
+            var model = new TrackedForegroundWindowModel
+            {
+                TrackedTime = time,
+                Window = node.Window,
+            };
+            Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                NativeTree.Add(node);
+                TrackedWindowsHistory.Insert(0, model);
+                SelectedNode = node;
+            }, DispatcherPriority.Background);
+        }
     }
 }
 

@@ -38,10 +38,6 @@ public partial class MainView : UserControl
     {
     }
 
-    private void TrackButton_CheckedChanged(object? sender, RoutedEventArgs e)
-    {
-    }
-
     private void ReloadButton_Click(object? sender, RoutedEventArgs e)
     {
         var oldSelection = WindowTreeView.SelectedItem;

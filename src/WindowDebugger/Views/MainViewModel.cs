@@ -1,18 +1,40 @@
 using Avalonia.Collections;
+using Avalonia.Threading;
+using Lsj.Util.Win32.BaseTypes;
 using ReactiveUI;
 using WindowDebugger.Services.NativeWindows;
+using WindowDebugger.Utils;
 
 namespace WindowDebugger.Views;
 
 public class MainViewModel : ReactiveObject
 {
-    public WindowListViewModel WindowList { get; }
-
-    public AvaloniaList<NativeTreeNode> NativeTree { get; } = [];
+    private readonly ForegroundWindowTracker _tracker = new();
 
     public MainViewModel()
     {
         WindowList = new WindowListViewModel(this);
+        _tracker.ForegroundWindowChanged += Tracker_ForegroundWindowChanged;
+    }
+
+    public WindowListViewModel WindowList { get; }
+
+    public AvaloniaList<NativeTreeNode> NativeTree { get; } = [];
+
+    public NativeTreeNode? SelectedNode
+    {
+        get;
+        set => this.RaiseAndSetIfChanged(ref field, value);
+    }
+
+    public bool IsForegroundWindowTracking
+    {
+        get => _tracker.IsEnabled;
+        set
+        {
+            _tracker.IsEnabled = value;
+            this.RaisePropertyChanged();
+        }
     }
 
     public void ReloadWindows()
@@ -20,5 +42,14 @@ public class MainViewModel : ReactiveObject
         var tree = WindowList.ReloadWindows();
         NativeTree.Clear();
         NativeTree.AddRange(tree);
+    }
+
+    private void Tracker_ForegroundWindowChanged(object? sender, HWND hwnd)
+    {
+        Dispatcher.UIThread.InvokeAsync(() =>
+        {
+            var node = NativeTree.EnumerableAllWindows().FirstOrDefault(windowNode => windowNode.Window.Id == hwnd);
+            SelectedNode = node;
+        });
     }
 }

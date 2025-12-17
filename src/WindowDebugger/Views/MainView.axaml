@@ -155,7 +155,7 @@
                     </Button>
                     <ToggleButton Grid.Column="3" Classes="GlobalToolButton"
                             Margin="4 0 0 0" HorizontalContentAlignment="Stretch"
-                            IsCheckedChanged="TrackButton_CheckedChanged">
+                            IsChecked="{Binding IsForegroundWindowTracking, Mode=TwoWay}">
                         <ToolTip.Tip>
                             <TextBlock LineHeight="24">
                                 <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.TrackButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
@@ -248,6 +248,7 @@
             <TreeView x:Name="WindowTreeView" Grid.Row="1" Background="Transparent"
                       Classes.PlainList="{Binding !WindowList.IsGroupedByProcess, Mode=OneWay}"
                       ItemsSource="{Binding NativeTree}"
+                      SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       ItemsPanel="{Binding WindowList.IsGroupedByProcess, Mode=OneWay, Converter={StaticResource IsGroupedToItemsPanelTemplateConverter}}">

@@ -28,9 +28,21 @@ public class EnumPageManager<T>(ItemsControl listBox, Func<T, long> numberConver
                 foreach (var checkBox in panel.Children.Select(x => x.FindDescendantOfType<CheckBox>()).OfType<CheckBox>())
                 {
                     var value = ((EnumNamedValue<T>)checkBox.DataContext!).Value;
-                    if (value.HasFlag(changingValue))
+                    if (changingCheckBox.IsChecked is true)
                     {
-                        checkBox.IsChecked = changingCheckBox.IsChecked;
+                        // 正在选择某项，那么该项所包含的所有子项都要被选中。
+                        if (changingValue.HasFlag(value))
+                        {
+                            checkBox.IsChecked = true;
+                        }
+                    }
+                    else
+                    {
+                        // 正在取消选择某项，那么所有包含该项的父项都要被取消选中。
+                        if (value.HasFlag(changingValue))
+                        {
+                            checkBox.IsChecked = false;
+                        }
                     }
                     var v = numberConverter(value);
                     if (checkBox.IsChecked == true)

@@ -37,9 +37,6 @@
             <Setter Property="Height" Value="16" />
             <Setter Property="Stretch" Value="Uniform" />
         </Style>
-        <Style Selector="Svg.Reload">
-            <Setter Property="Path" Value="/Assets/UI/reload.svg" />
-        </Style>
         <Style Selector="Svg.Capture">
             <Setter Property="Path" Value="/Assets/UI/crosshair.svg" />
         </Style>
@@ -140,7 +137,7 @@
                             </TextBlock>
                         </ToolTip.Tip>
                         <Grid ColumnDefinitions="32,Auto">
-                            <Svg Grid.Column="0" Classes="ButtonIcon Reload" />
+                            <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/reload-color.svg" />
                             <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
                         </Grid>
                     </Button>
@@ -259,7 +256,7 @@
                         <Grid ColumnDefinitions="32,*,Auto">
                             <Svg Grid.Column="0" Margin="6 0 0 0" Width="16" Height="16"
                                  HorizontalAlignment="Left" VerticalAlignment="Center"
-                                 Path="/Assets/UI/file-document-svgrepo-com.svg" />
+                                 Path="/Assets/UI/file-document-color.svg" />
                             <TextBlock Grid.Column="2"
                                        FontSize="11" Foreground="#40FFFFFF"
                                        VerticalAlignment="Center"
@@ -299,7 +296,7 @@
                         HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                         Click="SettingsButton_Click">
                     <StackPanel Orientation="Horizontal">
-                        <Svg Margin="4 0 8 0" Classes="ButtonIcon" Path="/Assets/UI/settings.svg" />
+                        <Svg Margin="4 0 8 0" Classes="ButtonIcon" Path="/Assets/UI/settings-color.svg" />
                         <TextBlock VerticalAlignment="Center"
                                    Text="{Binding App.UI.SettingsButton, Source={x:Static l:Lang.Current}}" />
                     </StackPanel>
@@ -317,7 +314,7 @@
                 <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
                         Background="Transparent" HorizontalAlignment="Left">
                     <Grid>
-                        <Image Source="/Assets/UI/browser-ui-svgrepo-com.256.png" Stretch="Uniform" />
+                        <Image Source="/Assets/UI/browser-ui-color.256.png" Stretch="Uniform" />
                     </Grid>
                 </Border>
                 <TextBox Grid.Row="0" Grid.Column="1" Classes="CopyableText"
@@ -343,7 +340,7 @@
                         </TextBlock>
                     </ToolTip.Tip>
                     <Grid ColumnDefinitions="32,Auto">
-                        <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/reload.svg" />
+                        <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/reload-color.svg" />
                         <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.WindowDetail.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
                     </Grid>
                 </Button>
@@ -359,7 +356,7 @@
                         </TextBlock>
                     </ToolTip.Tip>
                     <Grid ColumnDefinitions="32,Auto">
-                        <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/folder.svg" />
+                        <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/folder-color.svg" />
                         <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.WindowDetail.OpenDirectory.Content, Source={x:Static l:Lang.Current}}" />
                     </Grid>
                 </Button>

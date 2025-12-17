@@ -87,7 +87,7 @@
                 <Expander.Header>
                     <Grid RowDefinitions="24,16" ColumnDefinitions="40,*">
                         <Svg Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
-                             Path="/Assets/UI/monitor-tv-svgrepo-com.svg" />
+                             Path="/Assets/UI/monitor-tv-color.svg" />
                         <TextBlock Grid.Row="0" Grid.Column="1" Classes="SectionHeader"
                                    Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowOperation.Title, Source={x:Static l:Lang.Current}}" />
                         <TextBlock Grid.Row="1" Grid.Column="1" Classes="SectionDescription"
@@ -118,7 +118,7 @@
                 <Expander.Header>
                     <Grid RowDefinitions="24,16" ColumnDefinitions="40,*">
                         <Svg Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
-                             Path="/Assets/UI/laptop-electronics-svgrepo-com.svg" />
+                             Path="/Assets/UI/laptop-electronics-color.svg" />
                         <TextBlock Grid.Row="0" Grid.Column="1" Classes="SectionHeader"
                                    Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.WindowInteractions.Title, Source={x:Static l:Lang.Current}}" />
                         <TextBlock Grid.Row="1" Grid.Column="1" Classes="SectionDescription"
@@ -149,7 +149,7 @@
                 <Expander.Header>
                     <Grid RowDefinitions="24,16" ColumnDefinitions="40,*">
                         <Svg Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
-                             Path="/Assets/UI/bar-chart-graph-svgrepo-com.svg" />
+                             Path="/Assets/UI/bar-chart-graph-color.svg" />
                         <TextBlock Grid.Row="0" Grid.Column="1" Classes="SectionHeader"
                                    Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ProcessOperations.Title, Source={x:Static l:Lang.Current}}" />
                         <TextBlock Grid.Row="1" Grid.Column="1" Classes="SectionDescription"
@@ -180,7 +180,7 @@
                 <Expander.Header>
                     <Grid RowDefinitions="24,16" ColumnDefinitions="40,*">
                         <Svg Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
-                             Path="/Assets/UI/bar-chart-graph-svgrepo-com.svg" />
+                             Path="/Assets/UI/bar-chart-graph-color.svg" />
                         <TextBlock Grid.Row="0" Grid.Column="1" Classes="SectionHeader"
                                    Text="{Binding App.UI.WindowDetail.Pages.Windows.Operations.ThreadOperations.Title, Source={x:Static l:Lang.Current}}" />
                         <TextBlock Grid.Row="1" Grid.Column="1" Classes="SectionDescription"

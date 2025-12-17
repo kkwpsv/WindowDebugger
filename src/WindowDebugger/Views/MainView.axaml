@@ -249,6 +249,7 @@
                       Classes.PlainList="{Binding !WindowList.IsGroupedByProcess, Mode=OneWay}"
                       ItemsSource="{Binding NativeTree}"
                       SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
+                      SelectionChanged="WindowTreeView_SelectionChanged"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       ItemsPanel="{Binding WindowList.IsGroupedByProcess, Mode=OneWay, Converter={StaticResource IsGroupedToItemsPanelTemplateConverter}}">

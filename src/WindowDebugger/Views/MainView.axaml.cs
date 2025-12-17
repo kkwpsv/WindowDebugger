@@ -22,16 +22,16 @@ public partial class MainView : UserControl
         Loaded += OnLoaded;
     }
 
-    private async void OnLoaded(object? sender, RoutedEventArgs e)
+    private void OnLoaded(object? sender, RoutedEventArgs e)
     {
         var vm = new MainViewModel();
         DataContext = vm;
-        await ReloadAllAsync();
+        _ = ReloadAllAsync();
     }
 
-    private async void ReloadAllButton_Click(object? sender, RoutedEventArgs e)
+    private void ReloadAllButton_Click(object? sender, RoutedEventArgs e)
     {
-        await ReloadAllAsync();
+        _ = ReloadAllAsync();
     }
 
     private void CaptureButton_Click(object? sender, RoutedEventArgs e)
@@ -54,6 +54,12 @@ public partial class MainView : UserControl
         }
     }
 
+    private void WindowTreeView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        // 滚动到选中的项。
+        _ = ScrollToItem(WindowTreeView.SelectedItem);
+    }
+
     private async Task ReloadAllAsync()
     {
         var vm = (MainViewModel)DataContext!;
@@ -70,10 +76,8 @@ public partial class MainView : UserControl
             {
                 // 初次选择，或者此前已取消选择。
                 var index = vm.NativeTree.IndexOf(defaultSelection);
-                await Task.Delay(0);
-                WindowTreeView.ScrollIntoView(vm.NativeTree[^1]);
-                await Task.Delay(0);
-                WindowTreeView.ScrollIntoView(vm.NativeTree[Math.Max(0, index - 1)]);
+                await ScrollToItem(vm.NativeTree[^1]);
+                await ScrollToItem(vm.NativeTree[Math.Max(0, index - 1)]);
                 await Task.Delay(0);
                 WindowTreeView.SelectedItem = defaultSelection;
             }
@@ -82,7 +86,7 @@ public partial class MainView : UserControl
                 // 曾经已选择，刷新后重新选择。
                 await Task.Delay(0);
                 var index = vm.NativeTree.IndexOf(defaultSelection);
-                WindowTreeView.ScrollIntoView(vm.NativeTree[Math.Max(0, index)]);
+                await ScrollToItem(vm.NativeTree[Math.Max(0, index)]);
                 WindowTreeView.SelectedItem = defaultSelection;
             }
         }
@@ -92,6 +96,15 @@ public partial class MainView : UserControl
     {
         var w = (MainWindow)TopLevel.GetTopLevel(this)!;
         _ = w.ShowTransientViewAsync(new SettingsView());
+    }
+
+    private async Task ScrollToItem(object? item)
+    {
+        if (item is not null)
+        {
+            await Task.Delay(0);
+            WindowTreeView.ScrollIntoView(item);
+        }
     }
 
     private void InitializePlatformPages()

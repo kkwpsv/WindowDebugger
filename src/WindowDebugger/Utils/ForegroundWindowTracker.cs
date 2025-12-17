@@ -62,7 +62,7 @@ public class ForegroundWindowTracker
             EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND,
             default, _winEventProc,
             0, 0,
-            WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS);
+            WINEVENT_OUTOFCONTEXT);
     }
 
     private void Disable()

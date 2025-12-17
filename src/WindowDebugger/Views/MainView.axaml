@@ -171,7 +171,7 @@
                                     <Separator Margin="-12 12" />
                                     <CheckBox Content="{Binding App.UI.TrackButton.Flyout.IncludeSelf, Source={x:Static l:Lang.Current}}" IsChecked="{Binding AllowsTrackSelf, Mode=TwoWay}" />
                                     <Separator Margin="-12 12" />
-                                    <Button Content="{Binding App.UI.TrackButton.Flyout.ViewHistory, Source={x:Static l:Lang.Current}}" />
+                                    <Button Content="{Binding App.UI.TrackButton.Flyout.ViewHistory, Source={x:Static l:Lang.Current}}" Click="ViewTrackingHistoryButton_Click" />
                                 </StackPanel>
                             </Flyout>
                         </ToggleButton.ContextFlyout>

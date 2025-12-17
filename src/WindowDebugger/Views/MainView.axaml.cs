@@ -38,6 +38,15 @@ public partial class MainView : UserControl
     {
     }
 
+    private void ViewTrackingHistoryButton_Click(object? sender, RoutedEventArgs e)
+    {
+        var w = (MainWindow)TopLevel.GetTopLevel(this)!;
+        _ = w.ShowTransientViewAsync(new TrackingHistoryView
+        {
+            DataContext = DataContext,
+        });
+    }
+
     private void ReloadButton_Click(object? sender, RoutedEventArgs e)
     {
         var oldSelection = WindowTreeView.SelectedItem;

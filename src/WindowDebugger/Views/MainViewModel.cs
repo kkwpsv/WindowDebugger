@@ -21,6 +21,8 @@ public class MainViewModel : ReactiveObject
 
     public AvaloniaList<NativeTreeNode> NativeTree { get; } = [];
 
+    public AvaloniaList<NativeWindowModel> TrackedWindowsHistory { get; } = [];
+
     public NativeTreeNode? SelectedNode
     {
         get;
@@ -32,6 +34,10 @@ public class MainViewModel : ReactiveObject
         get => _tracker.IsEnabled;
         set
         {
+            if (value)
+            {
+                TrackedWindowsHistory.Clear();
+            }
             _tracker.IsEnabled = value;
             this.RaisePropertyChanged();
         }
@@ -42,6 +48,7 @@ public class MainViewModel : ReactiveObject
         get => _tracker.AllowsTrackSelf;
         set
         {
+            IsForegroundWindowTracking = false;
             _tracker.AllowsTrackSelf = value;
             this.RaisePropertyChanged();
         }
@@ -60,6 +67,10 @@ public class MainViewModel : ReactiveObject
         {
             var node = NativeTree.EnumerableAllWindows().FirstOrDefault(windowNode => windowNode.Window.Id == hwnd);
             SelectedNode = node;
+            if (node?.Window is { } window)
+            {
+                TrackedWindowsHistory.Add(window);
+            }
         });
     }
 }

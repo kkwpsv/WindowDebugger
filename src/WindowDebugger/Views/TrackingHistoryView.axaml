@@ -1,0 +1,39 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="using:WindowDebugger.Views"
+             xmlns:l="using:WindowDebugger.Localizations"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="WindowDebugger.Views.TrackingHistoryView"
+             x:DataType="views:MainViewModel">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.Title">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="Margin" Value="0 32 0 16" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,*" Margin="0 40 0 0">
+        <StackPanel Grid.Row="0" Margin="32 32 32 0" MaxWidth="1000">
+            <TextBlock Classes="Title"
+                       Text="{Binding App.UI.TrackButton.Flyout.Title, Source={x:Static l:Lang.Current}}" />
+            <Border Padding="16 16 16 8" CornerRadius="8" BorderThickness="1"
+                    BorderBrush="#20FFFFFF" Background="#20000000">
+                <ToggleSwitch OnContent="正在追踪" OffContent="未追踪" IsChecked="{Binding IsForegroundWindowTracking}" />
+            </Border>
+        </StackPanel>
+        <ListBox Grid.Row="1" ItemsSource="{Binding TrackedWindowsHistory}"
+                 Background="Transparent"
+                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+            <ListBox.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <VirtualizingStackPanel Margin="32 0 32 32" MaxWidth="1000" />
+                </ItemsPanelTemplate>
+            </ListBox.ItemsPanel>
+        </ListBox>
+    </Grid>
+
+</UserControl>

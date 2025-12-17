@@ -80,11 +80,7 @@ public class MainViewModel : ReactiveObject
         if (node?.Window is { } window)
         {
             // 现有窗口，直接添加记录。
-            var model = new TrackedForegroundWindowModel
-            {
-                TrackedTime = time,
-                Window = window,
-            };
+            var model = new TrackedForegroundWindowModel(time, node.Window);
             Dispatcher.UIThread.InvokeAsync(() =>
             {
                 TrackedWindowsHistory.Insert(0, model);
@@ -99,11 +95,7 @@ public class MainViewModel : ReactiveObject
             {
                 ChildWindows = [],
             };
-            var model = new TrackedForegroundWindowModel
-            {
-                TrackedTime = time,
-                Window = node.Window,
-            };
+            var model = new TrackedForegroundWindowModel(time, node.Window);
             Dispatcher.UIThread.InvokeAsync(() =>
             {
                 NativeTree.Add(node);
@@ -114,9 +106,15 @@ public class MainViewModel : ReactiveObject
     }
 }
 
-public record TrackedForegroundWindowModel
+public record TrackedForegroundWindowModel(DateTime TrackedTime, NativeWindowModel Window)
 {
-    public required DateTime TrackedTime { get; init; }
+    public long Id { get; } = Window.Id;
 
-    public required NativeWindowModel Window { get; init; }
+    public string? Title { get; } = Window.Title;
+
+    public int ProcessId { get; } = Window.ProcessId;
+
+    public string ProcessName { get; } = Window is WindowsNativeWindowModel winModel
+        ? winModel.ProcessName
+        : "";
 }

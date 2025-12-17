@@ -58,17 +58,17 @@
                 <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.WindowId, Source={x:Static l:Lang.Current}}"
                                     FontSize="11" Foreground="#999999"
                                     FontFamily="{StaticResource MonoFontFamily}"
-                                    Binding="{Binding Window.Id, Mode=OneWay, StringFormat=X8}" />
+                                    Binding="{Binding Id, Mode=OneWay, StringFormat=X8}" />
                 <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.WindowTitle, Source={x:Static l:Lang.Current}}"
                                     FontSize="13" Foreground="#CCCCCC"
-                                    Binding="{Binding Window.Title, Mode=OneWay}" Width="2*"/>
+                                    Binding="{Binding Title, Mode=OneWay}" Width="2*"/>
                 <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.ProcessId, Source={x:Static l:Lang.Current}}"
                                     FontSize="11" Foreground="#999999"
                                     FontFamily="{StaticResource MonoFontFamily}"
-                                    Binding="{Binding Window.ProcessId, Mode=OneWay}" />
+                                    Binding="{Binding ProcessId, Mode=OneWay}" />
                 <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.ProcessName, Source={x:Static l:Lang.Current}}"
                                     FontSize="13" Foreground="#999999"
-                                    Binding="{Binding Window.ProcessId, Mode=OneWay, Converter={StaticResource ProcessIdToProcessNameConverter}, Mode=OneWay}" Width="*" />
+                                    Binding="{Binding ProcessName, Mode=OneWay}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
     </Grid>

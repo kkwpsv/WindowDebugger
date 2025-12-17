@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
@@ -43,7 +44,12 @@ public partial class MainWindow : Window
 
     private void UacButton_Click(object? sender, RoutedEventArgs e)
     {
-        if (Environment.ProcessPath is { } path && File.Exists(path))
+        if (Environment.ProcessPath is not { } path || !File.Exists(path))
+        {
+            return;
+        }
+
+        try
         {
             Process.Start(new ProcessStartInfo(path)
             {
@@ -51,6 +57,10 @@ public partial class MainWindow : Window
                 Verb = "runas",
             });
             Close();
+        }
+        catch (Win32Exception)
+        {
+            // 用户取消了 UAC 提升请求
         }
     }
 

@@ -18,10 +18,10 @@ public class WindowListViewModel : ReactiveObject
     private readonly MainViewModel _owner;
     private readonly NativeWindowCollectionManager _nativeWindowCollectionManager;
     private string? _searchText;
-    private bool _includingInvisibleWindow;
-    private bool _includingEmptyTitleWindow;
+    private bool _includingInvisibleWindow = true;
+    private bool _includingEmptyTitleWindow = true;
     private bool _includingChildWindow;
-    private bool _includingMessageOnlyWindow;
+    private bool _includingMessageOnlyWindow = true;
     private bool _isGroupedByProcess;
     private NativeWindowGrouping _windowGrouping = NativeWindowGrouping.PlainList;
     private NativeWindowSorting _windowSorting = NativeWindowSorting.Raw;
@@ -128,6 +128,7 @@ public class WindowListViewModel : ReactiveObject
         LocalizedWindowIncluding = (IncludingInvisibleWindow, IncludingEmptyTitleWindow, IncludingChildWindow, IncludingMessageOnlyWindow) switch
         {
             (false, false, false, false) => Lang.Current.App.UI.Filter.IncludingNoneSlim,
+            (true, true, false, true) => Lang.Current.App.UI.Filter.IncludingTopLevelSlim,
             (true, true, true, true) => Lang.Current.App.UI.Filter.IncludingAllSlim,
             _ => Lang.Current.App.UI.Filter.IncludingPartialSlim,
         };

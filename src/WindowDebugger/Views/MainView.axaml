@@ -11,6 +11,7 @@
              x:DataType="views:MainViewModel">
 
     <UserControl.Resources>
+        <vc:ProcessIdToProcessNameConverter x:Key="ProcessIdToProcessNameConverter" />
         <vc:ProcessIdToProcessPathConverter x:Key="ProcessIdToProcessPathConverter" />
         <vc:NativeTreeNodeToNativeWindowConverter x:Key="NativeTreeNodeToNativeWindowConverter" />
         <vc:WindowGroupingToBooleanConverter x:Key="WindowGroupingToBooleanConverter" />
@@ -272,7 +273,7 @@
                                        Text="{Binding ProcessId}" />
                             <TextBlock Grid.Column="1"
                                        FontSize="13" Foreground="#40FFFFFF" VerticalAlignment="Center"
-                                       Text="{Binding ProcessName}"
+                                       Text="{Binding ProcessId, Converter={StaticResource ProcessIdToProcessNameConverter}, Mode=OneWay}"
                                        TextTrimming="CharacterEllipsis" />
                         </Grid>
                     </DataTemplate>
@@ -286,6 +287,11 @@
                             <TextBlock Grid.Column="1"
                                        FontSize="13" Foreground="#CCCCCC" VerticalAlignment="Center"
                                        Text="{Binding Window.Title}"
+                                       TextTrimming="CharacterEllipsis" />
+                            <TextBlock Grid.Column="1"
+                                       FontSize="11" Foreground="#80999999" VerticalAlignment="Center"
+                                       IsVisible="{Binding Window.Title, Mode=OneWay, Converter={x:Static StringConverters.IsNullOrEmpty}}"
+                                       Text="{Binding Window.ProcessId, Converter={StaticResource ProcessIdToProcessNameConverter}, Mode=OneWay}"
                                        TextTrimming="CharacterEllipsis" />
                         </Grid>
                     </DataTemplate>

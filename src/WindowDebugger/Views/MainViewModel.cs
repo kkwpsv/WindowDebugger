@@ -71,7 +71,7 @@ public class MainViewModel : ReactiveObject
             SelectedNode = node;
             if (node?.Window is { } window)
             {
-                TrackedWindowsHistory.Add(new TrackedForegroundWindowModel
+                TrackedWindowsHistory.Insert(0, new TrackedForegroundWindowModel
                 {
                     TrackedTime = time,
                     Window = window,

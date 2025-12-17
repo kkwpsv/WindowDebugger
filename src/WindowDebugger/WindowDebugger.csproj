@@ -14,12 +14,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Avalonia" Version="11.3.2" />
-    <PackageReference Include="Avalonia.Desktop" Version="11.3.2" />
-    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.2" Condition="'$(Configuration)' == 'Debug'" />
-    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.2" />
-    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.2" />
-    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.2" />
+    <PackageReference Include="Avalonia" Version="11.3.9" />
+    <PackageReference Include="Avalonia.Controls.DataGrid" Version="11.3.9" />
+    <PackageReference Include="Avalonia.Desktop" Version="11.3.9" />
+    <PackageReference Include="Avalonia.Diagnostics" Version="11.3.9" Condition="'$(Configuration)' == 'Debug'" />
+    <PackageReference Include="Avalonia.Fonts.Inter" Version="11.3.9" />
+    <PackageReference Include="Avalonia.ReactiveUI" Version="11.3.9" />
+    <PackageReference Include="Avalonia.Themes.Fluent" Version="11.3.9" />
     <PackageReference Include="dotnetCampus.Logger" Version="1.3.0-alpha02" />
     <PackageReference Include="dotnetCampus.SourceLocalizations" Version="0.1.0-alpha20" />
     <PackageReference Include="Lsj.Util.Win32" Version="8.0.2" />

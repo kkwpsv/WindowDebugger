@@ -40,50 +40,37 @@
                 </StackPanel>
             </Border>
         </StackPanel>
-        <ListBox x:Name="HistoryListBox" Grid.Row="2"
-                 Background="Transparent"
-                 ItemsSource="{Binding TrackedWindowsHistory}"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto">
-            <ListBox.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <VirtualizingStackPanel Margin="16 0 16 32" MaxWidth="1000" />
-                </ItemsPanelTemplate>
-            </ListBox.ItemsPanel>
-            <ListBox.ItemTemplate>
-                <DataTemplate x:DataType="views:TrackedForegroundWindowModel">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="TrackedTime" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="TrackedHwnd" />
-                            <ColumnDefinition Width="2*" SharedSizeGroup="TrackedTitle" />
-                            <ColumnDefinition Width="Auto" SharedSizeGroup="TrackedProcessId" />
-                            <ColumnDefinition Width="*" SharedSizeGroup="TrackedProcessName" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" Classes="TrackedWindow"
-                                   FontSize="11" Foreground="#999999"
-                                   FontFamily="{StaticResource MonoFontFamily}"
-                                   Text="{Binding TrackedTime, StringFormat=hh:mm:ss.fff}" />
-                        <TextBlock Grid.Column="1" Classes="TrackedWindow"
-                                   FontSize="11" Foreground="#999999"
-                                   FontFamily="{StaticResource MonoFontFamily}"
-                                   Text="{Binding Window.Id, StringFormat=X8}" />
-                        <TextBlock Grid.Column="2" Classes="TrackedWindow"
-                                   FontSize="13" Foreground="#CCCCCC"
-                                   Text="{Binding Window.Title}" TextWrapping="WrapWithOverflow" />
-                        <TextBlock Grid.Column="3" Classes="TrackedWindow"
-                                   FontSize="13" Foreground="#CCCCCC"
-                                   FontFamily="{StaticResource MonoFontFamily}"
-                                   HorizontalAlignment="Right"
-                                   Text="{Binding Window.ProcessId}" />
-                        <TextBlock Grid.Column="4" Classes="TrackedWindow"
-                                   FontSize="13" Foreground="#80999999"
-                                   Text="{Binding Window.ProcessId, Converter={StaticResource ProcessIdToProcessNameConverter}, Mode=OneWay}"
-                                   TextWrapping="WrapWithOverflow" />
-                    </Grid>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
+        <DataGrid Grid.Row="1" Margin="32 16 32 0" MaxWidth="1000"
+                  ItemsSource="{Binding TrackedWindowsHistory}"
+                  IsReadOnly="True"
+                  CanUserReorderColumns="False"
+                  CanUserResizeColumns="True"
+                  CanUserSortColumns="False"
+                  GridLinesVisibility="All"
+                  BorderThickness="1" BorderBrush="#999999"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.Time, Source={x:Static l:Lang.Current}}"
+                                    FontSize="11" Foreground="#999999"
+                                    FontFamily="{StaticResource MonoFontFamily}"
+                                    Binding="{Binding TrackedTime, Mode=OneWay, StringFormat=hh:mm:ss.fff}"/>
+                <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.WindowId, Source={x:Static l:Lang.Current}}"
+                                    FontSize="11" Foreground="#999999"
+                                    FontFamily="{StaticResource MonoFontFamily}"
+                                    Binding="{Binding Window.Id, Mode=OneWay, StringFormat=X8}" />
+                <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.WindowTitle, Source={x:Static l:Lang.Current}}"
+                                    FontSize="13" Foreground="#CCCCCC"
+                                    Binding="{Binding Window.Title, Mode=OneWay}" Width="2*"/>
+                <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.ProcessId, Source={x:Static l:Lang.Current}}"
+                                    FontSize="11" Foreground="#999999"
+                                    FontFamily="{StaticResource MonoFontFamily}"
+                                    Binding="{Binding Window.ProcessId, Mode=OneWay}" />
+                <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.ProcessName, Source={x:Static l:Lang.Current}}"
+                                    FontSize="13" Foreground="#999999"
+                                    Binding="{Binding Window.ProcessId, Mode=OneWay, Converter={StaticResource ProcessIdToProcessNameConverter}, Mode=OneWay}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
     </Grid>
 
 </UserControl>

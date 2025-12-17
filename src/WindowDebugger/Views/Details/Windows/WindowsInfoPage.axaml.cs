@@ -1,4 +1,3 @@
-using System.Collections.Immutable;
 using System.ComponentModel;
 using System.Globalization;
 using Avalonia.Controls;
@@ -26,9 +25,9 @@ public partial class WindowsInfoPage : UserControl
         _notification = new WindowNotificationManager(TopLevel.GetTopLevel(this)!);
     }
 
-    public ImmutableArray<ShowWindowCommands> AllShowWindowCommands { get; } = [..Enum.GetValues<ShowWindowCommands>()];
+    public IReadOnlyList<EnumNamedValue<ShowWindowCommands>> AllShowWindowCommands { get; } = EnumNamedValue<ShowWindowCommands>.GetAll();
 
-    public ImmutableArray<WindowDisplayAffinities> AllWindowDisplayAffinities { get; } = [..Enum.GetValues<WindowDisplayAffinities>()];
+    public IReadOnlyList<EnumNamedValue<WindowDisplayAffinities>> AllWindowDisplayAffinities { get; } = EnumNamedValue<WindowDisplayAffinities>.GetAll();
 
     private void UpdateText(object sender, RoutedEventArgs e)
     {

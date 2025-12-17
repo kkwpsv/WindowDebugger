@@ -28,11 +28,11 @@ public partial class WindowDwmPage : UserControl
         set => SetAndRaise(DwmIsCompositionEnabledProperty, ref _dwmIsCompositionEnabled, value);
     }
 
-    public ImmutableArray<BooleanValue> AllBooleans { get; } = [.. Enum.GetValues<BooleanValue>()];
+    public IReadOnlyList<EnumNamedValue<BooleanValue>> AllBooleans { get; } = EnumNamedValue<BooleanValue>.GetAll();
 
-    public ImmutableArray<DWMNCRENDERINGPOLICY> AllDwmNCRenderingPolicy { get; } = [.. Enum.GetValues<DWMNCRENDERINGPOLICY>()];
+    public IReadOnlyList<EnumNamedValue<DWMNCRENDERINGPOLICY>> AllDwmNCRenderingPolicy { get; } = EnumNamedValue<DWMNCRENDERINGPOLICY>.GetAll();
 
-    public ImmutableArray<DWMFLIP3DWINDOWPOLICY> AllDwmFlip3DWindowPolicy { get; } = [.. Enum.GetValues<DWMFLIP3DWINDOWPOLICY>()];
+    public IReadOnlyList<EnumNamedValue<DWMFLIP3DWINDOWPOLICY>> AllDwmFlip3DWindowPolicy { get; } = EnumNamedValue<DWMFLIP3DWINDOWPOLICY>.GetAll();
 
     private WindowsNativeWindowModel WindowModel => (WindowsNativeWindowModel)DataContext!;
 
@@ -135,16 +135,23 @@ file static class ComboBoxExtensions
     {
         return comboBox.SelectedItem switch
         {
+            EnumNamedValue<BooleanValue> { Value: BooleanValue.False } => false,
             BooleanValue.False => false,
             false => false,
+            EnumNamedValue<BooleanValue> { Value: BooleanValue.True } => true,
             BooleanValue.True => true,
             true => true,
             _ => null,
         };
     }
 
-    public static T? GetSelectedEnum<T>(this ComboBox comboBox) where T : struct, Enum
+    public static T? GetSelectedEnum<T>(this ComboBox comboBox) where T : unmanaged, Enum
     {
-        return comboBox.SelectedItem is T value ? value : null;
+        return comboBox.SelectedItem switch
+        {
+            EnumNamedValue<T> namedValue => namedValue.Value,
+            T value => value,
+            _ => null,
+        };
     }
 }

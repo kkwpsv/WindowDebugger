@@ -13,6 +13,7 @@ using ReactiveUI;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using WindowDebugger.Views.Details.Windows;
 using static Lsj.Util.Win32.BaseTypes.HRESULT;
 using static Lsj.Util.Win32.Constants;
 using static Lsj.Util.Win32.Enums.DPI_AWARENESS;
@@ -128,9 +129,9 @@ public record WindowsNativeWindowModel : NativeWindowModel
         get => _window.Rect.bottom - _window.Rect.top;
     }
 
-    public ShowWindowCommands WindowShowStates
+    public EnumNamedValue<ShowWindowCommands> WindowShowStates
     {
-        get => _window.ShowStates;
+        get => (EnumNamedValue<ShowWindowCommands>)_window.ShowStates;
         set
         {
             _window.ShowStates = value;

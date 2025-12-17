@@ -73,10 +73,16 @@ public interface IEnumNamedValue;
 public record EnumNamedValue<T>(T Value, string Name) : IEnumNamedValue
     where T : unmanaged, Enum
 {
+    public bool IsFlagged => typeof(T).IsDefined(typeof(FlagsAttribute), false);
+
     public override string ToString()
     {
-        return $"{Name} (0x{Convert.ToInt64(Value):X8})";
+        return IsFlagged ? $"{Name} (0x{Convert.ToInt64(Value):X8})" : Name;
     }
+
+    public static implicit operator T(EnumNamedValue<T> namedValue) => namedValue.Value;
+
+    public static explicit operator EnumNamedValue<T>(T value) => new(value, value.ToString());
 
     public static IReadOnlyList<EnumNamedValue<T>> GetAll()
     {

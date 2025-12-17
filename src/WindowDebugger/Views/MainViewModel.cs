@@ -37,6 +37,16 @@ public class MainViewModel : ReactiveObject
         }
     }
 
+    public bool AllowsTrackSelf
+    {
+        get => _tracker.AllowsTrackSelf;
+        set
+        {
+            _tracker.AllowsTrackSelf = value;
+            this.RaisePropertyChanged();
+        }
+    }
+
     public void ReloadWindows()
     {
         var tree = WindowList.ReloadWindows();

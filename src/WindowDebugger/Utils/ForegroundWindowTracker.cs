@@ -21,6 +21,11 @@ public class ForegroundWindowTracker
     }
 
     /// <summary>
+    /// 获取或设置是否允许跟踪自身应用的前台窗口变化。
+    /// </summary>
+    public bool AllowsTrackSelf { get; set; }
+
+    /// <summary>
     /// 获取或设置是否启用前台窗口跟踪。
     /// </summary>
     public bool IsEnabled
@@ -58,11 +63,14 @@ public class ForegroundWindowTracker
             Disable();
         }
 
+        var flags = AllowsTrackSelf
+            ? WINEVENT_OUTOFCONTEXT
+            : WINEVENT_OUTOFCONTEXT | WINEVENT_SKIPOWNPROCESS;
         _hookHandle = SetWinEventHook(
             EVENT_SYSTEM_FOREGROUND, EVENT_SYSTEM_FOREGROUND,
             default, _winEventProc,
             0, 0,
-            WINEVENT_OUTOFCONTEXT);
+            flags);
     }
 
     private void Disable()

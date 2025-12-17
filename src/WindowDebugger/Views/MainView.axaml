@@ -165,9 +165,15 @@
                         </ToolTip.Tip>
                         <Svg Classes="ButtonIcon Selection" />
                         <ToggleButton.ContextFlyout>
-                            <MenuFlyout>
-                                <MenuItem Header="查看前台窗口历史记录" />
-                            </MenuFlyout>
+                            <Flyout>
+                                <StackPanel>
+                                    <TextBlock Classes="FlyoutTitle" Text="{Binding App.UI.TrackButton.Flyout.Title, Source={x:Static l:Lang.Current}}" />
+                                    <Separator Margin="-12 12" />
+                                    <CheckBox Content="{Binding App.UI.TrackButton.Flyout.IncludeSelf, Source={x:Static l:Lang.Current}}" IsChecked="{Binding AllowsTrackSelf, Mode=TwoWay}" />
+                                    <Separator Margin="-12 12" />
+                                    <Button Content="{Binding App.UI.TrackButton.Flyout.ViewHistory, Source={x:Static l:Lang.Current}}" />
+                                </StackPanel>
+                            </Flyout>
                         </ToggleButton.ContextFlyout>
                     </ToggleButton>
                 </Grid>

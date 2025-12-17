@@ -1,6 +1,6 @@
 App.UI.AboutButton = "About"
 App.UI.CaptureButton.Content = "Capture"
-App.UI.CaptureButton.ToolTip.Description = "After clicking this button, the next window you click with the mouse will be captured and selected in this list."
+App.UI.CaptureButton.ToolTip.Description = "Drag this button over the target window to capture it and select it in the list."
 App.UI.CaptureButton.ToolTip.Title = "Capture Window"
 App.UI.Filter.FilterDescription = "By default, only visible top-level windows are shown in the list. Check to show more windows."
 App.UI.Filter.FilterTitle = "Including these windows"

@@ -298,7 +298,7 @@
                                            TextTrimming="CharacterEllipsis" />
                                 <TextBlock FontSize="13" Foreground="#C94F4F" VerticalAlignment="Center"
                                            IsVisible="{Binding Window.ProcessId, Mode=OneWay, Converter={StaticResource ProcessIdToIsVisibleConverter}}"
-                                           Text="{Binding App.UI.TrackPage.HistoryList.WindowWasBrieflyShown, Source={x:Static l:Lang.Current}}" />
+                                           Text="{Binding App.UI.TrackPage.HistoryList.WindowWasClosed, Source={x:Static l:Lang.Current}}" />
                             </Grid>
                         </Grid>
                     </DataTemplate>

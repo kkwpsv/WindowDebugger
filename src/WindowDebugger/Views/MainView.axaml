@@ -77,7 +77,7 @@
             <Style Selector="^ /template/ Grid#PART_Header">
                 <Setter Property="Margin" Value="16 0 0 0" />
             </Style>
-            <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
+            <Style Selector="^ /template/ Border#PART_SelectedPipe">
                 <Setter Property="Margin" Value="-16 0 0 0" />
             </Style>
             <Style Selector="^ /template/ Panel#PART_ExpandCollapseChevronContainer">
@@ -87,7 +87,7 @@
                 <Style Selector="^ /template/ Grid#PART_Header">
                     <Setter Property="Margin" Value="0" />
                 </Style>
-                <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
+                <Style Selector="^ /template/ Border#PART_SelectedPipe">
                     <Setter Property="Margin" Value="0" />
                 </Style>
             </Style>
@@ -97,7 +97,7 @@
                 <Style Selector="^ /template/ Grid#PART_Header">
                     <Setter Property="Margin" Value="8 0 0 0" />
                 </Style>
-                <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
+                <Style Selector="^ /template/ Border#PART_SelectedPipe">
                     <Setter Property="Margin" Value="-8 0 0 0" />
                 </Style>
             </Style>

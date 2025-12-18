@@ -129,10 +129,10 @@
                                               VerticalAlignment="{TemplateBinding VerticalAlignment}"
                                               Margin="{TemplateBinding Level, Mode=OneWay, Converter={StaticResource TreeViewItemLeftMarginConverter}}" />
                             <Border Grid.Column="0" Grid.ColumnSpan="2" Margin="0 10">
-                                <Rectangle Name="PART_SelectedPipe"
-                                           RadiusX="2" RadiusY="2" Width="4" MaxHeight="32"
-                                           HorizontalAlignment="Left" IsHitTestVisible="False"
-                                           Fill="Transparent" />
+                                <Border Name="PART_SelectedPipe"
+                                        CornerRadius="2" Width="4" MaxHeight="32"
+                                        HorizontalAlignment="Left" IsHitTestVisible="False"
+                                        Background="Transparent" />
                             </Border>
                         </Grid>
                     </Border>
@@ -178,8 +178,8 @@
         <Style Selector="^:selected /template/ Border#PART_LayoutRoot > ContentPresenter#PART_HeaderPresenter">
             <Setter Property="Foreground" Value="{DynamicResource TreeViewItemForegroundSelected}" />
         </Style>
-        <Style Selector="^:selected /template/ Rectangle#PART_SelectedPipe">
-            <Setter Property="Fill" Value="{DynamicResource SystemControlHighlightAccentBrush}" />
+        <Style Selector="^:selected /template/ Border#PART_SelectedPipe">
+            <Setter Property="Background" Value="{DynamicResource SystemControlHighlightAccentBrush}" />
         </Style>
 
         <!--  Selected PointerOver state  -->

@@ -112,6 +112,13 @@ public class WindowsForegroundWindowTracker : IForegroundWindowTracker
         LONG idObject, LONG idChild, DWORD idEventThread, DWORD dwmsEventTime)
     {
         var current = GetForegroundWindow();
-        ForegroundWindowChanged?.Invoke(this, current);
+        try
+        {
+            ForegroundWindowChanged?.Invoke(this, current);
+        }
+        catch (Exception ex)
+        {
+            // 来自非托管代码的回调，捕获所有异常以防止崩溃。
+        }
     }
 }

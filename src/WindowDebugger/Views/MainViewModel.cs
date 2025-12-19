@@ -101,7 +101,7 @@ public class MainViewModel : ReactiveObject
                 NativeTree.Add(node);
                 TrackedWindowsHistory.Insert(0, model);
                 SelectedNode = node;
-            }, DispatcherPriority.Background);
+            });
         }
     }
 }

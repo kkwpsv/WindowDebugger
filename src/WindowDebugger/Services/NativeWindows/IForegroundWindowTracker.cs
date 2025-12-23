@@ -84,7 +84,7 @@ public class WindowsForegroundWindowTracker : IForegroundWindowTracker
 
     private void Enable()
     {
-        if (_hookHandle != 0)
+        if (_hookHandle != IntPtr.Zero)
         {
             Disable();
         }
@@ -101,7 +101,7 @@ public class WindowsForegroundWindowTracker : IForegroundWindowTracker
 
     private void Disable()
     {
-        if (_hookHandle != 0)
+        if (_hookHandle != IntPtr.Zero)
         {
             UnhookWinEvent(_hookHandle);
             _hookHandle = default;
@@ -116,7 +116,7 @@ public class WindowsForegroundWindowTracker : IForegroundWindowTracker
         {
             ForegroundWindowChanged?.Invoke(this, current);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
             // 来自非托管代码的回调，捕获所有异常以防止崩溃。
         }

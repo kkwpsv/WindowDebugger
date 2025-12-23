@@ -194,6 +194,7 @@ public class WindowListViewModel : ReactiveObject
 
     private IEnumerable<NativeTreeNode> BuildTree(ImmutableArray<NativeWindowModel> nativeWindows)
     {
+#if NET6_0_OR_GREATER
         if (OperatingSystem.IsLinux())
         {
             var processWindowDictionary = GroupByProcess<LinuxNativeWindowModel>(nativeWindows);
@@ -204,6 +205,7 @@ public class WindowListViewModel : ReactiveObject
                     Windows = [..x.Value.Select(ConvertModelToNode)],
                 });
         }
+#endif
 
         if (OperatingSystem.IsWindows())
         {
@@ -225,6 +227,7 @@ public class WindowListViewModel : ReactiveObject
         throw new PlatformNotSupportedException();
     }
 
+#if NET6_0_OR_GREATER
     private NativeWindowNode ConvertModelToNode(LinuxNativeWindowModel model)
     {
         return new LinuxNativeWindowNode(model)
@@ -232,6 +235,7 @@ public class WindowListViewModel : ReactiveObject
             ChildWindows = [..model.GetChildren().OrderBy(_windowSorting).Select(ConvertModelToNode)],
         };
     }
+#endif
 
     private static Dictionary<int, List<T>> GroupByProcess<T>(ImmutableArray<NativeWindowModel> nativeWindows)
         where T : NativeWindowModel

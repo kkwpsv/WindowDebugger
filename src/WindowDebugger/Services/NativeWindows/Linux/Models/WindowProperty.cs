@@ -234,9 +234,9 @@ public record WindowPropertyAtomValue : IWindowPropertyValue<WindowPropertyAtomV
     }
 
     public string ValueType => _propertyType.GetAtomName() ?? "(null)";
-    
+
     public string[] Atoms { get; }
-    
+
     public PropertyData ToPropertyData()
     {
         return new PropertyData.Format32Array(_propertyType, _propertyType.Display.InternAtoms(Atoms).Select(x => (Long)(int)x.Atom).ToArray());

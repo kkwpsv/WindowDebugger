@@ -1,7 +1,8 @@
-﻿using SeWzc.X11Sharp;
-using WindowDebugger.Services.NativeWindows.Linux.Models;
+﻿namespace WindowDebugger.Services.NativeWindows.Linux;
 
-namespace WindowDebugger.Services.NativeWindows.Linux;
+#if NET6_0_OR_GREATER
+using SeWzc.X11Sharp;
+using WindowDebugger.Services.NativeWindows.Linux.Models;
 
 public record LinuxNativeWindowModel : NativeWindowModel
 {
@@ -81,3 +82,19 @@ public record LinuxNativeWindowModel : NativeWindowModel
             });
     }
 }
+#else
+public record LinuxNativeWindowModel(nint Id) : NativeWindowModel(Id)
+{
+    public override string? Title => null;
+    public override int ProcessId => 0;
+    public int Left => 0;
+    public int Top => 0;
+    public int Width => 0;
+    public int Height => 0;
+    public int Depth => 0;
+    public int BorderWidth => 0;
+    public int WindowClasses => 0;
+    public int MapState => 0;
+    public bool OverrideRedirect => false;
+}
+#endif

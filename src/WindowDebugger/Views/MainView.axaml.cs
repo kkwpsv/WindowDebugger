@@ -7,8 +7,11 @@ using WindowDebugger.Native;
 using WindowDebugger.Services.NativeWindows;
 using WindowDebugger.Services.NativeWindows.Windows;
 using WindowDebugger.Views.Details;
-using WindowDebugger.Views.Details.Linux;
 using WindowDebugger.Views.Details.Windows;
+
+#if NET6_0_OR_GREATER
+using WindowDebugger.Views.Details.Linux;
+#endif
 
 namespace WindowDebugger.Views;
 
@@ -124,6 +127,7 @@ public partial class MainView : UserControl
 
     private void InitializePlatformPages()
     {
+#if NET6_0_OR_GREATER
         if (OperatingSystem.IsLinux())
         {
             WindowDetailTabControl.Items.Add(new TabItem
@@ -142,7 +146,9 @@ public partial class MainView : UserControl
                 Content = new WipPage(),
             });
         }
-        else if (OperatingSystem.IsWindows())
+        else
+#endif
+        if (OperatingSystem.IsWindows())
         {
             WindowDetailTabControl.Items.Add(new TabItem
             {

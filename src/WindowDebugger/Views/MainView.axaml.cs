@@ -81,12 +81,16 @@ public partial class MainView : UserControl
     private async Task ReloadAllAsync()
     {
         var vm = (MainViewModel)DataContext!;
-        var oldSelection = WindowTreeView.SelectedItem as WindowsNativeWindowModel;
+        var oldSelectedWindowId = WindowTreeView.SelectedItem switch
+        {
+            WindowsNativeWindowNode node => node.Window.Id,
+            _ => 0,
+        };
 
         vm.ReloadWindows();
 
         var selfId = Environment.ProcessId;
-        var newSelection = vm.NativeTree.EnumerableAllWindows().FirstOrDefault(x => x.Window.Id == oldSelection?.Id);
+        var newSelection = vm.NativeTree.EnumerableAllWindows().FirstOrDefault(x => x.Window.Id == oldSelectedWindowId);
         var defaultSelection = newSelection ?? vm.NativeTree.EnumerableAllWindows().FirstOrDefault(x => x.Window.ProcessId == selfId);
         if (defaultSelection is not null)
         {

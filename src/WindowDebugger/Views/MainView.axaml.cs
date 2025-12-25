@@ -81,7 +81,7 @@ public partial class MainView : UserControl
     private async Task ReloadAllAsync()
     {
         var vm = (MainViewModel)DataContext!;
-        var oldSelectedWindowId = WindowTreeView.SelectedItem switch
+        var oldSelectedWindowId = vm.SelectedNode switch
         {
             WindowsNativeWindowNode node => node.Window.Id,
             _ => 0,
@@ -101,7 +101,6 @@ public partial class MainView : UserControl
                 await ScrollToItem(vm.NativeTree[^1]);
                 await ScrollToItem(vm.NativeTree[Math.Max(0, index - 1)]);
                 await Task.Delay(0);
-                WindowTreeView.SelectedItem = defaultSelection;
             }
             else
             {
@@ -109,8 +108,8 @@ public partial class MainView : UserControl
                 await Task.Delay(0);
                 var index = vm.NativeTree.IndexOf(defaultSelection);
                 await ScrollToItem(vm.NativeTree[Math.Max(0, index)]);
-                WindowTreeView.SelectedItem = defaultSelection;
             }
+            vm.SelectedNode = defaultSelection;
         }
     }
 

@@ -9,6 +9,7 @@
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Version>0.1.0-alpha.2</Version>
+    <ApplicationIcon>Assets\Icons\icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <PropertyGroup>

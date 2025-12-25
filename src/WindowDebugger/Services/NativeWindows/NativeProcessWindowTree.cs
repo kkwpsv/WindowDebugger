@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using WindowDebugger.Services.NativeWindows.Linux;
+﻿using WindowDebugger.Services.NativeWindows.Linux;
 using WindowDebugger.Services.NativeWindows.Windows;
 
 namespace WindowDebugger.Services.NativeWindows;
@@ -15,14 +14,14 @@ public record NativeProcessNode(int ProcessId) : NativeTreeNode
 
     public override IReadOnlyList<NativeTreeNode> Children => Windows;
 
-    public required ImmutableArray<NativeWindowNode> Windows { get; init; }
+    public required IReadOnlyList<NativeWindowNode> Windows { get; init; }
 }
 
 public abstract record NativeWindowNode(NativeWindowModel Window) : NativeTreeNode
 {
     public override IReadOnlyList<NativeTreeNode> Children => ChildWindows;
 
-    public required ImmutableArray<NativeWindowNode> ChildWindows { get; init; }
+    public required IReadOnlyList<NativeWindowNode> ChildWindows { get; init; }
 }
 
 public record WindowsNativeWindowNode(WindowsNativeWindowModel Window) : NativeWindowNode(Window)

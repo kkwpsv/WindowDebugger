@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using ReactiveUI;
 using WindowDebugger.Localizations;
@@ -192,7 +191,7 @@ public class WindowListViewModel : ReactiveObject
         return value;
     }
 
-    private IEnumerable<NativeTreeNode> BuildTree(ImmutableArray<NativeWindowModel> nativeWindows)
+    private IEnumerable<NativeTreeNode> BuildTree(IReadOnlyList<NativeWindowModel> nativeWindows)
     {
 #if NET6_0_OR_GREATER
         if (OperatingSystem.IsLinux())
@@ -237,7 +236,7 @@ public class WindowListViewModel : ReactiveObject
     }
 #endif
 
-    private static Dictionary<int, List<T>> GroupByProcess<T>(ImmutableArray<NativeWindowModel> nativeWindows)
+    private static Dictionary<int, List<T>> GroupByProcess<T>(IReadOnlyList<NativeWindowModel> nativeWindows)
         where T : NativeWindowModel
     {
         var processWindowDictionary = new Dictionary<int, List<T>>();

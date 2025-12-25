@@ -3,7 +3,6 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Lsj.Util.Win32;
 using Lsj.Util.Win32.Enums;
-using System.Collections.Immutable;
 using WindowDebugger.Services.NativeWindows.Windows;
 
 namespace WindowDebugger.Views.Details.Windows;

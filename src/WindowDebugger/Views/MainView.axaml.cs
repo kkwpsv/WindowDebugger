@@ -78,8 +78,8 @@ public partial class MainView : UserControl
             if (e.IsReloading)
             {
                 // 如果重新加载整个列表，那么滚动到选中项前后各有一些额外空间，提升视线舒适度。
-                await ScrollToItem(vm.NativeTree[Math.Min(e.NewSelectionIndex + 5, vm.NativeTree.Count - 1)]);
-                await ScrollToItem(vm.NativeTree[Math.Max(e.NewSelectionIndex - 5, 0)]);
+                await ScrollToItem(vm.NativeTree[Math.Min(e.NewSelectionIndex + 3, vm.NativeTree.Count - 1)]);
+                await ScrollToItem(vm.NativeTree[Math.Max(e.NewSelectionIndex - 3, 0)]);
             }
             await ScrollToItem(WindowTreeView.SelectedItem);
         }

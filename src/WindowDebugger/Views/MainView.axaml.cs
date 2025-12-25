@@ -1,11 +1,7 @@
-﻿using System.Diagnostics;
-using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
+﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using WindowDebugger.Localizations;
 using WindowDebugger.Native;
-using WindowDebugger.Services.NativeWindows;
-using WindowDebugger.Services.NativeWindows.Windows;
 using WindowDebugger.Views.Details;
 using WindowDebugger.Views.Details.Windows;
 
@@ -28,6 +24,7 @@ public partial class MainView : UserControl
     private void OnLoaded(object? sender, RoutedEventArgs e)
     {
         var vm = new MainViewModel();
+        vm.SelectionChanged += ViewModel_SelectionChanged;
         DataContext = vm;
         _ = ReloadAllAsync();
     }
@@ -72,45 +69,31 @@ public partial class MainView : UserControl
         }
     }
 
-    private void WindowTreeView_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private async void ViewModel_SelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         // 滚动到选中的项。
-        _ = ScrollToItem(WindowTreeView.SelectedItem);
+        try
+        {
+            var vm = (MainViewModel)sender!;
+            if (e.IsReloading)
+            {
+                // 如果重新加载整个列表，那么滚动到选中项前后各有一些额外空间，提升视线舒适度。
+                await ScrollToItem(vm.NativeTree[Math.Min(e.NewSelectionIndex + 5, vm.NativeTree.Count - 1)]);
+                await ScrollToItem(vm.NativeTree[Math.Max(e.NewSelectionIndex - 5, 0)]);
+            }
+            await ScrollToItem(WindowTreeView.SelectedItem);
+        }
+        catch (Exception)
+        {
+            // async void 方法不允许抛出异常。
+        }
     }
 
-    private async Task ReloadAllAsync()
+    private Task ReloadAllAsync()
     {
         var vm = (MainViewModel)DataContext!;
-        var oldSelectedWindowId = vm.SelectedNode switch
-        {
-            WindowsNativeWindowNode node => node.Window.Id,
-            _ => 0,
-        };
-
         vm.ReloadWindows();
-
-        var selfId = Environment.ProcessId;
-        var newSelection = vm.NativeTree.EnumerableAllWindows().FirstOrDefault(x => x.Window.Id == oldSelectedWindowId);
-        var defaultSelection = newSelection ?? vm.NativeTree.EnumerableAllWindows().FirstOrDefault(x => x.Window.ProcessId == selfId);
-        if (defaultSelection is not null)
-        {
-            if (newSelection is null)
-            {
-                // 初次选择，或者此前已取消选择。
-                var index = vm.NativeTree.IndexOf(defaultSelection);
-                await ScrollToItem(vm.NativeTree[^1]);
-                await ScrollToItem(vm.NativeTree[Math.Max(0, index - 1)]);
-                await Task.Delay(0);
-            }
-            else
-            {
-                // 曾经已选择，刷新后重新选择。
-                await Task.Delay(0);
-                var index = vm.NativeTree.IndexOf(defaultSelection);
-                await ScrollToItem(vm.NativeTree[Math.Max(0, index)]);
-            }
-            vm.SelectedNode = defaultSelection;
-        }
+        return Task.CompletedTask;
     }
 
     private void SettingsButton_Click(object? sender, RoutedEventArgs e)

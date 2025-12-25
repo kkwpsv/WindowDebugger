@@ -11,6 +11,7 @@ namespace WindowDebugger.Views;
 public class MainViewModel : ReactiveObject
 {
     private readonly IForegroundWindowTracker _tracker;
+    private bool _isReloading;
 
     public MainViewModel()
     {
@@ -37,7 +38,35 @@ public class MainViewModel : ReactiveObject
     public NativeTreeNode? SelectedNode
     {
         get;
-        set => this.RaiseAndSetIfChanged(ref field, value);
+        set
+        {
+            if (field == value)
+            {
+                return;
+            }
+
+            if (_isReloading)
+            {
+                // 在重新加载窗口列表时，因为这里无法获得正确的 Index，所以不触发 SelectionChanged 事件；
+                // 在重新加载的方法内，会主动触发具有正确 Index 的 SelectionChanged 事件。
+                this.RaiseAndSetIfChanged(ref field, value);
+                return;
+            }
+
+            var oldValue = field;
+            var oldIndex = oldValue is null ? -1 : NativeTree.IndexOf(oldValue);
+            var newIndex = value is null ? -1 : NativeTree.IndexOf(value);
+            this.RaiseAndSetIfChanged(ref field, value);
+
+            SelectionChanged?.Invoke(this, new SelectionChangedEventArgs
+            {
+                IsReloading = false,
+                OldSelection = oldValue,
+                OldSelectionIndex = oldIndex,
+                NewSelection = value,
+                NewSelectionIndex = newIndex,
+            });
+        }
     }
 
     public bool IsForegroundWindowTracking
@@ -65,11 +94,50 @@ public class MainViewModel : ReactiveObject
         }
     }
 
+    public event EventHandler<SelectionChangedEventArgs>? SelectionChanged;
+
     public void ReloadWindows()
     {
-        var tree = WindowList.ReloadWindows();
-        NativeTree.Clear();
-        NativeTree.AddRange(tree);
+        if (_isReloading)
+        {
+            return;
+        }
+
+        _isReloading = true;
+
+        try
+        {
+            var oldSelectedNode = SelectedNode;
+            var oldIndex = oldSelectedNode is null ? -1 : NativeTree.IndexOf(oldSelectedNode);
+            var oldSelectedWindowId = oldSelectedNode switch
+            {
+                WindowsNativeWindowNode node => node.Window.Id,
+                _ => 0,
+            };
+
+            var tree = WindowList.ReloadWindows();
+            NativeTree.Clear();
+            NativeTree.AddRange(tree);
+
+            var selfId = Environment.ProcessId;
+            var newSelection = NativeTree.EnumerableAllWindows().FirstOrDefault(x => x.Window.Id == oldSelectedWindowId);
+            var defaultSelection = newSelection ?? NativeTree.EnumerableAllWindows().FirstOrDefault(x => x.Window.ProcessId == selfId);
+            var newIndex = defaultSelection is null ? -1 : NativeTree.IndexOf(defaultSelection);
+            SelectedNode = defaultSelection;
+
+            SelectionChanged?.Invoke(this, new SelectionChangedEventArgs
+            {
+                IsReloading = true,
+                OldSelection = oldSelectedNode,
+                OldSelectionIndex = oldIndex,
+                NewSelection = defaultSelection,
+                NewSelectionIndex = newIndex,
+            });
+        }
+        finally
+        {
+            _isReloading = false;
+        }
     }
 
     [SupportedOSPlatform("windows")]
@@ -104,6 +172,15 @@ public class MainViewModel : ReactiveObject
             });
         }
     }
+}
+
+public class SelectionChangedEventArgs : EventArgs
+{
+    public required bool IsReloading { get; init; }
+    public required NativeTreeNode? OldSelection { get; init; }
+    public required int OldSelectionIndex { get; init; }
+    public required NativeTreeNode? NewSelection { get; init; }
+    public required int NewSelectionIndex { get; init; }
 }
 
 public record TrackedForegroundWindowModel(DateTime TrackedTime, NativeWindowModel Window)

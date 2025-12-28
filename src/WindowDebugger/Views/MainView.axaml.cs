@@ -1,14 +1,13 @@
-﻿using System.Diagnostics;
-using Avalonia.Controls;
-using Avalonia.Controls.Primitives;
+﻿using Avalonia.Controls;
 using Avalonia.Interactivity;
 using WindowDebugger.Localizations;
 using WindowDebugger.Native;
-using WindowDebugger.Services.NativeWindows;
-using WindowDebugger.Services.NativeWindows.Windows;
 using WindowDebugger.Views.Details;
-using WindowDebugger.Views.Details.Linux;
 using WindowDebugger.Views.Details.Windows;
+
+#if NET6_0_OR_GREATER
+using WindowDebugger.Views.Details.Linux;
+#endif
 
 namespace WindowDebugger.Views;
 
@@ -22,51 +21,43 @@ public partial class MainView : UserControl
         Loaded += OnLoaded;
     }
 
-    private void TopMostToggleButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
-    {
-        if (TopLevel.GetTopLevel(this) is Window window)
-        {
-            window.Topmost = ((ToggleButton)sender!).IsChecked is true;
-        }
-    }
-
-    private void UacButton_Click(object? sender, RoutedEventArgs e)
-    {
-        if (Environment.ProcessPath is { } path && File.Exists(path))
-        {
-            Process.Start(new ProcessStartInfo(path)
-            {
-                UseShellExecute = true,
-                Verb = "runas",
-            });
-            if (TopLevel.GetTopLevel(this) is Window window)
-            {
-                window.Close();
-            }
-        }
-    }
-
-    private async void OnLoaded(object? sender, RoutedEventArgs e)
+    private void OnLoaded(object? sender, RoutedEventArgs e)
     {
         var vm = new MainViewModel();
+        vm.SelectionChanged += ViewModel_SelectionChanged;
         DataContext = vm;
-        await ReloadAllAsync();
+        _ = ReloadAllAsync();
     }
 
-    private async void ReloadAllButton_Click(object? sender, RoutedEventArgs e)
+    private void ReloadAllButton_Click(object? sender, RoutedEventArgs e)
     {
-        await ReloadAllAsync();
+        _ = ReloadAllAsync();
     }
 
-    private void CaptureButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
+    private void CaptureButton_Click(object? sender, RoutedEventArgs e)
     {
+    }
+
+    private void ViewTrackingHistoryButton_Click(object? sender, RoutedEventArgs e)
+    {
+        if (TrackButton.ContextFlyout is { } flyout)
+        {
+            flyout.Hide();
+        }
+
+        var w = (MainWindow)TopLevel.GetTopLevel(this)!;
+        var view = new TrackingHistoryView
+        {
+            DataContext = DataContext,
+        };
+        _ = w.ShowTransientViewAsync(view);
     }
 
     private void ReloadButton_Click(object? sender, RoutedEventArgs e)
     {
-        var oldSelection = WindowListBox.SelectedItem;
-        WindowListBox.SelectedItem = null;
-        WindowListBox.SelectedItem = oldSelection;
+        var oldSelection = WindowTreeView.SelectedItem;
+        WindowTreeView.SelectedItem = null;
+        WindowTreeView.SelectedItem = oldSelection;
     }
 
     private void RevealExecutableFileButton_Click(object? sender, RoutedEventArgs e)
@@ -78,38 +69,31 @@ public partial class MainView : UserControl
         }
     }
 
-    private async Task ReloadAllAsync()
+    private async void ViewModel_SelectionChanged(object? sender, SelectionChangedEventArgs e)
+    {
+        // 滚动到选中的项。
+        try
+        {
+            var vm = (MainViewModel)sender!;
+            if (e.IsReloading)
+            {
+                // 如果重新加载整个列表，那么滚动到选中项前后各有一些额外空间，提升视线舒适度。
+                await ScrollToItem(vm.NativeTree[Math.Min(e.NewSelectionIndex + 3, vm.NativeTree.Count - 1)]);
+                await ScrollToItem(vm.NativeTree[Math.Max(e.NewSelectionIndex - 3, 0)]);
+            }
+            await ScrollToItem(WindowTreeView.SelectedItem);
+        }
+        catch (Exception)
+        {
+            // async void 方法不允许抛出异常。
+        }
+    }
+
+    private Task ReloadAllAsync()
     {
         var vm = (MainViewModel)DataContext!;
-        var oldSelection = WindowListBox.SelectedItem as WindowsNativeWindowModel;
-
         vm.ReloadWindows();
-
-        var selfId = Environment.ProcessId;
-        var newSelection = vm.NativeTree.EnumerableAllWindows().FirstOrDefault(x => x.Window.Id == oldSelection?.Id);
-        var defaultSelection = newSelection ?? vm.NativeTree.EnumerableAllWindows().FirstOrDefault(x => x.Window.ProcessId == selfId);
-        if (defaultSelection is not null)
-        {
-            if (newSelection is null)
-            {
-                // 初次选择，或者此前已取消选择。
-                var index = vm.NativeTree.IndexOf(defaultSelection);
-                await Task.Delay(0);
-                WindowListBox.ScrollIntoView(vm.NativeTree[^1]);
-                await Task.Delay(0);
-                WindowListBox.ScrollIntoView(vm.NativeTree[Math.Max(0, index - 1)]);
-                await Task.Delay(0);
-                WindowListBox.SelectedItem = defaultSelection;
-            }
-            else
-            {
-                // 曾经已选择，刷新后重新选择。
-                await Task.Delay(0);
-                var index = vm.NativeTree.IndexOf(defaultSelection);
-                WindowListBox.ScrollIntoView(vm.NativeTree[Math.Max(0, index)]);
-                WindowListBox.SelectedItem = defaultSelection;
-            }
-        }
+        return Task.CompletedTask;
     }
 
     private void SettingsButton_Click(object? sender, RoutedEventArgs e)
@@ -118,8 +102,18 @@ public partial class MainView : UserControl
         _ = w.ShowTransientViewAsync(new SettingsView());
     }
 
+    private async Task ScrollToItem(object? item)
+    {
+        if (item is not null)
+        {
+            await Task.Delay(0);
+            WindowTreeView.ScrollIntoView(item);
+        }
+    }
+
     private void InitializePlatformPages()
     {
+#if NET6_0_OR_GREATER
         if (OperatingSystem.IsLinux())
         {
             WindowDetailTabControl.Items.Add(new TabItem
@@ -138,7 +132,9 @@ public partial class MainView : UserControl
                 Content = new WipPage(),
             });
         }
-        else if (OperatingSystem.IsWindows())
+        else
+#endif
+        if (OperatingSystem.IsWindows())
         {
             WindowDetailTabControl.Items.Add(new TabItem
             {

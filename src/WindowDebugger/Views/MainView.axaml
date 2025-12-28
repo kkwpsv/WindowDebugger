@@ -11,6 +11,9 @@
              x:DataType="views:MainViewModel">
 
     <UserControl.Resources>
+        <vc:ZeroToBooleanConverter x:Key="ProcessIdToIsVisibleConverter" Zero="True" NonZero="False" />
+        <vc:ZeroToBooleanConverter x:Key="ProcessIdToIsInvisibleConverter" Zero="False" NonZero="True" />
+        <vc:ProcessIdToProcessNameConverter x:Key="ProcessIdToProcessNameConverter" />
         <vc:ProcessIdToProcessPathConverter x:Key="ProcessIdToProcessPathConverter" />
         <vc:NativeTreeNodeToNativeWindowConverter x:Key="NativeTreeNodeToNativeWindowConverter" />
         <vc:WindowGroupingToBooleanConverter x:Key="WindowGroupingToBooleanConverter" />
@@ -37,6 +40,18 @@
             <Setter Property="Height" Value="16" />
             <Setter Property="Stretch" Value="Uniform" />
         </Style>
+        <Style Selector="Svg.Capture">
+            <Setter Property="Path" Value="/Assets/UI/crosshair.svg" />
+        </Style>
+        <Style Selector="Button:pressed Svg.Capture">
+            <Setter Property="Path" Value="/Assets/UI/crosshair-fill.svg" />
+        </Style>
+        <Style Selector="Svg.Selection">
+            <Setter Property="Path" Value="/Assets/UI/selection.svg" />
+        </Style>
+        <Style Selector="ToggleButton:checked Svg.Selection">
+            <Setter Property="Path" Value="/Assets/UI/selection-fill.svg" />
+        </Style>
         <Style Selector="TextBlock.FlyoutTitle">
             <Setter Property="FontSize" Value="14" />
             <Setter Property="FontWeight" Value="Bold" />
@@ -62,7 +77,7 @@
             <Style Selector="^ /template/ Grid#PART_Header">
                 <Setter Property="Margin" Value="16 0 0 0" />
             </Style>
-            <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
+            <Style Selector="^ /template/ Border#PART_SelectedPipe">
                 <Setter Property="Margin" Value="-16 0 0 0" />
             </Style>
             <Style Selector="^ /template/ Panel#PART_ExpandCollapseChevronContainer">
@@ -72,7 +87,7 @@
                 <Style Selector="^ /template/ Grid#PART_Header">
                     <Setter Property="Margin" Value="0" />
                 </Style>
-                <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
+                <Style Selector="^ /template/ Border#PART_SelectedPipe">
                     <Setter Property="Margin" Value="0" />
                 </Style>
             </Style>
@@ -82,7 +97,7 @@
                 <Style Selector="^ /template/ Grid#PART_Header">
                     <Setter Property="Margin" Value="8 0 0 0" />
                 </Style>
-                <Style Selector="^ /template/ Rectangle#PART_SelectedPipe">
+                <Style Selector="^ /template/ Border#PART_SelectedPipe">
                     <Setter Property="Margin" Value="-8 0 0 0" />
                 </Style>
             </Style>
@@ -106,13 +121,13 @@
 
         <!-- Background -->
         <Border Grid.Column="1" Background="#08FFFFFF" IsHitTestVisible="False"
-                DataContext="{Binding #WindowListBox.SelectedItem}">
+                DataContext="{Binding #WindowTreeView.SelectedItem}">
         </Border>
 
         <!-- Left Side Bar -->
         <Grid Grid.Column="0" Margin="0 40 0 0" RowDefinitions="Auto,*,Auto">
             <StackPanel Grid.Row="0">
-                <Grid Margin="8 0" ColumnDefinitions="Auto,Auto,*,Auto,Auto">
+                <Grid Margin="8 0" ColumnDefinitions="Auto,*,Auto,Auto">
                     <Button Grid.Column="0" Classes="GlobalToolButton"
                             Padding="0 0 12 0" HorizontalContentAlignment="Stretch"
                             Background="#10FFFFFF"
@@ -125,13 +140,13 @@
                             </TextBlock>
                         </ToolTip.Tip>
                         <Grid ColumnDefinitions="32,Auto">
-                            <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/reload-svgrepo-com.svg" />
+                            <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/reload-color.svg" />
                             <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
                         </Grid>
                     </Button>
-                    <ToggleButton Grid.Column="1" Classes="GlobalToolButton"
+                    <Button Grid.Column="2" Classes="GlobalToolButton"
                                   Margin="4 0 0 0" HorizontalContentAlignment="Stretch"
-                                  IsCheckedChanged="CaptureButton_IsCheckedChanged">
+                                  Click="CaptureButton_Click">
                         <ToolTip.Tip>
                             <TextBlock LineHeight="24">
                                 <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.CaptureButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
@@ -139,30 +154,31 @@
                                 <Run Text="{Binding App.UI.CaptureButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
                             </TextBlock>
                         </ToolTip.Tip>
-                        <Svg Classes="ButtonIcon" Path="/Assets/UI/visibility-view-svgrepo-com.svg" />
-                    </ToggleButton>
-                    <ToggleButton Grid.Column="3" Classes="GlobalToolButton"
-                                  IsCheckedChanged="TopMostToggleButton_IsCheckedChanged">
-                        <ToolTip.Tip>
-                            <TextBlock LineHeight="24">
-                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.TopmostButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
-                                <LineBreak />
-                                <Run Text="{Binding App.UI.TopmostButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
-                            </TextBlock>
-                        </ToolTip.Tip>
-                        <Svg Classes="ButtonIcon" Path="/Assets/UI/layers-svgrepo-com.svg" />
-                    </ToggleButton>
-                    <Button Grid.Column="4" Classes="GlobalToolButton" Margin="4 0 0 0" Click="UacButton_Click"
-                            IsVisible="{OnPlatform False, Windows=True}">
-                        <ToolTip.Tip>
-                            <TextBlock LineHeight="24">
-                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.UacButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
-                                <LineBreak />
-                                <Run Text="{Binding App.UI.UacButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
-                            </TextBlock>
-                        </ToolTip.Tip>
-                        <Svg Classes="ButtonIcon" Path="/Assets/UI/shield-antivirus-svgrepo-com.svg" />
+                        <Svg Classes="ButtonIcon Capture" />
                     </Button>
+                    <ToggleButton x:Name="TrackButton" Grid.Column="3" Classes="GlobalToolButton"
+                            Margin="4 0 0 0" HorizontalContentAlignment="Stretch"
+                            IsChecked="{Binding IsForegroundWindowTracking, Mode=TwoWay}">
+                        <ToolTip.Tip>
+                            <TextBlock LineHeight="24">
+                                <Run FontSize="14" FontWeight="Bold" Text="{Binding App.UI.TrackButton.ToolTip.Title, Source={x:Static l:Lang.Current}}" />
+                                <LineBreak />
+                                <Run Text="{Binding App.UI.TrackButton.ToolTip.Description, Source={x:Static l:Lang.Current}}" />
+                            </TextBlock>
+                        </ToolTip.Tip>
+                        <Svg Classes="ButtonIcon Selection" />
+                        <ToggleButton.ContextFlyout>
+                            <Flyout>
+                                <StackPanel>
+                                    <TextBlock Classes="FlyoutTitle" Text="{Binding App.UI.TrackButton.Flyout.Title, Source={x:Static l:Lang.Current}}" />
+                                    <Separator Margin="-12 12" />
+                                    <CheckBox Content="{Binding App.UI.TrackButton.Flyout.IncludeSelf, Source={x:Static l:Lang.Current}}" IsChecked="{Binding AllowsTrackSelf, Mode=TwoWay}" />
+                                    <Separator Margin="-12 12" />
+                                    <Button Content="{Binding App.UI.TrackButton.Flyout.ViewHistory, Source={x:Static l:Lang.Current}}" Click="ViewTrackingHistoryButton_Click" />
+                                </StackPanel>
+                            </Flyout>
+                        </ToggleButton.ContextFlyout>
+                    </ToggleButton>
                 </Grid>
                 <TextBox Margin="8"
                          Watermark="{Binding App.UI.SearchWatermark, Source={x:Static l:Lang.Current}}"
@@ -238,9 +254,10 @@
                 </ScrollViewer>
                 <Separator Height="1" Margin="0 8 0 0" />
             </StackPanel>
-            <TreeView x:Name="WindowListBox" Grid.Row="1" Background="Transparent"
+            <TreeView x:Name="WindowTreeView" Grid.Row="1" Background="Transparent"
                       Classes.PlainList="{Binding !WindowList.IsGroupedByProcess, Mode=OneWay}"
                       ItemsSource="{Binding NativeTree}"
+                      SelectedItem="{Binding SelectedNode, Mode=TwoWay}"
                       ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                       ScrollViewer.VerticalScrollBarVisibility="Auto"
                       ItemsPanel="{Binding WindowList.IsGroupedByProcess, Mode=OneWay, Converter={StaticResource IsGroupedToItemsPanelTemplateConverter}}">
@@ -249,7 +266,7 @@
                         <Grid ColumnDefinitions="32,*,Auto">
                             <Svg Grid.Column="0" Margin="6 0 0 0" Width="16" Height="16"
                                  HorizontalAlignment="Left" VerticalAlignment="Center"
-                                 Path="/Assets/UI/file-document-svgrepo-com.svg" />
+                                 Path="/Assets/UI/file-document-color.svg" />
                             <TextBlock Grid.Column="2"
                                        FontSize="11" Foreground="#40FFFFFF"
                                        VerticalAlignment="Center"
@@ -257,7 +274,7 @@
                                        Text="{Binding ProcessId}" />
                             <TextBlock Grid.Column="1"
                                        FontSize="13" Foreground="#40FFFFFF" VerticalAlignment="Center"
-                                       Text="{Binding ProcessName}"
+                                       Text="{Binding ProcessId, Converter={StaticResource ProcessIdToProcessNameConverter}, Mode=OneWay}"
                                        TextTrimming="CharacterEllipsis" />
                         </Grid>
                     </DataTemplate>
@@ -272,6 +289,16 @@
                                        FontSize="13" Foreground="#CCCCCC" VerticalAlignment="Center"
                                        Text="{Binding Window.Title}"
                                        TextTrimming="CharacterEllipsis" />
+                            <Grid Grid.Column="1"
+                                  IsVisible="{Binding Window.Title, Mode=OneWay, Converter={x:Static StringConverters.IsNullOrEmpty}}">
+                                <TextBlock FontSize="11" Foreground="#80999999" VerticalAlignment="Center"
+                                           IsVisible="{Binding Window.ProcessId, Mode=OneWay, Converter={StaticResource ProcessIdToIsInvisibleConverter}}"
+                                           Text="{Binding Window.ProcessId, Mode=OneWay, Converter={StaticResource ProcessIdToProcessNameConverter}}"
+                                           TextTrimming="CharacterEllipsis" />
+                                <TextBlock FontSize="13" Foreground="#C94F4F" VerticalAlignment="Center"
+                                           IsVisible="{Binding Window.ProcessId, Mode=OneWay, Converter={StaticResource ProcessIdToIsVisibleConverter}}"
+                                           Text="{Binding App.UI.TrackPage.HistoryList.WindowWasClosed, Source={x:Static l:Lang.Current}}" />
+                            </Grid>
                         </Grid>
                     </DataTemplate>
                 </TreeView.DataTemplates>
@@ -289,7 +316,7 @@
                         HorizontalContentAlignment="Left" VerticalContentAlignment="Center"
                         Click="SettingsButton_Click">
                     <StackPanel Orientation="Horizontal">
-                        <Svg Margin="4 0 8 0" Classes="ButtonIcon" Path="/Assets/UI/settings-gear-svgrepo-com.svg" />
+                        <Svg Margin="4 0 8 0" Classes="ButtonIcon" Path="/Assets/UI/settings-color.svg" />
                         <TextBlock VerticalAlignment="Center"
                                    Text="{Binding App.UI.SettingsButton, Source={x:Static l:Lang.Current}}" />
                     </StackPanel>
@@ -300,14 +327,14 @@
         <!-- Right Content -->
         <Grid Grid.Column="1"
               x:DataType="nativeWindows:NativeWindowModel"
-              DataContext="{Binding #WindowListBox.SelectedItem, Converter={StaticResource NativeTreeNodeToNativeWindowConverter}}"
+              DataContext="{Binding #WindowTreeView.SelectedItem, Converter={StaticResource NativeTreeNodeToNativeWindowConverter}}"
               RowDefinitions="Auto,Auto,*">
             <Grid Grid.Row="0" RowDefinitions="32,16" ColumnDefinitions="48,*"
                   Margin="{OnPlatform 32 40 32 8, Linux=32 48 32 0}">
                 <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="0"
                         Background="Transparent" HorizontalAlignment="Left">
                     <Grid>
-                        <Image Source="/Assets/UI/browser-ui-svgrepo-com.256.png" Stretch="Uniform" />
+                        <Image Source="/Assets/UI/browser-ui-color.256.png" Stretch="Uniform" />
                     </Grid>
                 </Border>
                 <TextBox Grid.Row="0" Grid.Column="1" Classes="CopyableText"
@@ -333,7 +360,7 @@
                         </TextBlock>
                     </ToolTip.Tip>
                     <Grid ColumnDefinitions="32,Auto">
-                        <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/reload-svgrepo-com.svg" />
+                        <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/reload-color.svg" />
                         <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.WindowDetail.ReloadButton.Content, Source={x:Static l:Lang.Current}}" />
                     </Grid>
                 </Button>
@@ -349,7 +376,7 @@
                         </TextBlock>
                     </ToolTip.Tip>
                     <Grid ColumnDefinitions="32,Auto">
-                        <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/folder-svgrepo-com.svg" />
+                        <Svg Grid.Column="0" Classes="ButtonIcon" Path="/Assets/UI/folder-color.svg" />
                         <TextBlock Grid.Column="1" VerticalAlignment="Center" Text="{Binding App.UI.WindowDetail.OpenDirectory.Content, Source={x:Static l:Lang.Current}}" />
                     </Grid>
                 </Button>

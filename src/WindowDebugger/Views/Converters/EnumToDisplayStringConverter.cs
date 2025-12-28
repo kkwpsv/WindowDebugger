@@ -42,10 +42,4 @@ public abstract class UInt32EnumToDisplayStringConverter<T> : IValueConverter
     }
 }
 
-public sealed class WindowStyleToDisplayStringConverter : UInt32EnumToDisplayStringConverter<WindowStyles>;
-
-public sealed class WindowStyleExToDisplayStringConverter : UInt32EnumToDisplayStringConverter<WindowStylesEx>;
-
-public sealed class ClassStylesToDisplayStringConverter : UInt32EnumToDisplayStringConverter<ClassStyles>;
-
 public sealed class DwmCloakedToDisplayStringConverter : Int32EnumToDisplayStringConverter<DWM_CLOAKED>;

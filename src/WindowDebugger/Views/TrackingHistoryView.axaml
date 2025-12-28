@@ -1,0 +1,76 @@
+﻿<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:views="using:WindowDebugger.Views"
+             xmlns:l="using:WindowDebugger.Localizations"
+             xmlns:vc="using:WindowDebugger.Views.Converters"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="WindowDebugger.Views.TrackingHistoryView"
+             x:DataType="views:MainViewModel"
+             Grid.IsSharedSizeScope="True">
+
+    <UserControl.Resources>
+        <vc:ProcessIdToProcessNameConverter x:Key="ProcessIdToProcessNameConverter" />
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.Title">
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="Margin" Value="0 32 0 16" />
+        </Style>
+        <Style Selector="TextBlock.TrackedWindow">
+            <Setter Property="Margin" Value="4 0" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto,Auto,*" Margin="0 40 0 0">
+        <StackPanel Grid.Row="0" Margin="32 32 32 0" MaxWidth="1000">
+            <TextBlock Classes="Title"
+                       Text="{Binding App.UI.TrackButton.Flyout.Title, Source={x:Static l:Lang.Current}}" />
+            <Border Padding="16 16 16 8" CornerRadius="8" BorderThickness="1"
+                    BorderBrush="#20FFFFFF" Background="#20000000">
+                <StackPanel>
+                    <TextBlock TextWrapping="WrapWithOverflow"
+                               Text="{Binding App.UI.TrackSwitch.Description, Source={x:Static l:Lang.Current}}" />
+                    <ToggleSwitch Margin="0 8 0 0"
+                                  OnContent="{Binding App.UI.TrackSwitch.On, Source={x:Static l:Lang.Current}}"
+                                  OffContent="{Binding App.UI.TrackSwitch.Off, Source={x:Static l:Lang.Current}}"
+                                  IsChecked="{Binding IsForegroundWindowTracking}" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+        <DataGrid Grid.Row="1" Margin="32 16 32 0" MaxWidth="1000"
+                  ItemsSource="{Binding TrackedWindowsHistory}"
+                  IsReadOnly="True"
+                  CanUserReorderColumns="False"
+                  CanUserResizeColumns="True"
+                  CanUserSortColumns="False"
+                  GridLinesVisibility="All"
+                  BorderThickness="1" BorderBrush="#999999"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                  ScrollViewer.VerticalScrollBarVisibility="Visible">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.Time, Source={x:Static l:Lang.Current}}"
+                                    FontSize="11" Foreground="#999999"
+                                    FontFamily="{StaticResource MonoFontFamily}"
+                                    Binding="{Binding TrackedTime, Mode=OneWay, StringFormat=hh:mm:ss.fff}"/>
+                <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.WindowId, Source={x:Static l:Lang.Current}}"
+                                    FontSize="11" Foreground="#999999"
+                                    FontFamily="{StaticResource MonoFontFamily}"
+                                    Binding="{Binding Id, Mode=OneWay, StringFormat=X8}" />
+                <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.WindowTitle, Source={x:Static l:Lang.Current}}"
+                                    FontSize="13" Foreground="#CCCCCC"
+                                    Binding="{Binding Title, Mode=OneWay}" Width="2*"/>
+                <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.ProcessId, Source={x:Static l:Lang.Current}}"
+                                    FontSize="11" Foreground="#999999"
+                                    FontFamily="{StaticResource MonoFontFamily}"
+                                    Binding="{Binding ProcessId, Mode=OneWay}" />
+                <DataGridTextColumn Header="{Binding App.UI.TrackPage.HistoryList.Column.ProcessName, Source={x:Static l:Lang.Current}}"
+                                    FontSize="13" Foreground="#999999"
+                                    Binding="{Binding ProcessName, Mode=OneWay}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
+    </Grid>
+
+</UserControl>

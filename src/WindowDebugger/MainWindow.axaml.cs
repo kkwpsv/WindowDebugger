@@ -1,5 +1,8 @@
+using System.ComponentModel;
+using System.Diagnostics;
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.Primitives;
 using Avalonia.Input;
 using Avalonia.Interactivity;
 using Avalonia.Rendering.Composition;
@@ -39,6 +42,33 @@ public partial class MainWindow : Window
         Height = height;
     }
 
+    private void UacButton_Click(object? sender, RoutedEventArgs e)
+    {
+        if (Environment.ProcessPath is not { } path || !File.Exists(path))
+        {
+            return;
+        }
+
+        try
+        {
+            Process.Start(new ProcessStartInfo(path)
+            {
+                UseShellExecute = true,
+                Verb = "runas",
+            });
+            Close();
+        }
+        catch (Win32Exception)
+        {
+            // 用户取消了 UAC 提升请求
+        }
+    }
+
+    private void TopMostToggleButton_IsCheckedChanged(object? sender, RoutedEventArgs e)
+    {
+        Topmost = ((ToggleButton)sender!).IsChecked is true;
+    }
+
     private void OnGlobalPointerPressed(object? sender, PointerPressedEventArgs e)
     {
         var point = e.GetCurrentPoint(this);
@@ -64,12 +94,15 @@ public partial class MainWindow : Window
         var task2 = SlideFromAnimatedly(TransientBorder, new Vector2(ContentPanel.Bounds.Width, 0));
 
         await Task.WhenAll(task1, task2);
+        MainView.IsVisible = false;
     }
 
     public async Task CloseTransientViewAsync()
     {
         TitleTextBlock.Classes.Remove("HasBack");
         BackButton.Classes.Remove("HasBack");
+
+        MainView.IsVisible = true;
 
         var task1 = SlideFromAnimatedly(MainView, new Vector2(-ContentPanel.Bounds.Width, 0));
         var task2 = SlideToAnimatedly(TransientBorder, new Vector2(ContentPanel.Bounds.Width, 0));

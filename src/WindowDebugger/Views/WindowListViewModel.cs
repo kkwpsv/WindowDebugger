@@ -1,5 +1,4 @@
-﻿using System.Collections.Immutable;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using ReactiveUI;
 using WindowDebugger.Localizations;
@@ -18,10 +17,10 @@ public class WindowListViewModel : ReactiveObject
     private readonly MainViewModel _owner;
     private readonly NativeWindowCollectionManager _nativeWindowCollectionManager;
     private string? _searchText;
-    private bool _includingInvisibleWindow;
-    private bool _includingEmptyTitleWindow;
-    private bool _includingChildWindow;
-    private bool _includingMessageOnlyWindow;
+    private bool _includingInvisibleWindow = false;
+    private bool _includingEmptyTitleWindow = true;
+    private bool _includingChildWindow = false;
+    private bool _includingMessageOnlyWindow = false;
     private bool _isGroupedByProcess;
     private NativeWindowGrouping _windowGrouping = NativeWindowGrouping.PlainList;
     private NativeWindowSorting _windowSorting = NativeWindowSorting.Raw;
@@ -128,6 +127,8 @@ public class WindowListViewModel : ReactiveObject
         LocalizedWindowIncluding = (IncludingInvisibleWindow, IncludingEmptyTitleWindow, IncludingChildWindow, IncludingMessageOnlyWindow) switch
         {
             (false, false, false, false) => Lang.Current.App.UI.Filter.IncludingNoneSlim,
+            (false, true, false, false) => Lang.Current.App.UI.Filter.IncludingVisibleTopLevelSlim,
+            (true, true, false, true) => Lang.Current.App.UI.Filter.IncludingTopLevelSlim,
             (true, true, true, true) => Lang.Current.App.UI.Filter.IncludingAllSlim,
             _ => Lang.Current.App.UI.Filter.IncludingPartialSlim,
         };
@@ -190,8 +191,9 @@ public class WindowListViewModel : ReactiveObject
         return value;
     }
 
-    private IEnumerable<NativeTreeNode> BuildTree(ImmutableArray<NativeWindowModel> nativeWindows)
+    private IEnumerable<NativeTreeNode> BuildTree(IReadOnlyList<NativeWindowModel> nativeWindows)
     {
+#if NET6_0_OR_GREATER
         if (OperatingSystem.IsLinux())
         {
             var processWindowDictionary = GroupByProcess<LinuxNativeWindowModel>(nativeWindows);
@@ -202,6 +204,7 @@ public class WindowListViewModel : ReactiveObject
                     Windows = [..x.Value.Select(ConvertModelToNode)],
                 });
         }
+#endif
 
         if (OperatingSystem.IsWindows())
         {
@@ -223,6 +226,7 @@ public class WindowListViewModel : ReactiveObject
         throw new PlatformNotSupportedException();
     }
 
+#if NET6_0_OR_GREATER
     private NativeWindowNode ConvertModelToNode(LinuxNativeWindowModel model)
     {
         return new LinuxNativeWindowNode(model)
@@ -230,8 +234,9 @@ public class WindowListViewModel : ReactiveObject
             ChildWindows = [..model.GetChildren().OrderBy(_windowSorting).Select(ConvertModelToNode)],
         };
     }
+#endif
 
-    private static Dictionary<int, List<T>> GroupByProcess<T>(ImmutableArray<NativeWindowModel> nativeWindows)
+    private static Dictionary<int, List<T>> GroupByProcess<T>(IReadOnlyList<NativeWindowModel> nativeWindows)
         where T : NativeWindowModel
     {
         var processWindowDictionary = new Dictionary<int, List<T>>();

@@ -1,11 +1,10 @@
-﻿using System.Collections.Immutable;
-
-namespace WindowDebugger.Services.NativeWindows;
+﻿namespace WindowDebugger.Services.NativeWindows;
 
 public partial class NativeWindowCollectionManager
 {
-    public ImmutableArray<NativeWindowModel> FindWindows(WindowSearchingFilter filter)
+    public IReadOnlyList<NativeWindowModel> FindWindows(WindowSearchingFilter filter)
     {
+#if NET6_0_OR_GREATER
         if (OperatingSystem.IsLinux())
         {
             var list = FindWindowsOnLinux(filter)
@@ -13,6 +12,7 @@ public partial class NativeWindowCollectionManager
                 .ToList();
             return [..list];
         }
+#endif
 
         if (OperatingSystem.IsWindows())
         {

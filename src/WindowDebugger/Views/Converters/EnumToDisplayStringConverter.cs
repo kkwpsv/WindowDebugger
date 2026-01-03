@@ -42,4 +42,4 @@ public abstract class UInt32EnumToDisplayStringConverter<T> : IValueConverter
     }
 }
 
-public sealed class DwmCloakedToDisplayStringConverter : Int32EnumToDisplayStringConverter<DWM_CLOAKED>;
+public sealed class DwmCloakedToDisplayStringConverter : Int32EnumToDisplayStringConverter<DWMCloakReasons>;

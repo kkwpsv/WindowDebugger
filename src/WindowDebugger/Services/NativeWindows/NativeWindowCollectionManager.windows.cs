@@ -31,7 +31,7 @@ public partial class NativeWindowCollectionManager
 
         if (!filter.Including.HasFlag(WindowIncluding.MessageOnlyWindow))
         {
-            if (win.ParentWindowHandle == User32.HWND_MESSAGE)
+            if (win.ParentWindowHandle == Constants.HWND_MESSAGE)
             {
                 return (false, true);
             }

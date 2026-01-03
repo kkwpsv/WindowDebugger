@@ -7,19 +7,19 @@ namespace WindowDebugger.Views.Details.Windows;
 
 public partial class WindowClassStylesPage : UserControl
 {
-    private readonly EnumPageManager<ClassStyles> _manager;
+    private readonly EnumPageManager<WindowClassStyles> _manager;
 
     public WindowClassStylesPage()
     {
         InitializeComponent();
 
-        _manager = new EnumPageManager<ClassStyles>(WindowStyleListBox, v => (long)v, v => (ClassStyles)v);
+        _manager = new EnumPageManager<WindowClassStyles>(WindowStyleListBox, v => (long)v, v => (WindowClassStyles)v);
 
         DataContextChanged += (sender, args) => UpdateView();
         Loaded += (sender, args) => UpdateView();
     }
 
-    public IReadOnlyList<EnumNamedValue<ClassStyles>> AllClassStyles => EnumPageManager<ClassStyles>.AllValues;
+    public IReadOnlyList<EnumNamedValue<WindowClassStyles>> AllClassStyles => EnumPageManager<WindowClassStyles>.AllValues;
 
     private void UpdateView()
     {
@@ -36,7 +36,7 @@ public partial class WindowClassStylesPage : UserControl
         {
             if (uint.TryParse(ValueTextBox.Text, System.Globalization.NumberStyles.HexNumber, null, out var value))
             {
-                vm.ClassStyles = (ClassStyles)value;
+                vm.ClassStyles = (WindowClassStyles)value;
                 UpdateView();
             }
         }

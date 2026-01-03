@@ -6,6 +6,7 @@ using Lsj.Util.Win32.BaseTypes;
 using Lsj.Util.Win32.Callbacks;
 using Lsj.Util.Win32.Enums;
 using Lsj.Util.Win32.Extensions;
+using Lsj.Util.Win32.Extensions.Gdi;
 using Lsj.Util.Win32.Extensions.NativeUI;
 using Lsj.Util.Win32.NativeUI;
 using Lsj.Util.Win32.Structs;
@@ -69,7 +70,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
         }
     }
 
-    public WindowStylesEx StylesEx
+    public ExtendedWindowStyles StylesEx
     {
         get => _window.WindowStylesEx;
         set
@@ -79,7 +80,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
         }
     }
 
-    public ClassStyles ClassStyles
+    public WindowClassStyles ClassStyles
     {
         get => _window.ClassStyles;
         set
@@ -313,7 +314,7 @@ public record WindowsNativeWindowModel : NativeWindowModel
     {
         try
         {
-            var screenShot = await Task.Run(() => WindowExtensions.GetWindowScreenshotWithCaptureBlt(WindowHandle));
+            var screenShot = await Task.Run(() => new GdiScreenCapturer().CaptureWindow(WindowHandle));
             if (screenShot != NULL)
             {
                 var image = screenShot.HBitmapToAvaloniaImage();
@@ -388,7 +389,7 @@ file static class ThumbnailExtensions
         info.bmiHeader.biHeight = -bitmapPtr->bmHeight; // top-down
         info.bmiHeader.biPlanes = 1;
         info.bmiHeader.biBitCount = 32;
-        info.bmiHeader.biCompression = Compression.BI_RGB;
+        info.bmiHeader.biCompression = BitmapCompressions.BI_RGB;
 
         // 拷贝像素。
         var bitmap = new WriteableBitmap(new PixelSize(bitmapPtr->bmWidth, bitmapPtr->bmHeight), new Vector(96, 96), PixelFormat.Bgra8888);
@@ -396,7 +397,7 @@ file static class ThumbnailExtensions
         var hdc = User32.GetDC(Constants.NULL);
         try
         {
-            Gdi32.GetDIBits(hdc, hBitmap, 0u, (int)bitmapPtr->bmHeight, frameBuffer.Address, in info, (uint)DIBColorTableIdentifiers.DIB_RGB_COLORS);
+            Gdi32.GetDIBits(hdc, hBitmap, 0u, (int)bitmapPtr->bmHeight, frameBuffer.Address, in info, (uint)DIBColorTableUsages.DIB_RGB_COLORS);
         }
         finally
         {

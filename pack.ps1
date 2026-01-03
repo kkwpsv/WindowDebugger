@@ -17,7 +17,8 @@ if ($maxOldVersion -and $currentVersion -le $maxOldVersion) {
 
 Write-Output "Do release"
 
-dotnet publish -r win-x64 -c Release
+dotnet publish -r win-x64 -c Release -f net48
+dotnet publish -r win-x64 -c Release -f net10.0
 #TODO Linux
 
 $releaseObj =

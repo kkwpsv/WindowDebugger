@@ -8,7 +8,7 @@ build:
     - ".\\build.ps1"
   artifacts:
     paths:
-      - "WindowDebugger\\bin\\Release\\"
+      - "artifacts\\bin\\WindowDebugger"
     expire_in: 1h
 
 pack:

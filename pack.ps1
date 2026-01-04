@@ -25,7 +25,7 @@ $releaseObj =
 @{
     "name"     = [string]$currentVersion;
     "tag_name" = [string]$currentVersion;
-    "ref"      = $env:CI_BUILD_REF;
+    "ref"      = $env:CI_COMMIT_SHA;
     "assets"   = @{"links" = [System.Collections.ArrayList]@() }
 }
 

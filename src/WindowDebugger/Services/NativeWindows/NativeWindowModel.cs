@@ -2,7 +2,7 @@
 
 namespace WindowDebugger.Services.NativeWindows;
 
-public abstract record NativeWindowModel(nint Id) : ReactiveRecord
+public abstract record NativeWindowModel(NativeWindowId Id) : ReactiveRecord
 {
     public abstract string? Title { get; }
 

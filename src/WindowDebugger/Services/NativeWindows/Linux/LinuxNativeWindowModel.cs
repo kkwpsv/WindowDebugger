@@ -83,7 +83,7 @@ public record LinuxNativeWindowModel : NativeWindowModel
     }
 }
 #else
-public record LinuxNativeWindowModel(nint Id) : NativeWindowModel(Id)
+public record LinuxNativeWindowModel(NativeWindowId Id) : NativeWindowModel(Id)
 {
     public override string? Title => null;
     public override int ProcessId => 0;
